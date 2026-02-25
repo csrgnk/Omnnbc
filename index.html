@@ -143,7 +143,7 @@ function displayPosts(posts) {
   posts.forEach(post => {
     container.innerHTML += `
       <div class="post-item">
-        <a href="post.html?slug=${post.slug}">${post.title}</a>
+        <a href="posts/${post.slug}/">${post.title}</a>
       </div>
     `;
   });
