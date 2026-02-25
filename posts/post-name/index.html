@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Post Title - Namo Narayanaya</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #fdf6e3;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.header h1 { color: #b22222; margin: 0; }
+
+.content {
+  flex: 1;
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.share {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.share button {
+  margin: 5px;
+  padding: 10px 15px;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.whatsapp { background:#25D366; }
+.facebook { background:#1877F2; }
+.twitter { background:#000; }
+.copy { background:#555; }
+
+.footer {
+  background:#b22222;
+  color:white;
+  text-align:center;
+  padding:15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <h1>Namo Narayanaya</h1>
+  <p>Bhakthi Channel</p>
+</div>
+
+<div class="content">
+  <h2 id="postTitle">Post Title</h2>
+  <p>Your devotional content here...</p>
+</div>
+
+<div class="share">
+  <button class="whatsapp" onclick="shareWA()">WhatsApp</button>
+  <button class="facebook" onclick="shareFB()">Facebook</button>
+  <button class="twitter" onclick="shareTW()">Twitter</button>
+  <button class="copy" onclick="copyLink()">Copy</button>
+</div>
+
+<div style="text-align:center;margin-bottom:20px;">
+  <a href="../../index.html">← Back to Home</a>
+</div>
+
+<div class="footer">
+  © 2026 Namo Narayanaya Bhakthi Channel
+</div>
+
+<script>
+const title = document.getElementById("postTitle").innerText;
+const url = window.location.href;
+const text = title + " - " + url;
+
+function shareWA(){ window.open("https://wa.me/?text="+encodeURIComponent(text)); }
+function shareFB(){ window.open("https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(url)); }
+function shareTW(){ window.open("https://twitter.com/intent/tweet?text="+encodeURIComponent(text)); }
+function copyLink(){ navigator.clipboard.writeText(text); alert("Copied!"); }
+</script>
+
+</body>
+</html>
