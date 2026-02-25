@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Namo Narayanaya Bhakthi Channel</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #fdf6e3;
+  text-align: center;
+}
+
+.header {
+  padding: 60px 20px;
+}
+
+.header h1 {
+  font-size: 42px;
+  margin: 0;
+  color: #b22222;
+}
+
+.header h2 {
+  font-size: 26px;
+  margin-top: 10px;
+  color: #333;
+}
+
+.post-list {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+}
+
+.post-list h3 a {
+  text-decoration: none;
+  color: #000080;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <h1>Namo Narayanaya</h1>
+  <h2>Bhakthi Channel</h2>
+</div>
+
+<div class="post-list" id="posts"></div>
+
+<script>
+fetch('posts.json')
+  .then(res => res.json())
+  .then(data => {
+    let container = document.getElementById('posts');
+    data.forEach(post => {
+      container.innerHTML += `
+        <h3><a href="${post.slug}.html">${post.title}</a></h3>
+      `;
+    });
+  });
+</script>
+
+</body>
+</html>
