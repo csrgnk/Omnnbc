@@ -1,61 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Omnnbc Bhakthi Channel</title>
+---
+layout: default
+---
+{% include header.html %}
 
-<style>
-body {
-  margin:0;
-  font-family: Arial, sans-serif;
-  background:#FFFDF7;
-}
-.container {
-  max-width:900px;
-  margin:auto;
-  padding:20px;
-}
-.post-list a {
-  display:block;
-  padding:12px;
-  margin-bottom:10px;
-  background:#fff;
-  border-radius:6px;
-  text-decoration:none;
-  color:#C2185B;
-  box-shadow:0 2px 6px rgba(0,0,0,0.1);
-}
-.post-list a:hover {
-  background:#FFE0B2;
-}
-</style>
-</head>
-<body>
-
-<div id="header"></div>
-
-<div class="container">
-  <h2>Latest Posts</h2>
-
-  <div class="post-list">
-    <a href="rama-bhajan/">Rama Bhajan</a>
-    <a href="hanuman-stotram/">Hanuman Stotram</a>
-    <a href="gita-chapter-1/">Gita Chapter 1</a>
-  </div>
+<div style="max-width: 800px; margin: auto; padding: 20px;">
+    <h2 style="border-left: 5px solid #d35400; padding-left: 10px;">Recent Posts</h2>
+    <ul style="list-style: none; padding: 0;">
+        {% for page in site.pages %}
+            {% if page.layout == "post" %}
+                <li style="padding: 15px; border-bottom: 1px solid #eee;">
+                    <a href="{{ page.url }}" style="font-size: 20px; color: #2c3e50; text-decoration: none;">{{ page.title }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
 </div>
 
-<div id="footer"></div>
-
-<script>
-fetch("header.html")
-  .then(res => res.text())
-  .then(data => document.getElementById("header").innerHTML = data);
-
-fetch("footer.html")
-  .then(res => res.text())
-  .then(data => document.getElementById("footer").innerHTML = data);
-</script>
-
-</body>
-</html>
+{% include footer.html %}
