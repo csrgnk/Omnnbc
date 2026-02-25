@@ -4,10 +4,10 @@
 </header>
 
 <nav style="background:#FFCC80;padding:10px;text-align:center;">
-  <a href="index.html">Home</a>
-<a href="about/">About</a>
-  <a href="/contact/" style="margin:0 10px;">Contact</a>
-  <a href="/search.html" style="margin:0 10px;">Search</a>
+  <a href="index.html" style="margin:0 10px;">Home</a>
+  <a href="about/" style="margin:0 10px;">About</a>
+  <a href="contact/" style="margin:0 10px;">Contact</a>
+  <a href="search.html" style="margin:0 10px;">Search</a>
 </nav>
 
 <div style="text-align:center;padding:10px;background:#FFF8E1;">
@@ -19,7 +19,7 @@
 document.getElementById("searchInput").addEventListener("keypress", function(e){
   if(e.key === "Enter"){
     let query = this.value;
-    window.location.href = "/search.html?q=" + encodeURIComponent(query);
+    window.location.href = "search.html?q=" + encodeURIComponent(query);
   }
 });
 </script>
