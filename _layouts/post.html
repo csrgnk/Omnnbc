@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ page.title }}</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; margin: 0; padding: 0; line-height: 1.6; }
+        .post-container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
+        .share-btn { padding: 10px 15px; border-radius: 5px; color: white; text-decoration: none; display: inline-block; margin: 5px; font-weight: bold; }
+        .whatsapp { background-color: #25D366; }
+        .facebook { background-color: #4267B2; }
+    </style>
+</head>
+<body>
+    {% include header.html %}
+
+    <div class="post-container">
+        <h1 style="color: #d35400;">{{ page.title }}</h1>
+        <p style="color: #7f8c8d;">Post Views: <span id="busuanzi_value_page_pv"></span></p>
+        
+        <div class="main-content">
+            {{ content }}
+        </div>
+
+        <hr>
+        
+        <h3>Share this post:</h3>
+        <a href="https://api.whatsapp.com/send?text={{ page.title }} - {{ site.url }}{{ page.url }}" class="share-btn whatsapp">WhatsApp</a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ site.url }}{{ page.url }}" class="share-btn facebook">Facebook</a>
+
+        <br><br>
+        <a href="/" style="color: #d35400; font-weight: bold;">← Back to Home Page</a>
+    </div>
+
+    {% include footer.html %}
+</body>
+</html>
