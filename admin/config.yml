@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: csrgnk.github.io/Omnnbc
+  repo: csrgnk/Omnnbc
   branch: main
 
 media_folder: "images/uploads"
@@ -12,9 +12,9 @@ collections:
     folder: "posts"
     create: true
     slug: "{{slug}}"
-    extension: "json"
-    format: "json"
+    extension: "md"
+    format: "frontmatter"
     fields:
       - { label: "Title", name: "title", widget: "string" }
-      - { label: "Slug", name: "slug", widget: "string" }
-      - { label: "Content", name: "content", widget: "text" }
+      - { label: "Date", name: "date", widget: "datetime" }
+      - { label: "Body", name: "body", widget: "markdown" }
