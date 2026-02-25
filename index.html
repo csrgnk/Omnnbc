@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Namo Narayanaya Bhakthi Channel</title>
 
 <style>
@@ -12,31 +13,53 @@ body {
   text-align: center;
 }
 
+/* Header Section */
 .header {
-  padding: 60px 20px;
+  padding: 70px 20px 40px;
 }
 
+/* Main Title */
 .header h1 {
-  font-size: 42px;
+  font-size: 9vw;   /* Mobile Responsive */
   margin: 0;
   color: #b22222;
+  font-weight: bold;
+  letter-spacing: 1px;
 }
 
+/* Subtitle */
 .header h2 {
-  font-size: 26px;
+  font-size: 5vw;   /* Mobile Responsive */
   margin-top: 10px;
   color: #333;
+  font-weight: 500;
 }
 
+/* Desktop Size Fix */
+@media (min-width: 768px) {
+  .header h1 {
+    font-size: 48px;
+  }
+  .header h2 {
+    font-size: 28px;
+  }
+}
+
+/* Post List */
 .post-list {
   max-width: 800px;
   margin: auto;
   padding: 20px;
 }
 
+.post-list h3 {
+  margin: 15px 0;
+}
+
 .post-list h3 a {
   text-decoration: none;
   color: #000080;
+  font-size: 20px;
 }
 </style>
 </head>
@@ -52,12 +75,12 @@ body {
 
 <script>
 fetch('posts.json')
-  .then(res => res.json())
+  .then(response => response.json())
   .then(data => {
-    let container = document.getElementById('posts');
+    const container = document.getElementById('posts');
     data.forEach(post => {
       container.innerHTML += `
-        <h3><a href="${post.slug}.html">${post.title}</a></h3>
+        <h3><a href="posts/${post.slug}.json">${post.title}</a></h3>
       `;
     });
   });
