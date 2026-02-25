@@ -11,55 +11,55 @@ body {
   font-family: Arial, sans-serif;
   background-color: #fdf6e3;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-/* Header Section */
+/* Header */
 .header {
   padding: 70px 20px 40px;
 }
 
-/* Main Title */
 .header h1 {
-  font-size: 9vw;   /* Mobile Responsive */
+  font-size: 9vw;
   margin: 0;
   color: #b22222;
   font-weight: bold;
-  letter-spacing: 1px;
 }
 
-/* Subtitle */
 .header h2 {
-  font-size: 5vw;   /* Mobile Responsive */
+  font-size: 5vw;
   margin-top: 10px;
   color: #333;
-  font-weight: 500;
 }
 
-/* Desktop Size Fix */
+/* Desktop fix */
 @media (min-width: 768px) {
-  .header h1 {
-    font-size: 48px;
-  }
-  .header h2 {
-    font-size: 28px;
-  }
+  .header h1 { font-size: 48px; }
+  .header h2 { font-size: 28px; }
 }
 
-/* Post List */
+/* Posts */
 .post-list {
+  flex: 1;
   max-width: 800px;
   margin: auto;
   padding: 20px;
-}
-
-.post-list h3 {
-  margin: 15px 0;
 }
 
 .post-list h3 a {
   text-decoration: none;
   color: #000080;
   font-size: 20px;
+}
+
+/* Footer */
+.footer {
+  background: #b22222;
+  color: white;
+  padding: 15px;
+  font-size: 14px;
 }
 </style>
 </head>
@@ -72,6 +72,10 @@ body {
 </div>
 
 <div class="post-list" id="posts"></div>
+
+<div class="footer">
+  © 2026 Namo Narayanaya Bhakthi Channel | All Rights Reserved
+</div>
 
 <script>
 fetch('posts.json')
