@@ -1,0 +1,25 @@
+<header style="background:#FFF3E0;padding:15px 0;text-align:center;">
+  <h1 style="margin:0;color:#C2185B;">Namo Narayanaya</h1>
+  <h2 style="margin:0;color:#C2185B;font-weight:normal;">Bhakthi Channel</h2>
+</header>
+
+<nav style="background:#FFCC80;padding:10px;text-align:center;">
+  <a href="/" style="margin:0 10px;">Home</a>
+  <a href="/about/" style="margin:0 10px;">About</a>
+  <a href="/contact/" style="margin:0 10px;">Contact</a>
+  <a href="/search.html" style="margin:0 10px;">Search</a>
+</nav>
+
+<div style="text-align:center;padding:10px;background:#FFF8E1;">
+  <input type="text" id="searchInput" placeholder="Search posts..."
+         style="padding:8px;width:80%;max-width:400px;">
+</div>
+
+<script>
+document.getElementById("searchInput").addEventListener("keypress", function(e){
+  if(e.key === "Enter"){
+    let query = this.value;
+    window.location.href = "/search.html?q=" + encodeURIComponent(query);
+  }
+});
+</script>
