@@ -10,54 +10,88 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: #fdf6e3;
-  text-align: center;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-/* Header */
+/* HEADER */
 .header {
-  padding: 70px 20px 40px;
+  text-align: center;
+  padding: 50px 20px 20px;
 }
 
 .header h1 {
-  font-size: 9vw;
+  font-size: 8vw;
   margin: 0;
   color: #b22222;
-  font-weight: bold;
 }
 
 .header h2 {
-  font-size: 5vw;
-  margin-top: 10px;
+  font-size: 4.5vw;
+  margin-top: 5px;
   color: #333;
 }
 
-/* Desktop fix */
 @media (min-width: 768px) {
   .header h1 { font-size: 48px; }
-  .header h2 { font-size: 28px; }
+  .header h2 { font-size: 26px; }
 }
 
-/* Posts */
+/* MENU */
+.menu {
+  background: #b22222;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.menu a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+  font-size: 16px;
+}
+
+.menu a:hover {
+  text-decoration: underline;
+}
+
+/* SEARCH */
+.search-box {
+  text-align: center;
+  padding: 20px;
+}
+
+.search-box input {
+  width: 80%;
+  max-width: 400px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+/* POSTS */
 .post-list {
   flex: 1;
   max-width: 800px;
   margin: auto;
-  padding: 20px;
+  padding: 10px 20px;
 }
 
-.post-list h3 a {
+.post-item {
+  margin: 12px 0;
+}
+
+.post-item a {
   text-decoration: none;
   color: #000080;
-  font-size: 20px;
+  font-size: 18px;
 }
 
-/* Footer */
+/* FOOTER */
 .footer {
   background: #b22222;
   color: white;
+  text-align: center;
   padding: 15px;
   font-size: 14px;
 }
@@ -66,28 +100,63 @@ body {
 
 <body>
 
+<!-- SITE TITLE -->
 <div class="header">
   <h1>Namo Narayanaya</h1>
   <h2>Bhakthi Channel</h2>
 </div>
 
+<!-- MENU -->
+<div class="menu">
+  <a href="index.html">Home</a>
+  <a href="#">About</a>
+  <a href="#">Contact</a>
+  <a href="admin/">Admin</a>
+</div>
+
+<!-- SEARCH -->
+<div class="search-box">
+  <input type="text" id="searchInput" placeholder="Search posts...">
+</div>
+
+<!-- POSTS -->
 <div class="post-list" id="posts"></div>
 
+<!-- FOOTER -->
 <div class="footer">
   © 2026 Namo Narayanaya Bhakthi Channel | All Rights Reserved
 </div>
 
 <script>
+let allPosts = [];
+
 fetch('posts.json')
-  .then(response => response.json())
+  .then(res => res.json())
   .then(data => {
-    const container = document.getElementById('posts');
-    data.forEach(post => {
-      container.innerHTML += `
-        <h3><a href="posts/${post.slug}.json">${post.title}</a></h3>
-      `;
-    });
+    allPosts = data;
+    displayPosts(data);
   });
+
+function displayPosts(posts) {
+  const container = document.getElementById('posts');
+  container.innerHTML = "";
+  posts.forEach(post => {
+    container.innerHTML += `
+      <div class="post-item">
+        <a href="post.html?slug=${post.slug}">${post.title}</a>
+      </div>
+    `;
+  });
+}
+
+/* SEARCH FUNCTION */
+document.getElementById('searchInput').addEventListener('keyup', function() {
+  const searchText = this.value.toLowerCase();
+  const filtered = allPosts.filter(post =>
+    post.title.toLowerCase().includes(searchText)
+  );
+  displayPosts(filtered);
+});
 </script>
 
 </body>
