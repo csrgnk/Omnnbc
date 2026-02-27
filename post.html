@@ -1,26 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="te">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post View - Namo Narayanaya</title>
     <style>
-        body { margin:0; font-family:Arial; background:#f4f6f9; line-height: 1.6; color: #333; }
-        header { background:#fff9db; padding:20px; text-align:center; font-size:1.8rem; font-weight:bold; color:#C2185B; }
-        .container { max-width:800px; margin:20px auto; padding:20px; }
-        .content-area { background:#fff; padding:30px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
-        .back-link { display:inline-block; margin-bottom:20px; color:#FF9800; text-decoration:none; font-weight:bold; }
+        body { margin:0; font-family: Arial, sans-serif; background:#f4f6f9; line-height: 1.6; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
+        header { background:#fff9db; padding:20px; text-align:center; font-size:1.8rem; font-weight:bold; color:#C2185B; border-bottom: 2px solid #FFD700; }
+        .container { max-width:800px; margin:20px auto; padding:0 20px; flex: 1; }
+        .content-area { background:#fff; padding:30px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); }
+        #postTitle { color: #002366; text-align: center; margin-top: 0; margin-bottom: 20px; font-size: 1.8rem; border-bottom: 2px solid #fff9db; padding-bottom: 15px; }
         
-        /* Styled Share Row */
-        .share-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
+        /* Share Buttons Row */
+        .share-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; }
         .btn-s { padding: 10px 15px; border-radius: 5px; text-decoration: none; color: white; font-weight: bold; font-size: 13px; cursor: pointer; border: none; }
-        .wa { background: #25D366; }
-        .fb { background: #1877F2; }
-        .tw { background: #000000; }
-        .cp { background: #607D8B; }
+        .wa { background: #25D366; } /* WhatsApp Green */
+        .fb { background: #1877F2; } /* Facebook Blue */
+        .tw { background: #000; }    /* X Black */
+        .cp { background: #607D8B; } /* Copy Grey */
 
-        #postContent h1 { color: #002366; text-align: center; }
-        #postContent img { max-width: 100%; height: auto; border-radius: 8px; display: block; margin: 20px auto; }
+        .navigation-row { margin-top: 30px; text-align: center; }
+        .back-link { display:inline-block; color:#FF9800; text-decoration:none; font-weight:bold; font-size: 16px; }
+        footer { background: #C2185B; color: white; text-align: center; padding: 20px; margin-top: 40px; }
     </style>
 </head>
 <body>
@@ -28,9 +29,9 @@
 <header>Namo Narayanaya Bhakthi Channel</header>
 
 <div class="container">
-    <a href="index.html" class="back-link">← Back to Home</a>
     <article class="content-area">
-        <div id="postContent">Loading...</div>
+        <h1 id="postTitle">Loading...</h1>
+        <div id="postContent"></div>
 
         <div class="share-row" id="shareRow" style="display:none;">
             <a id="sWA" href="#" target="_blank" class="btn-s wa">WhatsApp</a>
@@ -39,7 +40,15 @@
             <button onclick="copyURL()" class="btn-s cp">Copy Link</button>
         </div>
     </article>
+
+    <div class="navigation-row">
+        <a href="index.html" class="back-link">← Back to Home</a>
+    </div>
 </div>
+
+<footer>
+    <p>© 2026 Namo Narayanaya Bhakthi Channel</p>
+</footer>
 
 <script>
     const params = new URLSearchParams(window.location.search);
@@ -55,19 +64,30 @@
         fetch(path)
             .then(res => res.text())
             .then(html => {
-                document.getElementById('postContent').innerHTML = html;
-                const postTitle = document.querySelector('h1')?.innerText || "Spiritual Wisdom";
-                const postUrl = encodeURIComponent(window.location.href);
-                const text = encodeURIComponent(postTitle + " - Read more here: ");
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                
+                // Extract title from <h1> if present
+                const foundTitle = tempDiv.querySelector('h1');
+                const titleText = foundTitle ? foundTitle.innerText : "Spiritual Wisdom";
+                if(foundTitle) foundTitle.remove();
 
-                document.getElementById('sWA').href = `https://api.whatsapp.com/send?text=${text}${postUrl}`;
-                document.getElementById('sFB').href = `https://www.facebook.com/sharer/sharer.php?u=${postUrl}`;
-                document.getElementById('sTW').href = `https://twitter.com/intent/tweet?text=${text}&url=${postUrl}`;
+                document.getElementById('postTitle').innerText = titleText;
+                document.getElementById('postContent').innerHTML = tempDiv.innerHTML;
+                
+                // SETUP SHARING WITH TITLE + URL
+                const currentUrl = window.location.href;
+                const encodedTitle = encodeURIComponent(titleText + "\n\n");
+                const encodedUrl = encodeURIComponent(currentUrl);
+
+                document.getElementById('sWA').href = `https://api.whatsapp.com/send?text=${encodedTitle}${encodedUrl}`;
+                document.getElementById('sFB').href = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+                document.getElementById('sTW').href = `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`;
                 
                 document.getElementById('shareRow').style.display = 'flex';
-                document.title = postTitle;
+                document.title = titleText;
             })
-            .catch(() => { document.getElementById('postContent').innerHTML = "Post not found."; });
+            .catch(() => { document.getElementById('postTitle').innerText = "Post Not Found"; });
     } else { window.location.href = "index.html"; }
 </script>
 </body>
