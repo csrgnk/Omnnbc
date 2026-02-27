@@ -10,8 +10,16 @@
         .container { max-width:800px; margin:20px auto; padding:20px; }
         .content-area { background:#fff; padding:30px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); min-height: 300px; }
         .back-link { display:inline-block; margin-bottom:20px; color:#FF9800; text-decoration:none; font-weight:bold; }
-        #postContent h1 { color: #002366; margin-top: 0; }
-        #postContent img { max-width: 100%; height: auto; border-radius: 8px; margin: 15px 0; }
+        
+        /* Share Button Styles */
+        .share-section { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
+        .share-title { font-weight: bold; margin-bottom: 10px; color: #666; }
+        .btn-share { display: inline-flex; align-items: center; padding: 10px 18px; border-radius: 5px; text-decoration: none; color: white; font-weight: bold; margin-right: 10px; font-size: 14px; }
+        .whatsapp { background: #25D366; }
+        .telegram { background: #0088cc; }
+
+        #postContent h1 { color: #002366; }
+        #postContent img { max-width: 100%; height: auto; border-radius: 8px; }
     </style>
 </head>
 <body>
@@ -20,8 +28,15 @@
 
 <div class="container">
     <a href="index.html" class="back-link">← Back to Home</a>
-    <article class="content-area" id="postContent">
-        Loading spiritual wisdom...
+    
+    <article class="content-area">
+        <div id="postContent">Loading spiritual wisdom...</div>
+
+        <div class="share-section" id="shareSection" style="display:none;">
+            <div class="share-title">Share this wisdom:</div>
+            <a id="shareWA" href="#" target="_blank" class="btn-share whatsapp">WhatsApp</a>
+            <a id="shareTG" href="#" target="_blank" class="btn-share telegram">Telegram</a>
+        </div>
     </article>
 </div>
 
@@ -30,9 +45,6 @@
     const postFile = params.get('id');
 
     if (postFile) {
-        // SMART PATH LOGIC: 
-        // If the link is "posts/file.html", use it directly. 
-        // If the link is just "file.html", add "posts/" in front.
         const finalPath = postFile.includes('posts/') ? `./${postFile}` : `./posts/${postFile}`;
 
         fetch(finalPath)
@@ -43,16 +55,24 @@
             .then(htmlContent => {
                 document.getElementById('postContent').innerHTML = htmlContent;
                 
-                // Update Browser Title based on the H1 in the content
+                // Get the title from the loaded content for sharing
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = htmlContent;
-                const titleText = tempDiv.querySelector('h1')?.innerText;
-                if(titleText) document.title = titleText + " - Namo Narayanaya";
+                const postTitle = tempDiv.querySelector('h1')?.innerText || "Spiritual Post";
+                
+                // Set Up Sharing Links
+                const postUrl = window.location.href;
+                const shareText = encodeURIComponent("Read this: " + postTitle + " \n\n");
+                
+                document.getElementById('shareWA').href = `https://api.whatsapp.com/send?text=${shareText}${postUrl}`;
+                document.getElementById('shareTG').href = `https://t.me/share/url?url=${postUrl}&text=${shareText}`;
+                
+                // Show share section once loaded
+                document.getElementById('shareSection').style.display = 'block';
+                document.title = postTitle + " - Namo Narayanaya";
             })
             .catch(err => {
-                console.error(err);
-                document.getElementById('postContent').innerHTML = 
-                `<h2>Content Not Found</h2><p>Sorry, we could not find the post at: <b>${finalPath}</b></p>`;
+                document.getElementById('postContent').innerHTML = "<h2>Post not found</h2>";
             });
     } else {
         window.location.href = "index.html";
