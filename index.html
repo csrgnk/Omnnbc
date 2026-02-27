@@ -8,26 +8,26 @@
         body { margin:0; font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6f9; display: flex; flex-direction: column; min-height: 100vh; }
         
         /* Top Navigation Menu */
-        .nav-menu { background: #C2185B; padding: 10px; text-align: center; }
-        .nav-menu a { color: white; text-decoration: none; margin: 0 15px; font-weight: bold; font-size: 14px; }
-        .nav-menu a:hover { color: #fff9db; }
+        .nav-menu { background: #C2185B; padding: 12px; text-align: center; position: sticky; top: 0; z-index: 1000; }
+        .nav-menu a { color: white; text-decoration: none; margin: 0 12px; font-weight: bold; font-size: 14px; transition: 0.3s; }
+        .nav-menu a:hover { color: #FFD700; }
 
-        header { background:#fff9db; padding:20px; text-align:center; font-size:1.8rem; font-weight:bold; color:#C2185B; border-bottom: 3px solid #FFD700; }
+        header { background:#fff9db; padding:30px 20px; text-align:center; font-size:2rem; font-weight:bold; color:#C2185B; border-bottom: 3px solid #FFD700; }
         
-        .search-container { max-width: 800px; margin: 20px auto; padding: 0 20px; text-align: center; }
-        #postSearch { width: 100%; padding: 12px 20px; font-size: 16px; border: 2px solid #C2185B; border-radius: 25px; outline: none; box-sizing: border-box; }
+        .search-container { max-width: 800px; margin: 20px auto; padding: 0 20px; }
+        #postSearch { width: 100%; padding: 14px 20px; font-size: 16px; border: 2px solid #C2185B; border-radius: 30px; outline: none; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         
         .container { max-width:800px; margin:auto; padding:20px; flex: 1; }
-        .post-card { background:#FFFDE7; padding:20px; margin-bottom:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.08); border-left: 5px solid #C2185B; }
+        .post-card { background:#FFFDE7; padding:25px; margin-bottom:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.08); border-left: 6px solid #C2185B; transition: 0.3s; }
+        .post-card:hover { transform: translateY(-3px); }
         .post-card h2 { margin:0 0 10px; color:#002366; }
         .post-card a { text-decoration:none; color:#002366; }
         
-        /* Pagination Styling */
-        .pagination { text-align: center; margin: 20px 0; }
-        .page-btn { padding: 8px 16px; margin: 5px; border: none; background: #C2185B; color: white; border-radius: 5px; cursor: pointer; }
+        .pagination { text-align: center; margin: 30px 0; }
+        .page-btn { padding: 10px 20px; margin: 5px; border: none; background: #C2185B; color: white; border-radius: 5px; cursor: pointer; font-weight: bold; }
         .page-btn:disabled { background: #ccc; cursor: not-allowed; }
 
-        footer { background: #C2185B; color: white; text-align: center; padding: 20px; margin-top: 40px; }
+        footer { background: #C2185B; color: white; text-align: center; padding: 25px; margin-top: auto; }
     </style>
 </head>
 <body>
@@ -36,53 +36,55 @@
     <a href="about-us">About Us</a>
     <a href="contact-us">Contact Us</a>
     <a href="dmca">DMCA</a>
-    <a href="https://Dasabodha.omnnbc.in" target="_blank">Dasabodha</a>
+    <a href="privacy-policy">Privacy</a>
+    <a href="https://Dasabodha.omnnbc.in" target="_blank" style="color:#FFD700;">Dasabodha</a>
 </nav>
 
 <header>Namo Narayanaya Bhakthi Channel</header>
 
 <div class="search-container">
-    <input type="text" id="postSearch" placeholder="Search stotrams...">
+    <input type="text" id="postSearch" placeholder="Search for stotrams (Rama, Surya, etc)...">
 </div>
 
 <div class="container" id="postsContainer">Loading...</div>
 
 <div class="pagination" id="paginationControls"></div>
 
-<footer><p>© 2026 Namo Narayanaya Bhakthi Channel</p></footer>
+<footer>
+    <p>© 2026 Namo Narayanaya Bhakthi Channel</p>
+</footer>
 
 <script>
     let allPosts = [];
     let currentPage = 1;
     const postsPerPage = 25;
+    const repoPath = "/Omnnbc"; // Change if your repo name is different
 
     fetch('./data/posts.json')
     .then(res => res.json())
-    .then(posts => {
-        allPosts = posts.sort((a, b) => new Date(b.publish_date) - new Date(a.publish_date));
+    .then(data => {
+        allPosts = data.sort((a, b) => new Date(b.publish_date) - new Date(a.publish_date));
         renderPage();
     });
 
     function renderPage() {
         const container = document.getElementById("postsContainer");
         container.innerHTML = "";
-
         const start = (currentPage - 1) * postsPerPage;
         const end = start + postsPerPage;
-        const paginatedPosts = allPosts.slice(start, end);
+        const pageItems = allPosts.slice(start, end);
 
-        paginatedPosts.forEach(post => {
+        pageItems.forEach(post => {
             const cleanId = post.url.replace('posts/', '').replace('.html', '');
             const card = document.createElement("div");
             card.className = "post-card";
             card.innerHTML = `
                 <h2><a href="${cleanId}">${post.title}</a></h2>
-                <small>📅 ${post.publish_date}</small><br><br>
-                <a href="${cleanId}" class="read-btn" style="color:#C2185B; font-weight:bold; text-decoration:none;">Read More</a>
+                <small style="color:#777;">📅 ${post.publish_date}</small><br><br>
+                <a href="${cleanId}" style="color:#FF9800; font-weight:bold; text-decoration:none;">READ MORE →</a>
             `;
             container.appendChild(card);
         });
-
         updateControls();
     }
 
@@ -90,35 +92,32 @@
         const controls = document.getElementById("paginationControls");
         const totalPages = Math.ceil(allPosts.length / postsPerPage);
         controls.innerHTML = "";
-
         if (totalPages <= 1) return;
 
-        const prevBtn = document.createElement("button");
-        prevBtn.innerText = "Previous";
-        prevBtn.className = "page-btn";
-        prevBtn.disabled = currentPage === 1;
-        prevBtn.onclick = () => { currentPage--; renderPage(); window.scrollTo(0,0); };
-        
-        const nextBtn = document.createElement("button");
-        nextBtn.innerText = "Next";
-        nextBtn.className = "page-btn";
-        nextBtn.disabled = currentPage === totalPages;
-        nextBtn.onclick = () => { currentPage++; renderPage(); window.scrollTo(0,0); };
+        const prev = document.createElement("button");
+        prev.innerText = "Previous";
+        prev.className = "page-btn";
+        prev.disabled = currentPage === 1;
+        prev.onclick = () => { currentPage--; renderPage(); window.scrollTo(0,0); };
 
-        controls.appendChild(prevBtn);
-        controls.appendChild(nextBtn);
+        const next = document.createElement("button");
+        next.innerText = "Next";
+        next.className = "page-btn";
+        next.disabled = currentPage === totalPages;
+        next.onclick = () => { currentPage++; renderPage(); window.scrollTo(0,0); };
+
+        controls.appendChild(prev);
+        controls.appendChild(next);
     }
 
-    // Search Logic (Resets to page 1)
     document.getElementById('postSearch').addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase();
         const filtered = allPosts.filter(p => p.title.toLowerCase().includes(term));
-        currentPage = 1;
-        // Temporary override allPosts for display
-        const originalPosts = allPosts;
+        const original = allPosts;
         allPosts = filtered;
+        currentPage = 1;
         renderPage();
-        allPosts = originalPosts; // Reset back
+        allPosts = original;
     });
 </script>
 </body>
