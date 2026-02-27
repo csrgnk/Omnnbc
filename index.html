@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Namo Narayanaya Bhakthi Channel</title>
 
-<meta name="description" content="Telugu devotional stotrams and spiritual content.">
-
 <style>
 body{
 margin:0;
@@ -90,11 +88,10 @@ Loading posts...
 </footer>
 
 <script>
-fetch('data/posts.json')
+fetch('./data/posts.json')
 .then(res=>res.json())
 .then(posts=>{
 
-// Sort newest first
 posts.sort((a,b)=> new Date(b.publish_date) - new Date(a.publish_date));
 
 const container = document.getElementById("postsContainer");
@@ -106,9 +103,9 @@ const card = document.createElement("div");
 card.className = "post-card";
 
 card.innerHTML = `
-<h2><a href="${post.url}">${post.title}</a></h2>
+<h2><a href="./${post.url}">${post.title}</a></h2>
 <div class="post-date">Published on: ${post.publish_date}</div>
-<a href="${post.url}" class="read-btn">Read More</a>
+<a href="./${post.url}" class="read-btn">Read More</a>
 `;
 
 container.appendChild(card);
