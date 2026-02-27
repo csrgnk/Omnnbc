@@ -1,47 +1,12 @@
-<!DOCTYPE html>
-<html lang="te">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namo Narayanaya</title>
-    <style>
-        body { margin:0; font-family: Arial, sans-serif; background:#f4f6f9; line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
-        header { background:#fff9db; padding:20px; text-align:center; font-size:1.8rem; font-weight:bold; color:#C2185B; border-bottom: 3px solid #FFD700; }
-        .container { max-width:800px; margin:20px auto; padding:0 20px; flex: 1; }
-        .content-area { background:#fff; padding:30px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); }
-        #postTitle { color: #002366; text-align: center; margin-top: 0; padding-bottom: 15px; border-bottom: 2px solid #fff9db; }
-        .share-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
-        .btn-s { padding: 10px 15px; border-radius: 5px; text-decoration: none; color: white; font-weight: bold; cursor: pointer; border: none; font-size: 13px; }
-        .wa { background: #25D366; } .fb { background: #1877F2; } .tw { background: #000; } .cp { background: #607D8B; }
-        footer { background: #C2185B; color: white; text-align: center; padding: 25px; margin-top: auto; }
-    </style>
-</head>
-<body>
-
-<header>Namo Narayanaya Bhakthi Channel</header>
-
-<div class="container">
-    <article class="content-area">
-        <h1 id="postTitle">Loading...</h1>
-        <div id="postContent"></div>
-        <div class="share-row" id="shareRow" style="display:none;">
-            <a id="sWA" href="#" target="_blank" class="btn-s wa">WhatsApp</a>
-            <a id="sFB" href="#" target="_blank" class="btn-s fb">Facebook</a>
-            <a id="sTW" href="#" target="_blank" class="btn-s tw">Twitter</a>
-            <button onclick="copyURL()" class="btn-s cp">Copy Link</button>
-        </div>
-    </article>
-    <div style="text-align:center; margin-top:20px;"><a href="/Omnnbc/" style="color:#FF9800; font-weight:bold; text-decoration:none;">← Back to Home</a></div>
-</div>
-
-<footer><p>© 2026 Namo Narayanaya Bhakthi Channel</p></footer>
-
 <script>
     const path = window.location.pathname;
     const cleanId = path.split('/').filter(Boolean).pop();
-    const repo = "/Omnnbc"; // Ensure this matches your Repo Name
+    const repo = "/Omnnbc"; 
 
-    function copyURL() { navigator.clipboard.writeText(window.location.href); alert("Link copied!"); }
+    function copyURL() { 
+        navigator.clipboard.writeText(window.location.href); 
+        alert("Link copied!"); 
+    }
 
     if (cleanId && cleanId !== 'Omnnbc') {
         // 1. Check Pages JSON first
@@ -64,25 +29,42 @@
                     loadContent(`${repo}/posts/${cleanId}.html`, post.title, true);
                 } else {
                     document.getElementById('postTitle').innerText = "404 - Not Found";
+                    document.getElementById('postContent').innerHTML = "<p>The requested page could not be found.</p>";
                 }
+            })
+            .catch(err => {
+                console.error("Routing error:", err);
             });
     }
 
     function loadContent(url, title, isPost) {
         document.getElementById('postTitle').innerText = title;
-        document.title = title;
-        fetch(url).then(res => res.text()).then(html => {
-            document.getElementById('postContent').innerHTML = html;
-            if (isPost) {
-                const shareUrl = encodeURIComponent(window.location.href);
-                const msg = encodeURIComponent(title + "\n\n");
-                document.getElementById('sWA').href = `https://api.whatsapp.com/send?text=${msg}${shareUrl}`;
-                document.getElementById('sFB').href = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
-                document.getElementById('sTW').href = `https://twitter.com/intent/tweet?text=${msg}&url=${shareUrl}`;
-                document.getElementById('shareRow').style.display = 'flex';
-            }
-        });
+        document.title = title + " - Namo Narayanaya";
+        
+        fetch(url)
+            .then(res => res.text())
+            .then(html => {
+                // This cleans the incoming HTML to prevent double headers if they exist
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                
+                // Remove any existing headers or footers found inside the loaded file
+                const badTags = tempDiv.querySelectorAll('header, footer, nav');
+                badTags.forEach(tag => tag.remove());
+
+                document.getElementById('postContent').innerHTML = tempDiv.innerHTML;
+
+                if (isPost) {
+                    const shareUrl = encodeURIComponent(window.location.href);
+                    const msg = encodeURIComponent(title + "\n\n");
+                    document.getElementById('sWA').href = `https://api.whatsapp.com/send?text=${msg}${shareUrl}`;
+                    document.getElementById('sFB').href = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
+                    document.getElementById('sTW').href = `https://twitter.com/intent/tweet?text=${msg}&url=${shareUrl}`;
+                    document.getElementById('shareRow').style.display = 'flex';
+                } else {
+                    // Hide share buttons for static pages like Privacy or About Us
+                    document.getElementById('shareRow').style.display = 'none';
+                }
+            });
     }
 </script>
-</body>
-</html>
