@@ -3,20 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rama Stotram Telugu</title>
 
-<title>Dashakam 1 Samasam 1</title>
-
-<meta name="description" content="Dashakam 1 Samasam 1 Telugu devotional lyrics.">
+<meta name="description" content="Sri Rama Stotram devotional lyrics in Telugu.">
 <meta name="robots" content="index, follow">
 
 <style>
-body {
-  margin:0;
-  font-family: Arial, sans-serif;
-  background:#f8f9fa;
-}
+body { margin:0; font-family:Arial; background:#f8f9fa; }
 
-/* Header */
 header {
   background:#fff9db;
   padding:20px;
@@ -26,7 +20,6 @@ header {
   color:#C2185B;
 }
 
-/* Main container */
 .container {
   max-width:750px;
   margin:auto;
@@ -34,7 +27,6 @@ header {
   background:#fff;
 }
 
-/* Post title */
 .post-title {
   font-size:28px;
   color:#C2185B;
@@ -42,14 +34,12 @@ header {
   font-weight:bold;
 }
 
-/* Content */
 .post-content {
   font-size:17px;
   line-height:1.7;
   color:#333;
 }
 
-/* Share buttons */
 .share-box {
   margin-top:30px;
   padding-top:20px;
@@ -73,7 +63,6 @@ header {
 .tw { background:#000; }
 .copy { background:#ff6600; cursor:pointer; border:none; }
 
-/* Footer */
 footer {
   background:#fff3cc;
   text-align:center;
@@ -93,13 +82,12 @@ Namo Narayanaya Bhakthi Channel
 
 <div class="container">
 
-<div class="post-title" id="postTitle">
-Dashakam 1 Samasam 1
+<div class="post-title">
+Rama Stotram Telugu
 </div>
 
 <div class="post-content">
-<p>Your devotional content goes here...</p>
-<p>Add Telugu lyrics or stotram here...</p>
+<p>Your devotional content here...</p>
 </div>
 
 <div class="share-box">
@@ -116,7 +104,7 @@ Dashakam 1 Samasam 1
 </footer>
 
 <script>
-const title = document.getElementById("postTitle").innerText;
+const title = document.querySelector(".post-title").innerText;
 const url = window.location.href;
 const shareText = encodeURIComponent(title + " " + url);
 
