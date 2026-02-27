@@ -6,91 +6,120 @@
     <title>Namo Narayanaya Bhakthi Channel</title>
     <style>
         body { margin:0; font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6f9; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        /* Top Navigation Menu */
+        .nav-menu { background: #C2185B; padding: 10px; text-align: center; }
+        .nav-menu a { color: white; text-decoration: none; margin: 0 15px; font-weight: bold; font-size: 14px; }
+        .nav-menu a:hover { color: #fff9db; }
+
         header { background:#fff9db; padding:20px; text-align:center; font-size:1.8rem; font-weight:bold; color:#C2185B; border-bottom: 3px solid #FFD700; }
         
-        /* Search Box */
         .search-container { max-width: 800px; margin: 20px auto; padding: 0 20px; text-align: center; }
         #postSearch { width: 100%; padding: 12px 20px; font-size: 16px; border: 2px solid #C2185B; border-radius: 25px; outline: none; box-sizing: border-box; }
         
         .container { max-width:800px; margin:auto; padding:20px; flex: 1; }
-        
-        /* Post Card Styling */
-        .post-card { background:#FFFDE7; padding:20px; margin-bottom:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.08); border-left: 5px solid #C2185B; transition: transform 0.2s; }
-        .post-card:hover { transform: translateY(-3px); }
+        .post-card { background:#FFFDE7; padding:20px; margin-bottom:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.08); border-left: 5px solid #C2185B; }
         .post-card h2 { margin:0 0 10px; color:#002366; }
         .post-card a { text-decoration:none; color:#002366; }
-        .date { color:#777; font-size:13px; margin-bottom:15px; display: block; }
         
-        /* Read More Button */
-        .read-btn { display:inline-block; padding:8px 18px; background:#FF9800; color:#fff; border-radius:20px; text-decoration:none; font-size:14px; font-weight:bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        
+        /* Pagination Styling */
+        .pagination { text-align: center; margin: 20px 0; }
+        .page-btn { padding: 8px 16px; margin: 5px; border: none; background: #C2185B; color: white; border-radius: 5px; cursor: pointer; }
+        .page-btn:disabled { background: #ccc; cursor: not-allowed; }
+
         footer { background: #C2185B; color: white; text-align: center; padding: 20px; margin-top: 40px; }
     </style>
 </head>
 <body>
 
+<nav class="nav-menu">
+    <a href="about-us">About Us</a>
+    <a href="contact-us">Contact Us</a>
+    <a href="dmca">DMCA</a>
+    <a href="https://Dasabodha.omnnbc.in" target="_blank">Dasabodha</a>
+</nav>
+
 <header>Namo Narayanaya Bhakthi Channel</header>
 
 <div class="search-container">
-    <input type="text" id="postSearch" placeholder="Search for stotrams (e.g. Rama, Surya)...">
+    <input type="text" id="postSearch" placeholder="Search stotrams...">
 </div>
 
-<div class="container" id="postsContainer">Loading divine content...</div>
+<div class="container" id="postsContainer">Loading...</div>
 
-<footer>
-    <p>© 2026 Namo Narayanaya Bhakthi Channel</p>
-    <p>Spreading Peace and Devotion</p>
-</footer>
+<div class="pagination" id="paginationControls"></div>
+
+<footer><p>© 2026 Namo Narayanaya Bhakthi Channel</p></footer>
 
 <script>
     let allPosts = [];
+    let currentPage = 1;
+    const postsPerPage = 25;
 
-    // Fetch the post database
     fetch('./data/posts.json')
     .then(res => res.json())
     .then(posts => {
-        // Sort by date (Newest first)
         allPosts = posts.sort((a, b) => new Date(b.publish_date) - new Date(a.publish_date));
-        displayPosts(allPosts);
-    })
-    .catch(() => { 
-        document.getElementById("postsContainer").innerHTML = "Error loading posts. Please check data/posts.json"; 
+        renderPage();
     });
 
-    function displayPosts(postsToDisplay) {
+    function renderPage() {
         const container = document.getElementById("postsContainer");
         container.innerHTML = "";
 
-        if (postsToDisplay.length === 0) {
-            container.innerHTML = "<p style='text-align:center;'>No stotrams found matching your search.</p>";
-            return;
-        }
+        const start = (currentPage - 1) * postsPerPage;
+        const end = start + postsPerPage;
+        const paginatedPosts = allPosts.slice(start, end);
 
-        postsToDisplay.forEach(post => {
-            // URL CLEANING: Removes 'posts/' and '.html'
-            // Result: "rama-stotram" instead of "posts/rama-stotram.html"
+        paginatedPosts.forEach(post => {
             const cleanId = post.url.replace('posts/', '').replace('.html', '');
-            
             const card = document.createElement("div");
             card.className = "post-card";
             card.innerHTML = `
                 <h2><a href="${cleanId}">${post.title}</a></h2>
-                <span class="date">📅 Published on: ${post.publish_date}</span>
-                <a href="${cleanId}" class="read-btn">Read More</a>
+                <small>📅 ${post.publish_date}</small><br><br>
+                <a href="${cleanId}" class="read-btn" style="color:#C2185B; font-weight:bold; text-decoration:none;">Read More</a>
             `;
             container.appendChild(card);
         });
+
+        updateControls();
     }
 
-    // Live Search Logic
+    function updateControls() {
+        const controls = document.getElementById("paginationControls");
+        const totalPages = Math.ceil(allPosts.length / postsPerPage);
+        controls.innerHTML = "";
+
+        if (totalPages <= 1) return;
+
+        const prevBtn = document.createElement("button");
+        prevBtn.innerText = "Previous";
+        prevBtn.className = "page-btn";
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.onclick = () => { currentPage--; renderPage(); window.scrollTo(0,0); };
+        
+        const nextBtn = document.createElement("button");
+        nextBtn.innerText = "Next";
+        nextBtn.className = "page-btn";
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.onclick = () => { currentPage++; renderPage(); window.scrollTo(0,0); };
+
+        controls.appendChild(prevBtn);
+        controls.appendChild(nextBtn);
+    }
+
+    // Search Logic (Resets to page 1)
     document.getElementById('postSearch').addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        const filtered = allPosts.filter(post => 
-            post.title.toLowerCase().includes(searchTerm)
-        );
-        displayPosts(filtered);
+        const term = e.target.value.toLowerCase();
+        const filtered = allPosts.filter(p => p.title.toLowerCase().includes(term));
+        currentPage = 1;
+        // Temporary override allPosts for display
+        const originalPosts = allPosts;
+        allPosts = filtered;
+        renderPage();
+        allPosts = originalPosts; // Reset back
     });
 </script>
-
 </body>
 </html>
