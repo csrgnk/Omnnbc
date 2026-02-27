@@ -1,48 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html lang="te">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Namo Narayanaya Bhakthi Channel</title>
-<style>
-    body{ margin:0; font-family:Arial; background:#f4f6f9; display: flex; flex-direction: column; min-height: 100vh; }
-    header{ background:#fff9db; padding:20px; text-align:center; font-size:1.8rem; font-weight:bold; color:#C2185B; border-bottom: 2px solid #f0e68c; }
-    .container{ max-width:900px; margin:auto; padding:20px; flex: 1; }
-    .post-card{ background:#FFFDE7; padding:20px; margin-bottom:20px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
-    .post-card h2{ margin:0 0 10px; color:#002366; }
-    .post-card a{ text-decoration:none; color:#002366; }
-    .date{ color:#666; font-size:14px; margin-bottom:10px; }
-    .read-btn{ display:inline-block; padding:8px 14px; background:#FF9800; color:#fff; border-radius:20px; text-decoration:none; font-size:14px; font-weight:bold; }
-    footer { background: #C2185B; color: white; text-align: center; padding: 20px; margin-top: 40px; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Namo Narayanaya Bhakthi Channel</title>
+    <style>
+        body { margin:0; font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6f9; display: flex; flex-direction: column; min-height: 100vh; }
+        header { background:#fff9db; padding:20px; text-align:center; font-size:1.8rem; font-weight:bold; color:#C2185B; border-bottom: 3px solid #FFD700; }
+        
+        /* Search Box Styling */
+        .search-container { max-width: 800px; margin: 20px auto; padding: 0 20px; text-align: center; }
+        #postSearch { width: 100%; padding: 12px 20px; font-size: 16px; border: 2px solid #C2185B; border-radius: 25px; outline: none; box-sizing: border-box; }
+        #postSearch:focus { box-shadow: 0 0 8px rgba(194, 24, 91, 0.3); }
+
+        .container { max-width:800px; margin:auto; padding:20px; flex: 1; }
+        .post-card { background:#FFFDE7; padding:20px; margin-bottom:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.08); border-left: 5px solid #C2185B; }
+        .post-card h2 { margin:0 0 10px; color:#002366; }
+        .post-card a { text-decoration:none; color:#002366; }
+        .date { color:#777; font-size:14px; margin-bottom:15px; display: block; }
+        .read-btn { display:inline-block; padding:8px 18px; background:#FF9800; color:#fff; border-radius:20px; text-decoration:none; font-size:14px; font-weight:bold; }
+        footer { background: #C2185B; color: white; text-align: center; padding: 20px; margin-top: 40px; }
+    </style>
 </head>
 <body>
+
 <header>Namo Narayanaya Bhakthi Channel</header>
+
+<div class="search-container">
+    <input type="text" id="postSearch" placeholder="Search for stotrams (e.g. Rama, Surya)...">
+</div>
+
 <div class="container" id="postsContainer">Loading...</div>
+
 <footer>
     <p>© 2026 Namo Narayanaya Bhakthi Channel</p>
-    <p>Spreading Peace and Devotion</p>
 </footer>
+
 <script>
-fetch('./data/posts.json')
-.then(res=>res.json())
-.then(posts=>{
-    posts.sort((a,b)=> new Date(b.publish_date) - new Date(a.publish_date));
-    const container = document.getElementById("postsContainer");
-    container.innerHTML = "";
-    posts.forEach(post=>{
-        const cleanId = post.url.replace('posts/', '');
-        const card = document.createElement("div");
-        card.className = "post-card";
-        card.innerHTML = `
-            <h2><a href="post.html?id=${cleanId}">${post.title}</a></h2>
-            <div class="date">📅 ${post.publish_date}</div>
-            <a href="post.html?id=${cleanId}" class="read-btn">Read More</a>
-        `;
-        container.appendChild(card);
+    let allPosts = []; // Store posts here so we can filter them
+
+    fetch('./data/posts.json')
+    .then(res => res.json())
+    .then(posts => {
+        allPosts = posts.sort((a, b) => new Date(b.publish_date) - new Date(a.publish_date));
+        displayPosts(allPosts);
+    })
+    .catch(() => { document.getElementById("postsContainer").innerHTML = "Error loading posts."; });
+
+    function displayPosts(postsToDisplay) {
+        const container = document.getElementById("postsContainer");
+        container.innerHTML = "";
+
+        if (postsToDisplay.length === 0) {
+            container.innerHTML = "<p style='text-align:center;'>No stotrams found.</p>";
+            return;
+        }
+
+        postsToDisplay.forEach(post => {
+            const cleanId = post.url.replace('posts/', '');
+            const card = document.createElement("div");
+            card.className = "post-card";
+            card.innerHTML = `
+                <h2><a href="post.html?id=${cleanId}">${post.title}</a></h2>
+                <span class="date">📅 ${post.publish_date}</span>
+                <a href="post.html?id=${cleanId}" class="read-btn">Read More</a>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    // Search Logic
+    document.getElementById('postSearch').addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const filtered = allPosts.filter(post => 
+            post.title.toLowerCase().includes(searchTerm)
+        );
+        displayPosts(filtered);
     });
-})
-.catch(()=> { document.getElementById("postsContainer").innerHTML="No posts available."; });
 </script>
+
 </body>
 </html>
