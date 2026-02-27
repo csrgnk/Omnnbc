@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rama Stotram Telugu</title>
+
+<meta name="description" content="Sri Rama Stotram devotional lyrics in Telugu.">
+</head>
+<body>
+
+<div id="header"></div>
+
+<div style="max-width:800px;margin:auto;padding:20px;">
+
+<h1 style="color:#002366;text-align:center;">
+Rama Stotram Telugu
+</h1>
+
+<p>Full devotional content here...</p>
+
+<hr>
+
+<div style="text-align:center;">
+<button onclick="shareWhatsApp()">WhatsApp</button>
+<button onclick="shareFacebook()">Facebook</button>
+<button onclick="shareTwitter()">Twitter</button>
+<button onclick="copyURL()">Copy Link</button>
+</div>
+
+</div>
+
+<div id="footer"></div>
+
+<script>
+fetch('../header.html')
+.then(r=>r.text())
+.then(d=>document.getElementById('header').innerHTML=d);
+
+fetch('../footer.html')
+.then(r=>r.text())
+.then(d=>document.getElementById('footer').innerHTML=d);
+
+const title = document.title;
+const url = window.location.href;
+
+function shareWhatsApp(){
+window.open(`https://wa.me/?text=${encodeURIComponent(title+" - "+url)}`,'_blank');
+}
+
+function shareFacebook(){
+window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,'_blank');
+}
+
+function shareTwitter(){
+window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(title+" - "+url)}`,'_blank');
+}
+
+function copyURL(){
+navigator.clipboard.writeText(title+" - "+url);
+alert("Copied!");
+}
+</script>
+
+</body>
+</html>
