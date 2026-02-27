@@ -1,77 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loading...</title>
-
-<style>
-body{
-margin:0;
-font-family:Arial, sans-serif;
-background:#f4f6f9;
-}
-
-header{
-background:#fff9db;
-padding:20px;
-text-align:center;
-font-size:1.8rem;
-font-weight:bold;
-color:#C2185B;
-}
-
-.container{
-padding:20px;
-max-width:800px;
-margin:auto;
-background:#FFFDE7;
-border-radius:12px;
-box-shadow:0 4px 10px rgba(0,0,0,0.1);
-margin-top:20px;
-}
-
-footer{
-background:#fff3cc;
-text-align:center;
-padding:20px;
-margin-top:40px;
-color:#C2185B;
-font-weight:bold;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post View - Namo Narayanaya</title>
+    <style>
+        body { margin:0; font-family:Arial; background:#f4f6f9; line-height: 1.6; color: #333; }
+        header { background:#fff9db; padding:20px; text-align:center; font-size:1.8rem; font-weight:bold; color:#C2185B; }
+        .container { max-width:800px; margin:20px auto; padding:20px; }
+        .content-area { background:#fff; padding:30px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+        .back-link { display:inline-block; margin-bottom:20px; color:#FF9800; text-decoration:none; font-weight:bold; }
+        
+        /* Styles for the fetched content */
+        #postContent h1 { color: #002366; margin-top: 0; }
+        #postContent img { max-width: 100%; height: auto; border-radius: 8px; margin: 10px 0; }
+    </style>
 </head>
-
 <body>
 
-<header>
-Namo Narayanaya Bhakthi Channel
-</header>
+<header>Namo Narayanaya Bhakthi Channel</header>
 
-<div class="container" id="contentArea">
-Loading...
+<div class="container">
+    <a href="index.html" class="back-link">← Back to Home</a>
+    <article class="content-area" id="postContent">
+        Loading content...
+    </article>
 </div>
 
-<footer>
-© Namo Narayanaya Bhakthi Channel
-</footer>
-
 <script>
-const params = new URLSearchParams(window.location.search);
-const url = params.get("url");
+    // 1. Capture the "id" from the browser URL (e.g., ?id=spiritual-post.html)
+    const params = new URLSearchParams(window.location.search);
+    const postFile = params.get('id');
 
-if(url){
-fetch(url)
-.then(res=>res.text())
-.then(html=>{
-document.getElementById("contentArea").innerHTML = html;
-})
-.catch(()=>{
-document.getElementById("contentArea").innerHTML="Post not found.";
-});
-}else{
-document.getElementById("contentArea").innerHTML="No post selected.";
-}
+    if (postFile) {
+        // 2. Fetch the HTML file from your 'posts' folder
+        fetch(`./posts/${postFile}`)
+            .then(response => {
+                if (!response.ok) throw new Error('File not found');
+                return response.text();
+            })
+            .then(htmlContent => {
+                // 3. Inject the content into the page
+                document.getElementById('postContent').innerHTML = htmlContent;
+            })
+            .catch(err => {
+                document.getElementById('postContent').innerHTML = "<h2>Error</h2><p>Could not load this post. It may have been moved.</p>";
+            });
+    } else {
+        // Redirect back home if no ID is found
+        window.location.href = "index.html";
+    }
 </script>
 
 </body>
