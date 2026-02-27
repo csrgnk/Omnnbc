@@ -7,19 +7,32 @@
     <style>
         body { margin:0; font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6f9; display: flex; flex-direction: column; min-height: 100vh; }
         
-        /* Top Navigation Menu */
         .nav-menu { background: #C2185B; padding: 12px; text-align: center; position: sticky; top: 0; z-index: 1000; }
-        .nav-menu a { color: white; text-decoration: none; margin: 0 12px; font-weight: bold; font-size: 14px; transition: 0.3s; }
-        .nav-menu a:hover { color: #FFD700; }
+        .nav-menu a { color: white; text-decoration: none; margin: 0 12px; font-weight: bold; font-size: 14px; }
 
         header { background:#fff9db; padding:30px 20px; text-align:center; font-size:2rem; font-weight:bold; color:#C2185B; border-bottom: 3px solid #FFD700; }
         
-        .search-container { max-width: 800px; margin: 20px auto; padding: 0 20px; }
-        #postSearch { width: 100%; padding: 14px 20px; font-size: 16px; border: 2px solid #C2185B; border-radius: 30px; outline: none; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        /* FIXED SEARCH BOX */
+        .search-container { 
+            max-width: 800px; 
+            margin: 20px auto; 
+            padding: 0 20px; 
+            box-sizing: border-box;
+        }
+        #postSearch { 
+            width: 100%; 
+            padding: 14px 20px; 
+            font-size: 16px; 
+            border: 2px solid #C2185B; 
+            border-radius: 30px; 
+            outline: none; 
+            box-sizing: border-box; /* Fixes right-side overflow */
+            display: block;
+            margin: 0 auto;
+        }
         
         .container { max-width:800px; margin:auto; padding:20px; flex: 1; }
-        .post-card { background:#FFFDE7; padding:25px; margin-bottom:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.08); border-left: 6px solid #C2185B; transition: 0.3s; }
-        .post-card:hover { transform: translateY(-3px); }
+        .post-card { background:#FFFDE7; padding:25px; margin-bottom:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.08); border-left: 6px solid #C2185B; }
         .post-card h2 { margin:0 0 10px; color:#002366; }
         .post-card a { text-decoration:none; color:#002366; }
         
@@ -43,22 +56,18 @@
 <header>Namo Narayanaya Bhakthi Channel</header>
 
 <div class="search-container">
-    <input type="text" id="postSearch" placeholder="Search for stotrams (Rama, Surya, etc)...">
+    <input type="text" id="postSearch" placeholder="Search for stotrams...">
 </div>
 
 <div class="container" id="postsContainer">Loading...</div>
-
 <div class="pagination" id="paginationControls"></div>
 
-<footer>
-    <p>© 2026 Namo Narayanaya Bhakthi Channel</p>
-</footer>
+<footer><p>© 2026 Namo Narayanaya Bhakthi Channel</p></footer>
 
 <script>
     let allPosts = [];
     let currentPage = 1;
     const postsPerPage = 25;
-    const repoPath = "/Omnnbc"; // Change if your repo name is different
 
     fetch('./data/posts.json')
     .then(res => res.json())
@@ -111,8 +120,8 @@
     }
 
     document.getElementById('postSearch').addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        const filtered = allPosts.filter(p => p.title.toLowerCase().includes(term));
+        const searchTerm = e.target.value.toLowerCase();
+        const filtered = allPosts.filter(p => p.title.toLowerCase().includes(searchTerm));
         const original = allPosts;
         allPosts = filtered;
         currentPage = 1;
