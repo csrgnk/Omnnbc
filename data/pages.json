@@ -2,5 +2,5 @@
   { "id": "about-us", "title": "About Us", "file": "pages/about-us.html" },
   { "id": "contact-us", "title": "Contact Us", "file": "pages/contact-us.html" },
   { "id": "dmca", "title": "DMCA Policy", "file": "pages/dmca.html" },
-  { "id": "privacy-policy", "title": "Privacy Policy", "file": "pages/privacy.html" }
+  { "id": "privacy-policy", "title": "Privacy Policy", "file": "pages/privacy-policy.html" }
 ]
