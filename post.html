@@ -8,18 +8,19 @@
         body { margin:0; font-family:Arial; background:#f4f6f9; line-height: 1.6; color: #333; }
         header { background:#fff9db; padding:20px; text-align:center; font-size:1.8rem; font-weight:bold; color:#C2185B; }
         .container { max-width:800px; margin:20px auto; padding:20px; }
-        .content-area { background:#fff; padding:30px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); min-height: 300px; }
+        .content-area { background:#fff; padding:30px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
         .back-link { display:inline-block; margin-bottom:20px; color:#FF9800; text-decoration:none; font-weight:bold; }
         
-        /* Share Button Styles */
-        .share-section { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
-        .share-title { font-weight: bold; margin-bottom: 10px; color: #666; }
-        .btn-share { display: inline-flex; align-items: center; padding: 10px 18px; border-radius: 5px; text-decoration: none; color: white; font-weight: bold; margin-right: 10px; font-size: 14px; }
-        .whatsapp { background: #25D366; }
-        .telegram { background: #0088cc; }
+        /* Styled Share Row */
+        .share-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
+        .btn-s { padding: 10px 15px; border-radius: 5px; text-decoration: none; color: white; font-weight: bold; font-size: 13px; cursor: pointer; border: none; }
+        .wa { background: #25D366; }
+        .fb { background: #1877F2; }
+        .tw { background: #000000; }
+        .cp { background: #607D8B; }
 
-        #postContent h1 { color: #002366; }
-        #postContent img { max-width: 100%; height: auto; border-radius: 8px; }
+        #postContent h1 { color: #002366; text-align: center; }
+        #postContent img { max-width: 100%; height: auto; border-radius: 8px; display: block; margin: 20px auto; }
     </style>
 </head>
 <body>
@@ -28,14 +29,14 @@
 
 <div class="container">
     <a href="index.html" class="back-link">← Back to Home</a>
-    
     <article class="content-area">
-        <div id="postContent">Loading spiritual wisdom...</div>
+        <div id="postContent">Loading...</div>
 
-        <div class="share-section" id="shareSection" style="display:none;">
-            <div class="share-title">Share this wisdom:</div>
-            <a id="shareWA" href="#" target="_blank" class="btn-share whatsapp">WhatsApp</a>
-            <a id="shareTG" href="#" target="_blank" class="btn-share telegram">Telegram</a>
+        <div class="share-row" id="shareRow" style="display:none;">
+            <a id="sWA" href="#" target="_blank" class="btn-s wa">WhatsApp</a>
+            <a id="sFB" href="#" target="_blank" class="btn-s fb">Facebook</a>
+            <a id="sTW" href="#" target="_blank" class="btn-s tw">X / Twitter</a>
+            <button onclick="copyURL()" class="btn-s cp">Copy Link</button>
         </div>
     </article>
 </div>
@@ -44,39 +45,30 @@
     const params = new URLSearchParams(window.location.search);
     const postFile = params.get('id');
 
-    if (postFile) {
-        const finalPath = postFile.includes('posts/') ? `./${postFile}` : `./posts/${postFile}`;
-
-        fetch(finalPath)
-            .then(response => {
-                if (!response.ok) throw new Error('File not found');
-                return response.text();
-            })
-            .then(htmlContent => {
-                document.getElementById('postContent').innerHTML = htmlContent;
-                
-                // Get the title from the loaded content for sharing
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = htmlContent;
-                const postTitle = tempDiv.querySelector('h1')?.innerText || "Spiritual Post";
-                
-                // Set Up Sharing Links
-                const postUrl = window.location.href;
-                const shareText = encodeURIComponent("Read this: " + postTitle + " \n\n");
-                
-                document.getElementById('shareWA').href = `https://api.whatsapp.com/send?text=${shareText}${postUrl}`;
-                document.getElementById('shareTG').href = `https://t.me/share/url?url=${postUrl}&text=${shareText}`;
-                
-                // Show share section once loaded
-                document.getElementById('shareSection').style.display = 'block';
-                document.title = postTitle + " - Namo Narayanaya";
-            })
-            .catch(err => {
-                document.getElementById('postContent').innerHTML = "<h2>Post not found</h2>";
-            });
-    } else {
-        window.location.href = "index.html";
+    function copyURL() {
+        navigator.clipboard.writeText(window.location.href);
+        alert("Link copied to clipboard!");
     }
+
+    if (postFile) {
+        const path = postFile.includes('posts/') ? `./${postFile}` : `./posts/${postFile}`;
+        fetch(path)
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('postContent').innerHTML = html;
+                const postTitle = document.querySelector('h1')?.innerText || "Spiritual Wisdom";
+                const postUrl = encodeURIComponent(window.location.href);
+                const text = encodeURIComponent(postTitle + " - Read more here: ");
+
+                document.getElementById('sWA').href = `https://api.whatsapp.com/send?text=${text}${postUrl}`;
+                document.getElementById('sFB').href = `https://www.facebook.com/sharer/sharer.php?u=${postUrl}`;
+                document.getElementById('sTW').href = `https://twitter.com/intent/tweet?text=${text}&url=${postUrl}`;
+                
+                document.getElementById('shareRow').style.display = 'flex';
+                document.title = postTitle;
+            })
+            .catch(() => { document.getElementById('postContent').innerHTML = "Post not found."; });
+    } else { window.location.href = "index.html"; }
 </script>
 </body>
 </html>
