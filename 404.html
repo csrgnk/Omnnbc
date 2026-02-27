@@ -3,20 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post View</title>
+    <title>Namo Narayanaya Bhakthi Channel</title>
     <style>
-        body { margin:0; font-family: Arial, sans-serif; background:#f4f6f9; line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
+        body { margin:0; font-family: Arial, sans-serif; background:#f4f6f9; display: flex; flex-direction: column; min-height: 100vh; }
         header { background:#fff9db; padding:20px; text-align:center; font-size:1.8rem; font-weight:bold; color:#C2185B; border-bottom: 2px solid #FFD700; }
         .container { max-width:800px; margin:20px auto; padding:0 20px; flex: 1; }
         .content-area { background:#fff; padding:30px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); }
-        #postTitle { color: #002366; text-align: center; margin-top: 0; margin-bottom: 20px; font-size: 1.8rem; border-bottom: 2px solid #fff9db; padding-bottom: 15px; }
+        #postTitle { color: #002366; text-align: center; margin-top: 0; padding-bottom: 15px; border-bottom: 2px solid #fff9db; }
         .share-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
-        .btn-s { padding: 12px 18px; border-radius: 8px; text-decoration: none; color: white; font-weight: bold; font-size: 14px; cursor: pointer; border: none; }
+        .btn-s { padding: 12px 18px; border-radius: 8px; text-decoration: none; color: white; font-weight: bold; cursor: pointer; border: none; }
         .wa { background: #25D366; } .fb { background: #1877F2; } .tw { background: #000; } .cp { background: #607D8B; }
-        .navigation-row { margin-top: 30px; text-align: center; margin-bottom: 20px; }
-        .back-link { display:inline-block; color:#FF9800; text-decoration:none; font-weight:bold; font-size: 16px; }
         footer { background: #C2185B; color: white; text-align: center; padding: 25px; margin-top: auto; }
-        #postContent img { max-width: 100%; height: auto; border-radius: 8px; display: block; margin: 20px auto; }
     </style>
 </head>
 <body>
@@ -25,7 +22,7 @@
 
 <div class="container">
     <article class="content-area">
-        <h1 id="postTitle">Loading...</h1>
+        <h1 id="postTitle">Loading Divine Wisdom...</h1>
         <div id="postContent"></div>
         <div class="share-row" id="shareRow" style="display:none;">
             <a id="sWA" href="#" target="_blank" class="btn-s wa">WhatsApp</a>
@@ -34,44 +31,42 @@
             <button onclick="copyURL()" class="btn-s cp">Copy Link</button>
         </div>
     </article>
-    <div class="navigation-row"><a href="index.html" class="back-link">← Back to Home</a></div>
+    <div style="text-align:center; margin-top:20px;"><a href="/Omnnbc/" style="color:#FF9800; font-weight:bold; text-decoration:none;">← Back to Home</a></div>
 </div>
 
 <footer><p>© 2026 Namo Narayanaya Bhakthi Channel</p></footer>
 
 <script>
-    const params = new URLSearchParams(window.location.search);
-    const cleanId = params.get('id');
+    // 1. Extract the clean ID from the URL path
+    const path = window.location.pathname;
+    const cleanId = path.split('/').filter(Boolean).pop();
 
     function copyURL() { navigator.clipboard.writeText(window.location.href); alert("Link copied!"); }
 
-    if (cleanId) {
-        fetch('./data/posts.json')
+    if (cleanId && cleanId !== 'Omnnbc') {
+        fetch('/Omnnbc/data/posts.json')
             .then(res => res.json())
             .then(allPosts => {
-                // Find post title by matching the ID
                 const postData = allPosts.find(p => p.url.includes(cleanId));
-                const titleToUse = postData ? postData.title : "Divine Wisdom";
+                const titleToUse = postData ? postData.title : "Spiritual Post";
                 document.getElementById('postTitle').innerText = titleToUse;
                 document.title = titleToUse;
 
-                // Load content from posts/ folder
-                return fetch(`./posts/${cleanId}.html`).then(res => res.text()).then(html => ({ html, title: titleToUse }));
+                return fetch(`/Omnnbc/posts/${cleanId}.html`).then(res => res.text()).then(html => ({ html, title: titleToUse }));
             })
             .then(({ html, title }) => {
                 document.getElementById('postContent').innerHTML = html;
-                
                 const url = window.location.href;
-                const msg = encodeURIComponent(title + "\n\nRead here: ");
-
+                const msg = encodeURIComponent(title + "\n\nRead more: ");
                 document.getElementById('sWA').href = `https://api.whatsapp.com/send?text=${msg}${encodeURIComponent(url)}`;
                 document.getElementById('sFB').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
                 document.getElementById('sTW').href = `https://twitter.com/intent/tweet?text=${msg}&url=${encodeURIComponent(url)}`;
-                
                 document.getElementById('shareRow').style.display = 'flex';
             })
-            .catch(() => { document.getElementById('postTitle').innerText = "Not Found"; });
-    } else { window.location.href = "index.html"; }
+            .catch(() => { document.getElementById('postTitle').innerText = "Post Not Found"; });
+    } else {
+        window.location.href = "/Omnnbc/";
+    }
 </script>
 </body>
 </html>
