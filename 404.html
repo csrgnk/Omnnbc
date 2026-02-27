@@ -3,52 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Namo Narayanaya</title>
+    
+    <title id="pageTitle">Namo Narayanaya</title>
+    <meta id="metaDesc" name="description" content="Devotional Stotrams and Spiritual Information">
+    <meta id="metaKeys" name="keywords" content="bhakthi, stotrams, telugu lyrics, omnnbc">
+    <link id="canonicalUrl" rel="canonical" href="">
+
     <style>
-        /* UNIVERSAL OVERFLOW FIX */
         * { box-sizing: border-box; }
-
-        body { 
-            margin:0; 
-            font-family: 'Segoe UI', Arial, sans-serif; 
-            background:#f4f6f9; 
-            line-height: 1.6; 
-            overflow-x: hidden; /* Prevents horizontal scroll */
-        }
-
-        header { 
-            background:#fff9db; 
-            padding:25px 15px; 
-            text-align:center; 
-            font-size:1.6rem; 
-            font-weight:bold; 
-            color:#C2185B; 
-            border-bottom: 3px solid #FFD700;
-        }
-
-        .container { 
-            width: 100%;
-            max-width: 800px; 
-            margin: 0 auto; 
-            padding: 15px; 
-        }
-
-        .content-area { 
-            background:#fff; 
-            padding: 20px; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-            width: 100%;
-            word-wrap: break-word; /* Prevents long text from breaking layout */
-        }
-
+        body { margin:0; font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6f9; line-height: 1.6; overflow-x: hidden; }
+        header { background:#fff9db; padding:25px 15px; text-align:center; font-size:1.6rem; font-weight:bold; color:#C2185B; border-bottom: 3px solid #FFD700; }
+        .container { width: 100%; max-width: 800px; margin: 0 auto; padding: 15px; }
+        .content-area { background:#fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; word-wrap: break-word; }
         #postTitle { color: #002366; text-align: center; margin-top: 0; padding-bottom: 15px; border-bottom: 2px solid #fff9db; font-size: 1.5rem; }
-
         .share-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
-        .btn-s { padding: 10px 14px; border-radius: 6px; text-decoration: none; color: white; font-weight: bold; font-size: 12px; border: none; }
+        .btn-s { padding: 10px 14px; border-radius: 6px; text-decoration: none; color: white; font-weight: bold; font-size: 12px; border: none; cursor: pointer; }
         .wa { background: #25D366; } .fb { background: #1877F2; } .tw { background: #000; } .cp { background: #607D8B; }
-
-        footer { background: #C2185B; color: white; text-align: center; padding: 20px; margin-top: auto; width: 100%; }
+        footer { background: #C2185B; color: white; text-align: center; padding: 20px; margin-top: 20px; width: 100%; }
     </style>
 </head>
 <body>
@@ -59,6 +30,7 @@
     <article class="content-area">
         <h1 id="postTitle">Loading...</h1>
         <div id="postContent"></div>
+        
         <div class="share-row" id="shareRow" style="display:none;">
             <a id="sWA" href="#" target="_blank" class="btn-s wa">WhatsApp</a>
             <a id="sFB" href="#" target="_blank" class="btn-s fb">Facebook</a>
@@ -81,27 +53,44 @@
     if (cleanId && cleanId !== 'Omnnbc') {
         fetch(`${repo}/data/pages.json`).then(res => res.json()).then(pages => {
             const page = pages.find(p => p.id === cleanId);
-            if (page) { loadContent(`${repo}/${page.file}`, page.title, false); } 
+            if (page) { 
+                updateSEO(page.title);
+                loadContent(`${repo}/${page.file}`, page.title, false); 
+            } 
             else { return fetch(`${repo}/data/posts.json`).then(res => res.json()); }
         }).then(posts => {
             if (!posts) return;
             const post = posts.find(p => p.url.includes(cleanId));
-            if (post) { loadContent(`${repo}/posts/${cleanId}.html`, post.title, true); }
+            if (post) { 
+                updateSEO(post.title);
+                loadContent(`${repo}/posts/${cleanId}.html`, post.title, true); 
+            }
         }).catch(() => { document.getElementById('postTitle').innerText = "Not Found"; });
+    }
+
+    // Dynamic SEO Setup
+    function updateSEO(title) {
+        const mainKeyword = title + " Telugu Lyrics";
+        document.title = mainKeyword + " - Namo Narayanaya";
+        document.getElementById('metaDesc').setAttribute("content", "Read " + mainKeyword + ". Find devotional stotrams on Namo Narayanaya.");
+        document.getElementById('metaKeys').setAttribute("content", title + ", " + mainKeyword + ", stotrams, omnnbc");
+        document.getElementById('canonicalUrl').setAttribute("href", window.location.href);
     }
 
     function loadContent(url, title, isPost) {
         document.getElementById('postTitle').innerText = title;
-        document.title = title;
         fetch(url).then(res => res.text()).then(html => {
             const temp = document.createElement('div');
             temp.innerHTML = html;
-            const extras = temp.querySelectorAll('header, footer, nav, h1');
+            
+            // Removing only common non-content elements, keeping your H1/H2 titles intact
+            const extras = temp.querySelectorAll('header, footer, nav');
             extras.forEach(e => e.remove());
+            
             document.getElementById('postContent').innerHTML = temp.innerHTML;
             if (isPost) {
                 const u = encodeURIComponent(window.location.href);
-                const m = encodeURIComponent(title + "\n\n");
+                const m = encodeURIComponent(title + " Telugu Lyrics\n\n");
                 document.getElementById('sWA').href = `https://api.whatsapp.com/send?text=${m}${u}`;
                 document.getElementById('sFB').href = `https://www.facebook.com/sharer/sharer.php?u=${u}`;
                 document.getElementById('sTW').href = `https://twitter.com/intent/tweet?text=${m}&url=${u}`;
@@ -111,5 +100,5 @@
     }
 </script>
 </body>
-                                                         </html>
-                                                         
+    </html>
+    
