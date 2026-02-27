@@ -3,87 +3,74 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Namo Narayanaya Bhakthi Channel</title>
 
 <meta name="description" content="Telugu devotional stotrams and spiritual content.">
 
 <style>
-body { background:#fff; font-family:Arial,sans-serif; margin:0; }
-
-header {
-  background:#fff9db;
-  padding:20px;
-  text-align:center;
-  font-size:1.8rem;
-  font-weight:bold;
-  color:#C2185B;
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:#f4f6f9;
 }
 
-.posts-wrapper { padding:20px 10px; }
-
-.post-card {
-  background:#FFFDE7;
-  padding:20px;
-  margin-bottom:20px;
-  border-radius:8px;
-  box-shadow:0 2px 5px rgba(0,0,0,0.1);
+header{
+background:#fff9db;
+padding:20px;
+text-align:center;
+font-size:1.8rem;
+font-weight:bold;
+color:#C2185B;
 }
 
-.post-card h2 {
-  margin-top:0;
-  font-size:22px;
+.container{
+padding:20px 15px;
+max-width:900px;
+margin:auto;
 }
 
-.post-card h2 a {
-  color:#C2185B;
-  text-decoration:none;
+.post-card{
+background:#FFFDE7;
+padding:20px;
+margin-bottom:20px;
+border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
-.post-card p {
-  color:#0033cc;
-  font-size:15px;
-  line-height:1.6;
+.post-card h2{
+margin:0 0 10px 0;
+color:#002366;
 }
 
-.btn-read {
-  display:block;
-  width:90%;
-  max-width:400px;
-  margin:15px auto 0;
-  padding:12px;
-  text-align:center;
-  background:#fff;
-  color:#ff6600;
-  border:1px solid #ff6600;
-  border-radius:5px;
-  font-weight:bold;
-  text-decoration:none;
+.post-card a{
+text-decoration:none;
+color:#002366;
 }
 
-.btn-read:hover {
-  background:#ff6600;
-  color:#fff;
+.post-date{
+color:#666;
+font-size:14px;
+margin-bottom:10px;
 }
 
-.pagination {
-  text-align:center;
-  margin:20px 0;
+.read-btn{
+display:inline-block;
+padding:8px 14px;
+background:#FF9800;
+color:#fff;
+border-radius:20px;
+text-decoration:none;
+font-size:14px;
+font-weight:bold;
 }
 
-.pagination button {
-  padding:8px 14px;
-  margin:5px;
-  border:1px solid #C2185B;
-  background:#fff;
-  color:#C2185B;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.pagination button.active {
-  background:#C2185B;
-  color:#fff;
+footer{
+background:#fff3cc;
+text-align:center;
+padding:20px;
+margin-top:40px;
+color:#C2185B;
+font-weight:bold;
 }
 </style>
 </head>
@@ -94,79 +81,44 @@ header {
 Namo Narayanaya Bhakthi Channel
 </header>
 
-<div class="posts-wrapper" id="postsContainer"></div>
-<div class="pagination" id="pagination"></div>
+<div class="container" id="postsContainer">
+Loading posts...
+</div>
+
+<footer>
+© Namo Narayanaya Bhakthi Channel
+</footer>
 
 <script>
+fetch('data/posts.json')
+.then(res=>res.json())
+.then(posts=>{
 
-let postsPerPage = 25;
-let currentPage = 1;
-let allPosts = [];
+// Sort newest first
+posts.sort((a,b)=> new Date(b.publish_date) - new Date(a.publish_date));
 
-fetch("data/posts.json")
-.then(res => res.json())
-.then(data => {
+const container = document.getElementById("postsContainer");
+container.innerHTML = "";
 
-  // Sort newest first
-  data.sort((a,b) => new Date(b.publish_date) - new Date(a.publish_date));
+posts.forEach(post=>{
 
-  allPosts = data;
-  displayPage(1);
+const card = document.createElement("div");
+card.className = "post-card";
+
+card.innerHTML = `
+<h2><a href="${post.url}">${post.title}</a></h2>
+<div class="post-date">Published on: ${post.publish_date}</div>
+<a href="${post.url}" class="read-btn">Read More</a>
+`;
+
+container.appendChild(card);
+
 });
 
-function displayPage(page){
-  currentPage = page;
-
-  let container = document.getElementById("postsContainer");
-  container.innerHTML = "";
-
-  let start = (page-1) * postsPerPage;
-  let end = start + postsPerPage;
-  let pagePosts = allPosts.slice(start,end);
-
-  if(pagePosts.length === 0){
-    container.innerHTML = "<p style='text-align:center;color:#C2185B;'>No posts available.</p>";
-    return;
-  }
-
-  pagePosts.forEach(post=>{
-    let article = document.createElement("article");
-    article.className = "post-card";
-
-    let meta = post.meta_description || "";
-
-    article.innerHTML = `
-      <h2><a href="${post.slug}">${post.title}</a></h2>
-      <p>${meta}</p>
-      <a href="${post.slug}" class="btn-read">
-        Read More: ${post.title}
-      </a>
-    `;
-
-    container.appendChild(article);
-  });
-
-  createPagination();
-}
-
-function createPagination(){
-  let totalPages = Math.ceil(allPosts.length / postsPerPage);
-  let pagination = document.getElementById("pagination");
-  pagination.innerHTML = "";
-
-  for(let i=1;i<=totalPages;i++){
-    let btn = document.createElement("button");
-    btn.textContent = i;
-
-    if(i === currentPage){
-      btn.classList.add("active");
-    }
-
-    btn.onclick = ()=> displayPage(i);
-    pagination.appendChild(btn);
-  }
-}
-
+})
+.catch(()=>{
+document.getElementById("postsContainer").innerHTML="No posts available.";
+});
 </script>
 
 </body>
