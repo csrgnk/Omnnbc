@@ -7,12 +7,8 @@
     <style>
         body { margin:0; font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6f9; display: flex; flex-direction: column; min-height: 100vh; }
         header { background:#fff9db; padding:20px; text-align:center; font-size:1.8rem; font-weight:bold; color:#C2185B; border-bottom: 3px solid #FFD700; }
-        
-        /* Search Box Styling */
         .search-container { max-width: 800px; margin: 20px auto; padding: 0 20px; text-align: center; }
         #postSearch { width: 100%; padding: 12px 20px; font-size: 16px; border: 2px solid #C2185B; border-radius: 25px; outline: none; box-sizing: border-box; }
-        #postSearch:focus { box-shadow: 0 0 8px rgba(194, 24, 91, 0.3); }
-
         .container { max-width:800px; margin:auto; padding:20px; flex: 1; }
         .post-card { background:#FFFDE7; padding:20px; margin-bottom:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.08); border-left: 5px solid #C2185B; }
         .post-card h2 { margin:0 0 10px; color:#002366; }
@@ -27,7 +23,7 @@
 <header>Namo Narayanaya Bhakthi Channel</header>
 
 <div class="search-container">
-    <input type="text" id="postSearch" placeholder="Search for stotrams (e.g. Rama, Surya)...">
+    <input type="text" id="postSearch" placeholder="Search for stotrams (Rama, Surya)...">
 </div>
 
 <div class="container" id="postsContainer">Loading...</div>
@@ -37,7 +33,7 @@
 </footer>
 
 <script>
-    let allPosts = []; // Store posts here so we can filter them
+    let allPosts = [];
 
     fetch('./data/posts.json')
     .then(res => res.json())
@@ -51,13 +47,10 @@
         const container = document.getElementById("postsContainer");
         container.innerHTML = "";
 
-        if (postsToDisplay.length === 0) {
-            container.innerHTML = "<p style='text-align:center;'>No stotrams found.</p>";
-            return;
-        }
-
         postsToDisplay.forEach(post => {
-            const cleanId = post.url.replace('posts/', '');
+            // URL CLEANING: Removes 'posts/' and '.html' for the browser bar
+            const cleanId = post.url.replace('posts/', '').replace('.html', '');
+            
             const card = document.createElement("div");
             card.className = "post-card";
             card.innerHTML = `
@@ -69,15 +62,11 @@
         });
     }
 
-    // Search Logic
     document.getElementById('postSearch').addEventListener('input', (e) => {
         const searchTerm = e.target.value.toLowerCase();
-        const filtered = allPosts.filter(post => 
-            post.title.toLowerCase().includes(searchTerm)
-        );
+        const filtered = allPosts.filter(post => post.title.toLowerCase().includes(searchTerm));
         displayPosts(filtered);
     });
 </script>
-
 </body>
 </html>
