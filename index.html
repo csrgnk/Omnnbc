@@ -7,7 +7,7 @@
     <style>
         body { margin:0; font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6f9; display: flex; flex-direction: column; min-height: 100vh; }
         header { background:#fff9db; padding:20px; text-align:center; font-size:1.8rem; font-weight:bold; color:#C2185B; border-bottom: 3px solid #FFD700; }
-        .search-container { max-width: 800px; margin: 20px auto; padding: 0 20px; text-align: center; }
+        .search-container { max-width: 800px; margin: 20px auto; padding: 0 20px; }
         #postSearch { width: 100%; padding: 12px 20px; font-size: 16px; border: 2px solid #C2185B; border-radius: 25px; outline: none; box-sizing: border-box; }
         .container { max-width:800px; margin:auto; padding:20px; flex: 1; }
         .post-card { background:#FFFDE7; padding:20px; margin-bottom:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.08); border-left: 5px solid #C2185B; }
@@ -23,34 +23,26 @@
 <header>Namo Narayanaya Bhakthi Channel</header>
 
 <div class="search-container">
-    <input type="text" id="postSearch" placeholder="Search for stotrams (Rama, Surya)...">
+    <input type="text" id="postSearch" placeholder="Search stotrams...">
 </div>
 
 <div class="container" id="postsContainer">Loading...</div>
 
-<footer>
-    <p>© 2026 Namo Narayanaya Bhakthi Channel</p>
-</footer>
+<footer><p>© 2026 Namo Narayanaya Bhakthi Channel</p></footer>
 
 <script>
     let allPosts = [];
-
-    fetch('./data/posts.json')
-    .then(res => res.json())
-    .then(posts => {
+    fetch('./data/posts.json').then(res => res.json()).then(posts => {
         allPosts = posts.sort((a, b) => new Date(b.publish_date) - new Date(a.publish_date));
         displayPosts(allPosts);
-    })
-    .catch(() => { document.getElementById("postsContainer").innerHTML = "Error loading posts."; });
+    });
 
     function displayPosts(postsToDisplay) {
         const container = document.getElementById("postsContainer");
         container.innerHTML = "";
-
         postsToDisplay.forEach(post => {
-            // URL CLEANING: Removes 'posts/' and '.html' for the browser bar
+            // This cleans "posts/rama-stotram.html" into "rama-stotram" for the URL
             const cleanId = post.url.replace('posts/', '').replace('.html', '');
-            
             const card = document.createElement("div");
             card.className = "post-card";
             card.innerHTML = `
@@ -63,9 +55,8 @@
     }
 
     document.getElementById('postSearch').addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        const filtered = allPosts.filter(post => post.title.toLowerCase().includes(searchTerm));
-        displayPosts(filtered);
+        const term = e.target.value.toLowerCase();
+        displayPosts(allPosts.filter(p => p.title.toLowerCase().includes(term)));
     });
 </script>
 </body>
