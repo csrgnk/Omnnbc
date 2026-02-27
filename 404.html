@@ -6,19 +6,42 @@
     
     <title id="pageTitle">Namo Narayanaya</title>
     <meta id="metaDesc" name="description" content="Devotional Stotrams and Spiritual Information">
-    <meta id="metaKeys" name="keywords" content="bhakthi, stotrams, telugu lyrics, omnnbc">
+    <meta id="metaKeys" name="keywords" content="bhakthi, stotrams, omnnbc">
     <link id="canonicalUrl" rel="canonical" href="">
 
     <style>
         * { box-sizing: border-box; }
-        body { margin:0; font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6f9; line-height: 1.6; overflow-x: hidden; }
-        header { background:#fff9db; padding:25px 15px; text-align:center; font-size:1.6rem; font-weight:bold; color:#C2185B; border-bottom: 3px solid #FFD700; }
-        .container { width: 100%; max-width: 800px; margin: 0 auto; padding: 15px; }
-        .content-area { background:#fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; word-wrap: break-word; }
-        
-        /* Title Styling */
-        #postTitle { color: #002366; text-align: center; margin-top: 0; padding-bottom: 10px; font-size: 1.5rem; border-bottom: 1px solid #eee; }
-
+        body { 
+            margin:0; 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            background:#f4f6f9; 
+            line-height: 1.6; 
+            overflow-x: hidden; 
+        }
+        header { 
+            background:#fff9db; 
+            padding:25px 15px; 
+            text-align:center; 
+            font-size:1.6rem; 
+            font-weight:bold; 
+            color:#C2185B; 
+            border-bottom: 3px solid #FFD700;
+        }
+        .container { 
+            width: 100%; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 15px; 
+        }
+        .content-area { 
+            background:#fff; 
+            padding: 20px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            width: 100%; 
+            word-wrap: break-word; 
+        }
+        #postTitle { color: #002366; text-align: center; margin-top: 0; padding-bottom: 15px; border-bottom: 2px solid #fff9db; font-size: 1.5rem; }
         .share-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
         .btn-s { padding: 10px 14px; border-radius: 6px; text-decoration: none; color: white; font-weight: bold; font-size: 12px; border: none; cursor: pointer; }
         .wa { background: #25D366; } .fb { background: #1877F2; } .tw { background: #000; } .cp { background: #607D8B; }
@@ -71,20 +94,11 @@
         }).catch(() => { document.getElementById('postTitle').innerText = "Not Found"; });
     }
 
-    // Dynamic SEO Setup - Adds Main Keywords to Meta Tags
+    // UPDATED SEO SETUP (No "Telugu Lyrics" added)
     function updateSEO(title) {
-        const mainKeyword = title + " Telugu Lyrics";
-        
-        // 1. Browser Title Setup
-        document.title = mainKeyword + " - Namo Narayanaya";
-        
-        // 2. Meta Description Setup
-        document.getElementById('metaDesc').setAttribute("content", "Read " + mainKeyword + ". Find devotional stotrams and spiritual lyrics on Namo Narayanaya Bhakthi Channel.");
-        
-        // 3. Meta Keywords Setup
-        document.getElementById('metaKeys').setAttribute("content", title + ", " + mainKeyword + ", stotrams, omnnbc, telugu bhakti");
-        
-        // 4. Canonical Setup
+        document.title = title + " - Namo Narayanaya";
+        document.getElementById('metaDesc').setAttribute("content", "Read " + title + ". Find devotional stotrams and spiritual information on Namo Narayanaya.");
+        document.getElementById('metaKeys').setAttribute("content", title + ", stotrams, omnnbc, bhakti");
         document.getElementById('canonicalUrl').setAttribute("href", window.location.href);
     }
 
@@ -94,15 +108,15 @@
             const temp = document.createElement('div');
             temp.innerHTML = html;
             
-            // This cleans extra headers but keeps your post title safe
+            // Keeps your content clean while preserving post body
             const extras = temp.querySelectorAll('header, footer, nav');
             extras.forEach(e => e.remove());
             
             document.getElementById('postContent').innerHTML = temp.innerHTML;
-
             if (isPost) {
                 const u = encodeURIComponent(window.location.href);
-                const m = encodeURIComponent(title + " Telugu Lyrics\n\n");
+                // WhatsApp share will only contain the original title
+                const m = encodeURIComponent(title + "\n\n"); 
                 document.getElementById('sWA').href = `https://api.whatsapp.com/send?text=${m}${u}`;
                 document.getElementById('sFB').href = `https://www.facebook.com/sharer/sharer.php?u=${u}`;
                 document.getElementById('sTW').href = `https://twitter.com/intent/tweet?text=${m}&url=${u}`;
