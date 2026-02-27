@@ -5,23 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post View - Namo Narayanaya</title>
     <style>
-        body { margin:0; font-family: Arial, sans-serif; background:#f4f6f9; line-height: 1.6; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
+        body { margin:0; font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6f9; line-height: 1.6; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
         header { background:#fff9db; padding:20px; text-align:center; font-size:1.8rem; font-weight:bold; color:#C2185B; border-bottom: 2px solid #FFD700; }
         .container { max-width:800px; margin:20px auto; padding:0 20px; flex: 1; }
         .content-area { background:#fff; padding:30px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); }
+        
+        /* Post Title from JSON */
         #postTitle { color: #002366; text-align: center; margin-top: 0; margin-bottom: 20px; font-size: 1.8rem; border-bottom: 2px solid #fff9db; padding-bottom: 15px; }
         
-        /* Share Buttons Row */
-        .share-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; }
-        .btn-s { padding: 10px 15px; border-radius: 5px; text-decoration: none; color: white; font-weight: bold; font-size: 13px; cursor: pointer; border: none; }
-        .wa { background: #25D366; } /* WhatsApp Green */
-        .fb { background: #1877F2; } /* Facebook Blue */
-        .tw { background: #000; }    /* X Black */
-        .cp { background: #607D8B; } /* Copy Grey */
+        .share-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
+        .btn-s { padding: 12px 18px; border-radius: 8px; text-decoration: none; color: white; font-weight: bold; font-size: 14px; cursor: pointer; border: none; }
+        .wa { background: #25D366; } .fb { background: #1877F2; } .tw { background: #000; } .cp { background: #607D8B; }
 
-        .navigation-row { margin-top: 30px; text-align: center; }
+        .navigation-row { margin-top: 30px; text-align: center; margin-bottom: 20px; }
         .back-link { display:inline-block; color:#FF9800; text-decoration:none; font-weight:bold; font-size: 16px; }
-        footer { background: #C2185B; color: white; text-align: center; padding: 20px; margin-top: 40px; }
+        footer { background: #C2185B; color: white; text-align: center; padding: 25px; margin-top: auto; }
+        #postContent img { max-width: 100%; height: auto; border-radius: 8px; display: block; margin: 20px auto; }
     </style>
 </head>
 <body>
@@ -42,13 +41,11 @@
     </article>
 
     <div class="navigation-row">
-        <a href="index.html" class="back-link">← Back to Home</a>
+        <a href="index.html" class="back-link">← Back to All Stotrams</a>
     </div>
 </div>
 
-<footer>
-    <p>© 2026 Namo Narayanaya Bhakthi Channel</p>
-</footer>
+<footer><p>© 2026 Namo Narayanaya Bhakthi Channel</p></footer>
 
 <script>
     const params = new URLSearchParams(window.location.search);
@@ -56,38 +53,46 @@
 
     function copyURL() {
         navigator.clipboard.writeText(window.location.href);
-        alert("Link copied to clipboard!");
+        alert("Link copied!");
     }
 
     if (postFile) {
-        const path = postFile.includes('posts/') ? `./${postFile}` : `./posts/${postFile}`;
-        fetch(path)
-            .then(res => res.text())
-            .then(html => {
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = html;
+        // 1. Fetch JSON first to get the Title
+        fetch('./data/posts.json')
+            .then(res => res.json())
+            .then(allPosts => {
+                // Find the post by checking if the URL in JSON contains our postFile
+                const postData = allPosts.find(p => p.url.includes(postFile));
+                const titleToUse = postData ? postData.title : "Divine Wisdom";
                 
-                // Extract title from <h1> if present
-                const foundTitle = tempDiv.querySelector('h1');
-                const titleText = foundTitle ? foundTitle.innerText : "Spiritual Wisdom";
-                if(foundTitle) foundTitle.remove();
+                document.getElementById('postTitle').innerText = titleToUse;
+                document.title = titleToUse;
 
-                document.getElementById('postTitle').innerText = titleText;
-                document.getElementById('postContent').innerHTML = tempDiv.innerHTML;
-                
-                // SETUP SHARING WITH TITLE + URL
-                const currentUrl = window.location.href;
-                const encodedTitle = encodeURIComponent(titleText + "\n\n");
-                const encodedUrl = encodeURIComponent(currentUrl);
+                // 2. Fetch the actual content file
+                const path = postFile.includes('posts/') ? `./${postFile}` : `./posts/${postFile}`;
+                return fetch(path).then(res => {
+                    if(!res.ok) throw new Error();
+                    return { content: res.text(), title: titleToUse };
+                });
+            })
+            .then(async ({ content, title }) => {
+                const html = await content;
+                document.getElementById('postContent').innerHTML = html;
 
-                document.getElementById('sWA').href = `https://api.whatsapp.com/send?text=${encodedTitle}${encodedUrl}`;
-                document.getElementById('sFB').href = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
-                document.getElementById('sTW').href = `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`;
+                // 3. Setup Sharing
+                const url = encodeURIComponent(window.location.href);
+                const msg = encodeURIComponent(title + "\n\nRead more: ");
+
+                document.getElementById('sWA').href = `https://api.whatsapp.com/send?text=${msg}${url}`;
+                document.getElementById('sFB').href = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                document.getElementById('sTW').href = `https://twitter.com/intent/tweet?text=${msg}&url=${url}`;
                 
                 document.getElementById('shareRow').style.display = 'flex';
-                document.title = titleText;
             })
-            .catch(() => { document.getElementById('postTitle').innerText = "Post Not Found"; });
+            .catch(() => {
+                document.getElementById('postTitle').innerText = "Not Found";
+                document.getElementById('postContent').innerHTML = "Could not load stotram.";
+            });
     } else { window.location.href = "index.html"; }
 </script>
 </body>
