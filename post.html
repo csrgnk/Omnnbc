@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post View - Namo Narayanaya</title>
+    <title>Post View</title>
     <style>
-        body { margin:0; font-family: 'Segoe UI', sans-serif; background:#f4f6f9; line-height: 1.6; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
+        body { margin:0; font-family: Arial, sans-serif; background:#f4f6f9; line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
         header { background:#fff9db; padding:20px; text-align:center; font-size:1.8rem; font-weight:bold; color:#C2185B; border-bottom: 2px solid #FFD700; }
         .container { max-width:800px; margin:20px auto; padding:0 20px; flex: 1; }
         .content-area { background:#fff; padding:30px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); }
@@ -27,15 +27,14 @@
     <article class="content-area">
         <h1 id="postTitle">Loading...</h1>
         <div id="postContent"></div>
-
         <div class="share-row" id="shareRow" style="display:none;">
             <a id="sWA" href="#" target="_blank" class="btn-s wa">WhatsApp</a>
             <a id="sFB" href="#" target="_blank" class="btn-s fb">Facebook</a>
-            <a id="sTW" href="#" target="_blank" class="btn-s tw">X / Twitter</a>
+            <a id="sTW" href="#" target="_blank" class="btn-s tw">Twitter</a>
             <button onclick="copyURL()" class="btn-s cp">Copy Link</button>
         </div>
     </article>
-    <div class="navigation-row"><a href="index.html" class="back-link">← Back to All Stotrams</a></div>
+    <div class="navigation-row"><a href="index.html" class="back-link">← Back to Home</a></div>
 </div>
 
 <footer><p>© 2026 Namo Narayanaya Bhakthi Channel</p></footer>
@@ -44,49 +43,34 @@
     const params = new URLSearchParams(window.location.search);
     const cleanId = params.get('id');
 
-    function copyURL() {
-        navigator.clipboard.writeText(window.location.href);
-        alert("Link copied!");
-    }
+    function copyURL() { navigator.clipboard.writeText(window.location.href); alert("Link copied!"); }
 
     if (cleanId) {
-        // 1. Get Title from JSON
         fetch('./data/posts.json')
             .then(res => res.json())
             .then(allPosts => {
+                // Find post title by matching the ID
                 const postData = allPosts.find(p => p.url.includes(cleanId));
                 const titleToUse = postData ? postData.title : "Divine Wisdom";
                 document.getElementById('postTitle').innerText = titleToUse;
                 document.title = titleToUse;
 
-                // 2. Fetch file by adding back 'posts/' and '.html'
-                return fetch(`./posts/${cleanId}.html`).then(res => {
-                    if(!res.ok) throw new Error();
-                    return { content: res.text(), title: titleToUse };
-                });
+                // Load content from posts/ folder
+                return fetch(`./posts/${cleanId}.html`).then(res => res.text()).then(html => ({ html, title: titleToUse }));
             })
-            .then(async ({ content, title }) => {
-                const html = await content;
-                // Remove h1 from fetched content if it exists to avoid double titles
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = html;
-                const innerH1 = tempDiv.querySelector('h1');
-                if(innerH1) innerH1.remove();
+            .then(({ html, title }) => {
+                document.getElementById('postContent').innerHTML = html;
                 
-                document.getElementById('postContent').innerHTML = tempDiv.innerHTML;
+                const url = window.location.href;
+                const msg = encodeURIComponent(title + "\n\nRead here: ");
 
-                // 3. Setup Share Links
-                const url = encodeURIComponent(window.location.href);
-                const msg = encodeURIComponent(title + "\n\nRead more: ");
-                document.getElementById('sWA').href = `https://api.whatsapp.com/send?text=${msg}${url}`;
-                document.getElementById('sFB').href = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-                document.getElementById('sTW').href = `https://twitter.com/intent/tweet?text=${msg}&url=${url}`;
+                document.getElementById('sWA').href = `https://api.whatsapp.com/send?text=${msg}${encodeURIComponent(url)}`;
+                document.getElementById('sFB').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+                document.getElementById('sTW').href = `https://twitter.com/intent/tweet?text=${msg}&url=${encodeURIComponent(url)}`;
+                
                 document.getElementById('shareRow').style.display = 'flex';
             })
-            .catch(() => {
-                document.getElementById('postTitle').innerText = "Not Found";
-                document.getElementById('postContent').innerHTML = "Could not load stotram.";
-            });
+            .catch(() => { document.getElementById('postTitle').innerText = "Not Found"; });
     } else { window.location.href = "index.html"; }
 </script>
 </body>
