@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namo Narayanaya Bhakthi Channel</title>
-    <style>
-        body{ margin:0; font-family:Arial; background:#f4f6f9; }
-        header{ background:#fff9db; padding:20px; text-align:center; font-size:1.8rem; font-weight:bold; color:#C2185B; }
-        .container{ max-width:900px; margin:auto; padding:20px; }
-        .post-card{ background:#FFFDE7; padding:20px; margin-bottom:20px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
-        .post-card h2{ margin:0 0 10px; color:#002366; }
-        .post-card a{ text-decoration:none; color:#002366; }
-        .date{ color:#666; font-size:14px; margin-bottom:10px; }
-        .read-btn{ display:inline-block; padding:8px 14px; background:#FF9800; color:#fff; border-radius:20px; text-decoration:none; font-size:14px; font-weight:bold; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Namo Narayanaya Bhakthi Channel</title>
+<style>
+body{ margin:0; font-family:Arial; background:#f4f6f9; }
+header{ background:#fff9db; padding:20px; text-align:center; font-size:1.8rem; font-weight:bold; color:#C2185B; }
+.container{ max-width:900px; margin:auto; padding:20px; }
+.post-card{ background:#FFFDE7; padding:20px; margin-bottom:20px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+.post-card h2{ margin:0 0 10px; color:#002366; }
+.post-card a{ text-decoration:none; color:#002366; }
+.date{ color:#666; font-size:14px; margin-bottom:10px; }
+.read-btn{ display:inline-block; padding:8px 14px; background:#FF9800; color:#fff; border-radius:20px; text-decoration:none; font-size:14px; font-weight:bold; }
+</style>
 </head>
 <body>
 
@@ -30,14 +30,15 @@ fetch('./data/posts.json')
     container.innerHTML = "";
 
     posts.forEach(post=>{
+        // This line removes "posts/" from the URL if it exists, so we send a clean ID
+        const cleanId = post.url.replace('posts/', '');
+        
         const card = document.createElement("div");
         card.className = "post-card";
-        
-        // UPDATED: Links now point to post.html with an ID parameter
         card.innerHTML = `
-            <h2><a href="post.html?id=${post.url}">${post.title}</a></h2>
+            <h2><a href="post.html?id=${cleanId}">${post.title}</a></h2>
             <div class="date">Published on: ${post.publish_date}</div>
-            <a href="post.html?id=${post.url}" class="read-btn">Read More</a>
+            <a href="post.html?id=${cleanId}" class="read-btn">Read More</a>
         `;
         container.appendChild(card);
     });
@@ -46,6 +47,5 @@ fetch('./data/posts.json')
     document.getElementById("postsContainer").innerHTML="No posts available.";
 });
 </script>
-
 </body>
 </html>
