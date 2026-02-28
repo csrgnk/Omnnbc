@@ -7,104 +7,93 @@
     <style>
         body { margin:0; font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6f9; display: flex; flex-direction: column; min-height: 100vh; }
         
-        /* IMPROVED NAVIGATION MENU - CLEAR SEPARATION */
+        /* NAVIGATION MENU - FIXED FOR MOBILE */
         .nav-menu { 
             background: #C2185B; 
-            padding: 20px 10px; /* Increased height for better spacing */
+            padding: 10px 5px; 
             text-align: center; 
             position: sticky; 
             top: 0; 
             z-index: 1000; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            line-height: 2.5; /* Increased line height to prevent word mixing */
+            white-space: nowrap; /* Forces links into one line */
+            overflow-x: auto; /* Allows sliding left/right on mobile */
+            -webkit-overflow-scrolling: touch;
         }
+        /* Hide scrollbar for a cleaner look */
+        .nav-menu::-webkit-scrollbar { display: none; }
+
         .nav-menu a { 
             color: white; 
             text-decoration: none; 
-            margin: 0 15px; 
+            margin: 0 10px; 
             font-weight: bold; 
-            font-size: 15px; 
-            display: inline-block; /* Ensures padding is respected */
+            font-size: 14px; 
+            display: inline-block;
+            vertical-align: middle;
         }
+        
+        /* Home Button - Updated Link */
         .nav-menu a.home-btn { 
             background: #fff; 
             color: #C2185B; 
-            padding: 8px 20px; 
-            border-radius: 5px; 
+            padding: 5px 15px; 
+            border-radius: 4px; 
         }
 
-        /* HEADER WITH CLEAR MARGIN FROM MENU */
         header { 
             background:#fff9db; 
-            padding:40px 20px; 
+            padding:20px 10px; /* Reduced padding for mobile */
             text-align:center; 
-            font-size:2.2rem; 
+            font-size:1.6rem; 
             font-weight:bold; 
             color:#C2185B; 
             border-bottom: 3px solid #FFD700;
-            margin-top: 5px; /* Creates the "Third Line" visual separation */
         }
         
-        /* SEARCH BOX SPACING */
-        .search-container { 
-            max-width: 800px; 
-            margin: 30px auto; 
-            padding: 0 20px; 
-            box-sizing: border-box; 
-        }
+        .search-container { max-width: 800px; margin: 15px auto; padding: 0 15px; }
         #postSearch { 
             width: 100%; 
-            padding: 16px 25px; 
+            padding: 12px 20px; 
             font-size: 16px; 
             border: 2px solid #C2185B; 
-            border-radius: 35px; 
+            border-radius: 30px; 
             outline: none; 
-            box-sizing: border-box; 
-            display: block; 
-            margin: 0 auto;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-sizing: border-box;
         }
         
-        .container { max-width:800px; margin:auto; padding:20px; flex: 1; }
+        .container { max-width:800px; margin:auto; padding:15px; flex: 1; }
         .post-card { 
             background:#FFFDE7; 
-            padding:25px; 
-            margin-bottom:25px; 
+            padding:20px; 
+            margin-bottom:15px; 
             border-radius:12px; 
-            box-shadow:0 4px 12px rgba(0,0,0,0.08); 
-            border-left: 8px solid #C2185B; 
+            box-shadow:0 2px 8px rgba(0,0,0,0.08); 
+            border-left: 6px solid #C2185B; 
         }
-        .post-card h2 { margin:0 0 12px; color:#002366; font-size: 1.5rem; }
-        .post-card a { text-decoration:none; color:#002366; }
+        .post-card h2 { margin:0 0 8px; color:#002366; font-size: 1.3rem; }
         
-        /* Description Preview */
         .post-meta-desc { 
-            color: #444; 
-            font-size: 15px; 
-            margin: 12px 0; 
-            line-height: 1.6;
+            color: #555; 
+            font-size: 14px; 
+            margin: 8px 0; 
+            line-height: 1.5;
             display: -webkit-box;
             -webkit-line-clamp: 2; 
             -webkit-box-orient: vertical;
             overflow: hidden;
-            text-overflow: ellipsis;
         }
 
-        .pagination { text-align: center; margin: 40px 0; }
-        .page-btn { padding: 12px 25px; margin: 8px; border: none; background: #C2185B; color: white; border-radius: 6px; cursor: pointer; font-weight: bold; }
-        .page-btn:disabled { background: #ccc; cursor: not-allowed; }
-
-        footer { background: #C2185B; color: white; text-align: center; padding: 30px; margin-top: auto; }
+        footer { background: #C2185B; color: white; text-align: center; padding: 20px; margin-top: auto; }
     </style>
 </head>
 <body>
 
 <nav class="nav-menu">
-    <a href="/" class="home-btn">Home</a>
+    <a href="https://csrgnk.github.io/Omnnbc/" class="home-btn">Home</a>
     <a href="about-us">About Us</a>
     <a href="contact-us">Contact Us</a>
     <a href="dmca">DMCA</a>
-    <a href="privacy-policy">Privacy Policy</a>
+    <a href="privacy-policy">Privacy</a>
     <a href="https://Dasabodha.omnnbc.in" target="_blank" style="color:#FFD700;">Dasabodha</a>
 </nav>
 
@@ -114,89 +103,40 @@
     <input type="text" id="postSearch" placeholder="Search for stotrams...">
 </div>
 
-<div class="container" id="postsContainer">Loading posts...</div>
-<div class="pagination" id="paginationControls"></div>
+<div class="container" id="postsContainer">Loading...</div>
 
 <footer><p>© 2026 Namo Narayanaya Bhakthi Channel</p></footer>
 
 <script>
     let allPosts = [];
-    let currentPage = 1;
-    const postsPerPage = 25;
 
     fetch('./data/posts.json')
     .then(res => res.json())
     .then(data => {
         allPosts = data.sort((a, b) => new Date(b.publish_date) - new Date(a.publish_date));
-        renderPage();
+        renderPage(allPosts);
     });
 
-    function renderPage() {
+    function renderPage(data) {
         const container = document.getElementById("postsContainer");
         container.innerHTML = "";
-        
-        const start = (currentPage - 1) * postsPerPage;
-        const end = start + postsPerPage;
-        const pageItems = allPosts.slice(start, end);
-
-        pageItems.forEach(post => {
+        data.forEach(post => {
             const cleanId = post.url.replace('posts/', '').replace('.html', '');
-            const previewText = post.description || "Find complete lyrics and spiritual significance of this stotram on Namo Narayanaya...";
-
             const card = document.createElement("div");
             card.className = "post-card";
             card.innerHTML = `
-                <h2><a href="${cleanId}">${post.title}</a></h2>
-                <small style="color:#666;">📅 ${post.publish_date}</small>
-                <div class="post-meta-desc">${previewText}</div>
-                <a href="${cleanId}" style="color:#FF9800; font-weight:bold; text-decoration:none; font-size:14px;">READ FULL POST →</a>
+                <h2><a href="${cleanId}" style="text-decoration:none; color:#002366;">${post.title}</a></h2>
+                <div class="post-meta-desc">${post.description || "Read more about this spiritual stotram..."}</div>
+                <a href="${cleanId}" style="color:#FF9800; font-weight:bold; text-decoration:none; font-size:13px;">READ MORE →</a>
             `;
             container.appendChild(card);
         });
-        updateControls();
-    }
-
-    function updateControls() {
-        const controls = document.getElementById("paginationControls");
-        const totalPages = Math.ceil(allPosts.length / postsPerPage);
-        controls.innerHTML = "";
-        if (totalPages <= 1) return;
-
-        const prev = document.createElement("button");
-        prev.innerText = "Previous";
-        prev.className = "page-btn";
-        prev.disabled = currentPage === 1;
-        prev.onclick = () => { currentPage--; renderPage(); window.scrollTo(0,0); };
-
-        const next = document.createElement("button");
-        next.innerText = "Next";
-        next.className = "page-btn";
-        next.disabled = currentPage === totalPages;
-        next.onclick = () => { currentPage++; renderPage(); window.scrollTo(0,0); };
-
-        controls.appendChild(prev);
-        controls.appendChild(next);
     }
 
     document.getElementById('postSearch').addEventListener('input', (e) => {
         const searchTerm = e.target.value.toLowerCase();
         const filtered = allPosts.filter(p => p.title.toLowerCase().includes(searchTerm));
-        
-        const container = document.getElementById("postsContainer");
-        container.innerHTML = "";
-        
-        filtered.forEach(post => {
-            const cleanId = post.url.replace('posts/', '').replace('.html', '');
-            const card = document.createElement("div");
-            card.className = "post-card";
-            card.innerHTML = `
-                <h2><a href="${cleanId}">${post.title}</a></h2>
-                <div class="post-meta-desc">${post.description || ""}</div>
-                <a href="${cleanId}" style="color:#FF9800; font-weight:bold; text-decoration:none;">READ MORE →</a>
-            `;
-            container.appendChild(card);
-        });
-        document.getElementById("paginationControls").innerHTML = ""; 
+        renderPage(filtered);
     });
 </script>
 </body>
