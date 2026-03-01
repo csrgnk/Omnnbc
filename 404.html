@@ -4,57 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <title id="pageTitle">Namo Narayanaya</title>
+    <title id="pageTitle">Loading... - Namo Narayanaya</title>
     <meta id="metaDesc" name="description" content="Devotional Stotrams and Spiritual Information">
     <meta id="metaKeys" name="keywords" content="bhakthi, stotrams, omnnbc">
     <link id="canonicalUrl" rel="canonical" href="">
 
     <style>
         * { box-sizing: border-box; }
-        body { 
-            margin:0; 
-            font-family: 'Segoe UI', Arial, sans-serif; 
-            background:#f4f6f9; 
-            line-height: 1.6; 
-            overflow-x: hidden; 
+        body { margin:0; font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6f9; line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        /* TOP MENU */
+        .nav-menu { 
+            background: #C2185B; padding: 10px 5px; text-align: center; position: sticky; top: 0; z-index: 1000; 
+            white-space: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
         }
+        .nav-menu::-webkit-scrollbar { display: none; }
+        .nav-menu a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; font-size: 14px; display: inline-block; }
+        .nav-menu a.home-btn { background: #fff; color: #C2185B; padding: 5px 15px; border-radius: 4px; }
+
+        /* REDUCED HEADER HEIGHT */
         header { 
-            background:#fff9db; 
-            padding:25px 15px; 
-            text-align:center; 
-            font-size:1.6rem; 
-            font-weight:bold; 
-            color:#C2185B; 
-            border-bottom: 3px solid #FFD700;
+            background:#fff9db; padding:15px 10px; text-align:center; font-size:1.4rem; 
+            font-weight:bold; color:#C2185B; border-bottom: 3px solid #FFD700;
         }
-        .container { 
-            width: 100%; 
-            max-width: 800px; 
-            margin: 0 auto; 
-            padding: 15px; 
-        }
-        .content-area { 
-            background:#fff; 
-            padding: 20px; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-            width: 100%; 
-            word-wrap: break-word; 
-        }
+
+        .container { width: 100%; max-width: 800px; margin: 0 auto; padding: 15px; flex: 1; }
+        .content-area { background:#fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; word-wrap: break-word; }
+        
         #postTitle { color: #002366; text-align: center; margin-top: 0; padding-bottom: 15px; border-bottom: 2px solid #fff9db; font-size: 1.5rem; }
+        
+        /* SHARE BUTTONS */
         .share-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
         .btn-s { padding: 10px 14px; border-radius: 6px; text-decoration: none; color: white; font-weight: bold; font-size: 12px; border: none; cursor: pointer; }
         .wa { background: #25D366; } .fb { background: #1877F2; } .tw { background: #000; } .cp { background: #607D8B; }
-        footer { background: #C2185B; color: white; text-align: center; padding: 20px; margin-top: 20px; width: 100%; }
+        
+        footer { background: #C2185B; color: white; text-align: center; padding: 20px; margin-top: auto; }
     </style>
 </head>
 <body>
+
+<nav class="nav-menu">
+    <a href="/Omnnbc/" class="home-btn">Home</a>
+    <a href="/Omnnbc/about-us">About Us</a>
+    <a href="/Omnnbc/contact-us">Contact Us</a>
+    <a href="/Omnnbc/dmca">DMCA</a>
+    <a href="/Omnnbc/privacy-policy">Privacy</a>
+</nav>
 
 <header>Namo Narayanaya Bhakthi Channel</header>
 
 <div class="container">
     <article class="content-area">
         <h1 id="postTitle">Loading...</h1>
+        <div id="hiddenKeywords" style="display:none !important; visibility:hidden;" aria-hidden="true"></div>
         <div id="postContent"></div>
         
         <div class="share-row" id="shareRow" style="display:none;">
@@ -64,7 +66,9 @@
             <button onclick="copyURL()" class="btn-s cp">Copy Link</button>
         </div>
     </article>
-    <div style="text-align:center; margin-top:20px;"><a href="/Omnnbc/" style="color:#FF9800; font-weight:bold; text-decoration:none;">← Back to Home</a></div>
+    <div style="text-align:center; margin-top:20px;">
+        <a href="/Omnnbc/" style="color:#C2185B; font-weight:bold; text-decoration:none;">← Back to Home</a>
+    </div>
 </div>
 
 <footer><p>© 2026 Namo Narayanaya Bhakthi Channel</p></footer>
@@ -74,32 +78,47 @@
     const cleanId = path.split('/').filter(Boolean).pop();
     const repo = "/Omnnbc"; 
 
-    function copyURL() { navigator.clipboard.writeText(window.location.href); alert("Link copied!"); }
-
-    if (cleanId && cleanId !== 'Omnnbc') {
-        fetch(`${repo}/data/pages.json`).then(res => res.json()).then(pages => {
-            const page = pages.find(p => p.id === cleanId);
-            if (page) { 
-                updateSEO(page.title);
-                loadContent(`${repo}/${page.file}`, page.title, false); 
-            } 
-            else { return fetch(`${repo}/data/posts.json`).then(res => res.json()); }
-        }).then(posts => {
-            if (!posts) return;
-            const post = posts.find(p => p.url.includes(cleanId));
-            if (post) { 
-                updateSEO(post.title);
-                loadContent(`${repo}/posts/${cleanId}.html`, post.title, true); 
-            }
-        }).catch(() => { document.getElementById('postTitle').innerText = "Not Found"; });
+    function copyURL() { 
+        navigator.clipboard.writeText(window.location.href); 
+        alert("Link copied!"); 
     }
 
-    // UPDATED SEO SETUP (No "Telugu Lyrics" added)
-    function updateSEO(title) {
+    if (cleanId && cleanId !== 'Omnnbc') {
+        fetch(`${repo}/data/posts.json`).then(res => res.json()).then(posts => {
+            const post = posts.find(p => p.url.includes(cleanId));
+            if (post) {
+                updateSEO(post.title, post.description);
+                loadContent(`${repo}/posts/${cleanId}.html`, post.title, true);
+            } else {
+                return fetch(`${repo}/data/pages.json`).then(res => res.json());
+            }
+        }).then(pages => {
+            if (!pages) return;
+            const page = pages.find(p => p.id === cleanId);
+            if (page) {
+                updateSEO(page.title, "");
+                loadContent(`${repo}/${page.file}`, page.title, false);
+            }
+        }).catch(() => { document.getElementById('postTitle').innerText = "Page Not Found"; });
+    }
+
+    function updateSEO(title, desc) {
+        // Focus Keyword: First 4 words
+        const words = title.split(' ');
+        const focusKey = words.slice(0, 4).join(' ');
+        
         document.title = title + " - Namo Narayanaya";
-        document.getElementById('metaDesc').setAttribute("content", "Read " + title + ". Find devotional stotrams and spiritual information on Namo Narayanaya.");
-        document.getElementById('metaKeys').setAttribute("content", title + ", stotrams, omnnbc, bhakti");
+        
+        const finalDesc = desc || "Read " + title + " on Namo Narayanaya Bhakthi Channel. Spiritual and devotional info.";
+        document.getElementById('metaDesc').setAttribute("content", finalDesc);
+        
+        // Meta Keywords Auto Setup
+        const metaKeys = `${focusKey}, ${title}, bhakti, telugu stotrams, omnnbc`;
+        document.getElementById('metaKeys').setAttribute("content", metaKeys);
         document.getElementById('canonicalUrl').setAttribute("href", window.location.href);
+
+        // Populate Hidden Keywords for Search Bots
+        document.getElementById('hiddenKeywords').innerText = `${focusKey}, ${title}, Namo Narayanaya`;
     }
 
     function loadContent(url, title, isPost) {
@@ -108,14 +127,14 @@
             const temp = document.createElement('div');
             temp.innerHTML = html;
             
-            // Keeps your content clean while preserving post body
-            const extras = temp.querySelectorAll('header, footer, nav');
+            // Remove redundant layout parts
+            const extras = temp.querySelectorAll('header, footer, nav, style, script');
             extras.forEach(e => e.remove());
             
             document.getElementById('postContent').innerHTML = temp.innerHTML;
+            
             if (isPost) {
                 const u = encodeURIComponent(window.location.href);
-                // WhatsApp share will only contain the original title
                 const m = encodeURIComponent(title + "\n\n"); 
                 document.getElementById('sWA').href = `https://api.whatsapp.com/send?text=${m}${u}`;
                 document.getElementById('sFB').href = `https://www.facebook.com/sharer/sharer.php?u=${u}`;
