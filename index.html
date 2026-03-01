@@ -7,7 +7,7 @@
     <style>
         body { margin:0; font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6f9; display: flex; flex-direction: column; min-height: 100vh; }
         
-        /* NAVIGATION MENU - FIXED FOR MOBILE */
+        /* NAVIGATION MENU */
         .nav-menu { 
             background: #C2185B; 
             padding: 10px 5px; 
@@ -15,34 +15,17 @@
             position: sticky; 
             top: 0; 
             z-index: 1000; 
-            white-space: nowrap; /* Forces links into one line */
-            overflow-x: auto; /* Allows sliding left/right on mobile */
+            white-space: nowrap; 
+            overflow-x: auto; 
             -webkit-overflow-scrolling: touch;
         }
-        /* Hide scrollbar for a cleaner look */
         .nav-menu::-webkit-scrollbar { display: none; }
-
-        .nav-menu a { 
-            color: white; 
-            text-decoration: none; 
-            margin: 0 10px; 
-            font-weight: bold; 
-            font-size: 14px; 
-            display: inline-block;
-            vertical-align: middle;
-        }
-        
-        /* Home Button - Updated Link */
-        .nav-menu a.home-btn { 
-            background: #fff; 
-            color: #C2185B; 
-            padding: 5px 15px; 
-            border-radius: 4px; 
-        }
+        .nav-menu a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; font-size: 14px; display: inline-block; }
+        .nav-menu a.home-btn { background: #fff; color: #C2185B; padding: 5px 15px; border-radius: 4px; }
 
         header { 
             background:#fff9db; 
-            padding:20px 10px; /* Reduced padding for mobile */
+            padding:20px 10px; 
             text-align:center; 
             font-size:1.6rem; 
             font-weight:bold; 
@@ -52,36 +35,56 @@
         
         .search-container { max-width: 800px; margin: 15px auto; padding: 0 15px; }
         #postSearch { 
-            width: 100%; 
-            padding: 12px 20px; 
-            font-size: 16px; 
-            border: 2px solid #C2185B; 
-            border-radius: 30px; 
-            outline: none; 
-            box-sizing: border-box;
+            width: 100%; padding: 12px 20px; font-size: 16px; 
+            border: 2px solid #C2185B; border-radius: 30px; outline: none; box-sizing: border-box;
         }
         
         .container { max-width:800px; margin:auto; padding:15px; flex: 1; }
         .post-card { 
-            background:#FFFDE7; 
-            padding:20px; 
-            margin-bottom:15px; 
-            border-radius:12px; 
-            box-shadow:0 2px 8px rgba(0,0,0,0.08); 
-            border-left: 6px solid #C2185B; 
+            background:#FFFDE7; padding:20px; margin-bottom:15px; border-radius:12px; 
+            box-shadow:0 2px 8px rgba(0,0,0,0.08); border-left: 6px solid #C2185B; 
         }
         .post-card h2 { margin:0 0 8px; color:#002366; font-size: 1.3rem; }
-        
-        .post-meta-desc { 
-            color: #555; 
-            font-size: 14px; 
-            margin: 8px 0; 
-            line-height: 1.5;
-            display: -webkit-box;
-            -webkit-line-clamp: 2; 
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+        .post-meta-desc { color: #555; font-size: 14px; margin: 8px 0; line-height: 1.5; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+
+        /* BOOK TYPE HORIZONTAL PAGINATION */
+        .pagination-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+            padding: 10px;
+            border-top: 2px solid #FFD700;
+            gap: 10px;
         }
+
+        .page-numbers-container {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 5px;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE */
+        }
+        .page-numbers-container::-webkit-scrollbar { display: none; }
+
+        .pg-btn {
+            min-width: 40px;
+            height: 40px;
+            border: 2px solid #C2185B;
+            border-radius: 50%;
+            background: #fff9db;
+            color: #C2185B;
+            font-weight: bold;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pg-btn.active { background: #C2185B; color: #FFD700; box-shadow: 0 0 10px rgba(194, 24, 91, 0.4); }
+        .pg-btn:hover:not(.active) { background: #fce4ec; }
 
         footer { background: #C2185B; color: white; text-align: center; padding: 20px; margin-top: auto; }
     </style>
@@ -105,38 +108,96 @@
 
 <div class="container" id="postsContainer">Loading...</div>
 
+<div class="pagination-wrapper" id="paginationWrapper"></div>
+
 <footer><p>© 2026 Namo Narayanaya Bhakthi Channel</p></footer>
 
 <script>
     let allPosts = [];
+    let filteredPosts = [];
+    let currentPage = 1;
+    const postsPerPage = 25;
 
     fetch('./data/posts.json')
     .then(res => res.json())
     .then(data => {
         allPosts = data.sort((a, b) => new Date(b.publish_date) - new Date(a.publish_date));
-        renderPage(allPosts);
+        filteredPosts = [...allPosts];
+        renderPage();
     });
 
-    function renderPage(data) {
+    function renderPage() {
         const container = document.getElementById("postsContainer");
         container.innerHTML = "";
-        data.forEach(post => {
+
+        const start = (currentPage - 1) * postsPerPage;
+        const end = start + postsPerPage;
+        const currentItems = filteredPosts.slice(start, end);
+
+        if (currentItems.length === 0) {
+            container.innerHTML = "<p style='text-align:center;'>నిర్దిష్ట ఫలితాలేవీ లేవు.</p>";
+            document.getElementById("paginationWrapper").innerHTML = "";
+            return;
+        }
+
+        currentItems.forEach(post => {
             const cleanId = post.url.replace('posts/', '').replace('.html', '');
             const card = document.createElement("div");
             card.className = "post-card";
             card.innerHTML = `
                 <h2><a href="${cleanId}" style="text-decoration:none; color:#002366;">${post.title}</a></h2>
-                <div class="post-meta-desc">${post.description || "Read more about this spiritual stotram..."}</div>
+                <div class="post-meta-desc">${post.description || "మరింత సమాచారం కోసం ఇక్కడ క్లిక్ చేయండి..."}</div>
                 <a href="${cleanId}" style="color:#FF9800; font-weight:bold; text-decoration:none; font-size:13px;">READ MORE →</a>
             `;
             container.appendChild(card);
         });
+
+        setupPagination();
+        window.scrollTo(0, 0);
+    }
+
+    function setupPagination() {
+        const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+        const wrapper = document.getElementById("paginationWrapper");
+        wrapper.innerHTML = "";
+
+        if (totalPages <= 1) return;
+
+        // Previous Button
+        const prev = document.createElement("button");
+        prev.className = "pg-btn";
+        prev.innerHTML = "«";
+        prev.disabled = currentPage === 1;
+        prev.onclick = () => { currentPage--; renderPage(); };
+        wrapper.appendChild(prev);
+
+        // Numbers Container (Scrollable)
+        const numbersDiv = document.createElement("div");
+        numbersDiv.className = "page-numbers-container";
+
+        for (let i = 1; i <= totalPages; i++) {
+            const btn = document.createElement("button");
+            btn.className = `pg-btn ${i === currentPage ? 'active' : ''}`;
+            btn.innerText = i;
+            btn.onclick = () => { currentPage = i; renderPage(); };
+            numbersDiv.appendChild(btn);
+        }
+        wrapper.appendChild(numbersDiv);
+
+        // Next Button
+        const next = document.createElement("button");
+        next.className = "pg-btn";
+        next.innerHTML = "»";
+        next.disabled = currentPage === totalPages;
+        next.onclick = () => { currentPage++; renderPage(); };
+        wrapper.appendChild(next);
     }
 
     document.getElementById('postSearch').addEventListener('input', (e) => {
         const searchTerm = e.target.value.toLowerCase();
-        const filtered = allPosts.filter(p => p.title.toLowerCase().includes(searchTerm));
-        renderPage(filtered);
+        filteredPosts = allPosts.filter(p => p.title.toLowerCase().includes(searchTerm));
+        currentPage = 1;
+        renderPage();
     });
 </script>
 </body>
