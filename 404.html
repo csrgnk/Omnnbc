@@ -22,11 +22,13 @@
         .nav-menu a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; font-size: 14px; display: inline-block; }
         .nav-menu a.home-btn { background: #fff; color: #C2185B; padding: 5px 15px; border-radius: 4px; }
 
-        /* REDUCED HEADER HEIGHT */
+        /* TWO LINE HEADER SETUP */
         header { 
-            background:#fff9db; padding:15px 10px; text-align:center; font-size:1.4rem; 
-            font-weight:bold; color:#C2185B; border-bottom: 3px solid #FFD700;
+            background:#fff9db; padding:15px 10px; text-align:center; color:#C2185B; border-bottom: 3px solid #FFD700;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
+        .header-main { font-size: 1.6rem; font-weight: bold; line-height: 1.2; }
+        .header-sub { font-size: 1.5rem; font-weight: bold; margin-top: 5px; }
 
         .container { width: 100%; max-width: 800px; margin: 0 auto; padding: 15px; flex: 1; }
         .content-area { background:#fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; word-wrap: break-word; }
@@ -39,6 +41,11 @@
         .wa { background: #25D366; } .fb { background: #1877F2; } .tw { background: #000; } .cp { background: #607D8B; }
         
         footer { background: #C2185B; color: white; text-align: center; padding: 20px; margin-top: auto; }
+
+        @media (max-width: 600px) {
+            .header-main { font-size: 1.4rem; }
+            .header-sub { font-size: 1.3rem; }
+        }
     </style>
 </head>
 <body>
@@ -51,7 +58,10 @@
     <a href="/Omnnbc/privacy-policy">Privacy</a>
 </nav>
 
-<header>Namo Narayanaya Bhakthi Channel</header>
+<header>
+    <div class="header-main">Namo Narayanaya</div>
+    <div class="header-sub">Bhakthi Channel</div>
+</header>
 
 <div class="container">
     <article class="content-area">
@@ -80,7 +90,7 @@
 
     function copyURL() { 
         navigator.clipboard.writeText(window.location.href); 
-        alert("Link copied!"); 
+        alert("లింక్ కాపీ చేయబడింది!"); 
     }
 
     if (cleanId && cleanId !== 'Omnnbc') {
@@ -103,7 +113,7 @@
     }
 
     function updateSEO(title, desc) {
-        // Focus Keyword: First 4 words
+        // Focus Keyword logic: First 4 words
         const words = title.split(' ');
         const focusKey = words.slice(0, 4).join(' ');
         
@@ -112,13 +122,13 @@
         const finalDesc = desc || "Read " + title + " on Namo Narayanaya Bhakthi Channel. Spiritual and devotional info.";
         document.getElementById('metaDesc').setAttribute("content", finalDesc);
         
-        // Meta Keywords Auto Setup
+        // Dynamic Meta Keywords
         const metaKeys = `${focusKey}, ${title}, bhakti, telugu stotrams, omnnbc`;
         document.getElementById('metaKeys').setAttribute("content", metaKeys);
         document.getElementById('canonicalUrl').setAttribute("href", window.location.href);
 
-        // Populate Hidden Keywords for Search Bots
-        document.getElementById('hiddenKeywords').innerText = `${focusKey}, ${title}, Namo Narayanaya`;
+        // Fill Hidden Div for Search Engines
+        document.getElementById('hiddenKeywords').innerText = `${focusKey}, ${title}, Namo Narayanaya Bhakthi Channel`;
     }
 
     function loadContent(url, title, isPost) {
@@ -127,7 +137,7 @@
             const temp = document.createElement('div');
             temp.innerHTML = html;
             
-            // Remove redundant layout parts
+            // Clean content from extra layout tags
             const extras = temp.querySelectorAll('header, footer, nav, style, script');
             extras.forEach(e => e.remove());
             
@@ -145,4 +155,5 @@
     }
 </script>
 </body>
-</html>
+                </html>
+    
