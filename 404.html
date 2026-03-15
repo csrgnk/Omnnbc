@@ -1,100 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Searching... - Namo Narayanaya Bhakthi Channel</title>
-    
+    <meta charset="utf-8">
+    <title>Redirecting...</title>
     <script type="text/javascript">
-        // Security: Disable Right-Click & Copying
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        document.onkeydown = function(e) {
-            if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 85 || e.keyCode === 83 || e.keyCode === 123 || e.keyCode === 73)) return false;
-            if (e.keyCode === 123) return false;
-        };
-        document.onselectstart = function() { return false; };
-
-        // SMART REDIRECT LOGIC
-        // This will try to find the post in the /posts/ folder automatically
-        const path = window.location.pathname.split('/').pop();
-        if (path && path !== "" && path !== "index.html") {
-            // Redirecting to the new location in /posts/ folder
-            window.location.href = "/posts/" + path;
+        // 1. Get the requested page name
+        var segment = window.location.pathname.split('/').pop();
+        
+        // 2. Try to redirect to /posts/ folder with .html extension
+        if (segment && segment !== "" && !segment.includes('.')) {
+            window.location.replace("/posts/" + segment + ".html");
+        } else {
+            // 3. If it's a broken link, send to home
+            setTimeout(function() {
+                window.location.replace("/");
+            }, 3000);
         }
     </script>
-
     <style>
-        body { margin:0; font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6f9; display: flex; flex-direction: column; min-height: 100vh; -webkit-user-select: none; user-select: none; text-align: center; }
-        .nav-menu { background: #C2185B; padding: 10px 5px; text-align: center; position: sticky; top: 0; z-index: 1000; }
-        .nav-menu a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; font-size: 14px; }
-        header { background:#fff9db; padding:20px 10px; font-size:1.6rem; font-weight:bold; color:#C2185B; border-bottom: 3px solid #FFD700; }
-        .error-box { padding: 50px 20px; background: #fff; margin: 20px auto; max-width: 800px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h1 { color: #C2185B; }
-        .search-container { max-width: 800px; margin: 15px auto; padding: 0 15px; }
-        #postSearch { width: 100%; padding: 12px 20px; border: 2px solid #C2185B; border-radius: 30px; outline: none; }
-        .container { max-width:800px; margin:auto; padding:15px; flex: 1; text-align: left; }
-        .post-card { background:#FFFDE7; padding:15px; margin-bottom:10px; border-radius:10px; border-left: 5px solid #C2185B; }
-        .post-card a { text-decoration: none; color: #002366; font-weight: bold; }
-        footer { background: #C2185B; color: white; padding: 20px; margin-top: auto; }
+        body { font-family: sans-serif; text-align: center; padding: 50px; background: #f4f6f9; }
+        .loader { border: 5px solid #f3f3f3; border-top: 5px solid #C2185B; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-
-<nav class="nav-menu">
-    <a href="https://omnnbc.in/">Home</a>
-    <a href="https://dasabodha.omnnbc.in/" target="_blank">Dasabodha</a>
-    <a href="https://upasana.omnnbc.in/" target="_blank">Upasana Chandrika</a>
-</nav>
-
-<header>Namo Narayanaya Bhakthi Channel</header>
-
-<div class="error-box">
-    <h1>Redirecting...</h1>
-    <p>We are moving you to the correct page. If it doesn't load, please search below:</p>
-</div>
-
-<div class="search-container">
-    <input type="text" id="postSearch" placeholder="Search for stotrams or mantras...">
-</div>
-
-<div class="container" id="postsContainer">Loading suggested posts...</div>
-
-<footer><p>© 2026 Namo Narayanaya Bhakthi Channel</p></footer>
-
-<script>
-    let allPosts = [];
-    fetch('/data/posts.json').then(res => res.json()).then(data => {
-        allPosts = data;
-        renderSuggestions();
-    });
-
-    function renderSuggestions() {
-        const container = document.getElementById("postsContainer");
-        container.innerHTML = "<h3>Top Content:</h3>";
-        allPosts.slice(0, 5).forEach(post => {
-            const cleanUrl = post.url.replace('.html', '');
-            const finalPath = cleanUrl.startsWith('posts/') ? cleanUrl : 'posts/' + cleanUrl;
-            const card = document.createElement("div");
-            card.className = "post-card";
-            card.innerHTML = `<h2><a href="/${finalPath}">${post.title}</a></h2>`;
-            container.appendChild(card);
-        });
-    }
-
-    document.getElementById('postSearch').addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        const filtered = allPosts.filter(p => p.title.toLowerCase().includes(searchTerm));
-        const container = document.getElementById("postsContainer");
-        container.innerHTML = "";
-        filtered.slice(0, 10).forEach(post => {
-            const cleanUrl = post.url.replace('.html', '');
-            const finalPath = cleanUrl.startsWith('posts/') ? cleanUrl : 'posts/' + cleanUrl;
-            const card = document.createElement("div");
-            card.className = "post-card";
-            card.innerHTML = `<h2><a href="/${finalPath}">${post.title}</a></h2>`;
-            container.appendChild(card);
-        });
-    });
-</script>
+    <header style="color: #C2185B; font-size: 24px; font-weight: bold;">Namo Narayanaya Bhakthi Channel</header>
+    <div class="loader"></div>
+    <p>Loading your page, please wait...</p>
+    <p>If not redirected, <a href="/">click here to go home</a>.</p>
 </body>
 </html>
