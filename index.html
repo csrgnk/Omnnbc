@@ -56,8 +56,8 @@
         const currentItems = filteredPosts.slice(start, start + postsPerPage);
         
         currentItems.forEach(post => {
-            // Clean URL Logic: Extracts filename from path and removes .html
-            const cleanName = post.url.split('/').pop().replace('.html', '');
+            // Clean URL Logic: Points to root domain without /posts/ folder
+            let cleanName = post.url.split('/').pop().replace('.html', '');
             const card = document.createElement("div");
             card.className = "post-card";
             card.innerHTML = `
