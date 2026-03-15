@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page Not Found - Namo Narayanaya Bhakthi Channel</title>
+    <title>Searching... - Namo Narayanaya Bhakthi Channel</title>
     
     <script type="text/javascript">
         // Security: Disable Right-Click & Copying
@@ -13,85 +13,70 @@
             if (e.keyCode === 123) return false;
         };
         document.onselectstart = function() { return false; };
+
+        // SMART REDIRECT LOGIC
+        // This will try to find the post in the /posts/ folder automatically
+        const path = window.location.pathname.split('/').pop();
+        if (path && path !== "" && path !== "index.html") {
+            // Redirecting to the new location in /posts/ folder
+            window.location.href = "/posts/" + path;
+        }
     </script>
 
     <style>
-        body { margin:0; font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6f9; display: flex; flex-direction: column; min-height: 100vh; -webkit-user-select: none; user-select: none; }
-        
-        /* NAVIGATION MENU */
-        .nav-menu { background: #C2185B; padding: 10px 5px; text-align: center; position: sticky; top: 0; z-index: 1000; white-space: nowrap; overflow-x: auto; }
-        .nav-menu::-webkit-scrollbar { display: none; }
-        .nav-menu a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; font-size: 14px; display: inline-block; }
-        .nav-menu a.home-btn { background: #fff; color: #C2185B; padding: 5px 15px; border-radius: 4px; }
-
-        header { background:#fff9db; padding:20px 10px; text-align:center; font-size:1.6rem; font-weight:bold; color:#C2185B; border-bottom: 3px solid #FFD700; }
-        
-        .error-box { text-align: center; padding: 40px 20px; background: #fff; margin: 20px auto; max-width: 800px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .error-box h1 { color: #C2185B; font-size: 60px; margin: 0; }
-        .error-box p { color: #555; font-size: 18px; margin: 10px 0; }
-
+        body { margin:0; font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6f9; display: flex; flex-direction: column; min-height: 100vh; -webkit-user-select: none; user-select: none; text-align: center; }
+        .nav-menu { background: #C2185B; padding: 10px 5px; text-align: center; position: sticky; top: 0; z-index: 1000; }
+        .nav-menu a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; font-size: 14px; }
+        header { background:#fff9db; padding:20px 10px; font-size:1.6rem; font-weight:bold; color:#C2185B; border-bottom: 3px solid #FFD700; }
+        .error-box { padding: 50px 20px; background: #fff; margin: 20px auto; max-width: 800px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: #C2185B; }
         .search-container { max-width: 800px; margin: 15px auto; padding: 0 15px; }
-        #postSearch { width: 100%; padding: 12px 20px; font-size: 16px; border: 2px solid #C2185B; border-radius: 30px; outline: none; box-sizing: border-box; }
-        
-        .container { max-width:800px; margin:auto; padding:15px; flex: 1; }
-        .post-card { background:#FFFDE7; padding:20px; margin-bottom:15px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.08); border-left: 6px solid #C2185B; text-align: left; }
-        .post-card h2 { margin: 0; font-size: 1.2rem; }
-        .post-card h2 a { text-decoration: none; color: #002366; }
-        
-        footer { background: #C2185B; color: white; text-align: center; padding: 20px; margin-top: auto; }
+        #postSearch { width: 100%; padding: 12px 20px; border: 2px solid #C2185B; border-radius: 30px; outline: none; }
+        .container { max-width:800px; margin:auto; padding:15px; flex: 1; text-align: left; }
+        .post-card { background:#FFFDE7; padding:15px; margin-bottom:10px; border-radius:10px; border-left: 5px solid #C2185B; }
+        .post-card a { text-decoration: none; color: #002366; font-weight: bold; }
+        footer { background: #C2185B; color: white; padding: 20px; margin-top: auto; }
     </style>
 </head>
 <body>
 
 <nav class="nav-menu">
-    <a href="https://omnnbc.in/" class="home-btn">Home</a>
-    <a href="https://dasabodha.omnnbc.in/" target="_blank" style="color:#FFD700;">Dasabodha</a>
+    <a href="https://omnnbc.in/">Home</a>
+    <a href="https://dasabodha.omnnbc.in/" target="_blank">Dasabodha</a>
     <a href="https://upasana.omnnbc.in/" target="_blank">Upasana Chandrika</a>
-    <a href="https://shlok.omnnbc.in/" target="_blank">Manache Shlok</a>
 </nav>
 
 <header>Namo Narayanaya Bhakthi Channel</header>
 
 <div class="error-box">
-    <h1>404</h1>
-    <p>Oops! We couldn't find that page.</p>
-    <p>Search our 360+ devotional posts below:</p>
+    <h1>Redirecting...</h1>
+    <p>We are moving you to the correct page. If it doesn't load, please search below:</p>
 </div>
 
 <div class="search-container">
-    <input type="text" id="postSearch" placeholder="Search for stotrams, mantras, or lyrics...">
+    <input type="text" id="postSearch" placeholder="Search for stotrams or mantras...">
 </div>
 
-<div class="container" id="postsContainer">Loading recommendations...</div>
+<div class="container" id="postsContainer">Loading suggested posts...</div>
 
 <footer><p>© 2026 Namo Narayanaya Bhakthi Channel</p></footer>
 
 <script>
     let allPosts = [];
-    
-    // Fetching the posts database from your data folder
-    fetch('/data/posts.json')
-    .then(res => res.json())
-    .then(data => {
+    fetch('/data/posts.json').then(res => res.json()).then(data => {
         allPosts = data;
         renderSuggestions();
-    }).catch(() => {
-        document.getElementById("postsContainer").innerHTML = "<p style='text-align:center;'>Unable to load posts. Please visit our Home page.</p>";
     });
 
     function renderSuggestions() {
         const container = document.getElementById("postsContainer");
-        container.innerHTML = "<h3 style='color:#C2185B;'>Recent Post Suggestions:</h3>";
-        
-        // Show the 5 latest posts without .html extension
+        container.innerHTML = "<h3>Top Content:</h3>";
         allPosts.slice(0, 5).forEach(post => {
+            const cleanUrl = post.url.replace('.html', '');
+            const finalPath = cleanUrl.startsWith('posts/') ? cleanUrl : 'posts/' + cleanUrl;
             const card = document.createElement("div");
             card.className = "post-card";
-            const cleanUrl = post.url.replace('.html', '').replace('posts/', '');
-            card.innerHTML = `
-                <h2><a href="/${cleanUrl}">${post.title}</a></h2>
-                <p style="font-size:14px; color:#666; margin-top:8px;">${post.description || "Click to read full lyrics..."}</p>
-            `;
+            card.innerHTML = `<h2><a href="/${finalPath}">${post.title}</a></h2>`;
             container.appendChild(card);
         });
     }
@@ -101,18 +86,14 @@
         const filtered = allPosts.filter(p => p.title.toLowerCase().includes(searchTerm));
         const container = document.getElementById("postsContainer");
         container.innerHTML = "";
-
-        if(filtered.length > 0) {
-            filtered.slice(0, 10).forEach(post => {
-                const card = document.createElement("div");
-                card.className = "post-card";
-                const cleanUrl = post.url.replace('.html', '').replace('posts/', '');
-                card.innerHTML = `<h2><a href="/${cleanUrl}">${post.title}</a></h2>`;
-                container.appendChild(card);
-            });
-        } else {
-            container.innerHTML = "<p style='text-align:center;'>No matching devotional content found.</p>";
-        }
+        filtered.slice(0, 10).forEach(post => {
+            const cleanUrl = post.url.replace('.html', '');
+            const finalPath = cleanUrl.startsWith('posts/') ? cleanUrl : 'posts/' + cleanUrl;
+            const card = document.createElement("div");
+            card.className = "post-card";
+            card.innerHTML = `<h2><a href="/${finalPath}">${post.title}</a></h2>`;
+            container.appendChild(card);
+        });
     });
 </script>
 </body>
