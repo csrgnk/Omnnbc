@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Namo Narayanaya Bhakthi Channel</title>
     <script type="text/javascript">
+        // Security: Disable Right-Click & Copying
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.onkeydown = e => { if (e.ctrlKey && [67, 85, 83, 123, 73].includes(e.keyCode)) return false; };
         document.onselectstart = () => false;
@@ -28,7 +29,7 @@
 </head>
 <body>
 <nav class="nav-menu">
-    <a href="/" class="home-btn">Home</a>
+    <a href="https://omnnbc.in/" class="home-btn">Home</a>
     <a href="https://dasabodha.omnnbc.in/">Dasabodha</a>
     <a href="https://upasana.omnnbc.in/">Upasana Chandrika</a>
     <a href="https://shlok.omnnbc.in/">Manache Shlok</a>
@@ -53,8 +54,8 @@
         const start = (currentPage - 1) * postsPerPage;
         const currentItems = filteredPosts.slice(start, start + postsPerPage);
         currentItems.forEach(post => {
-            // Logic: Removing .html and posts/ for clean display
-            const cleanUrl = post.url.replace('.html', '').replace('posts/', '');
+            // Logic: Removing 'posts/' and '.html' from URL for display
+            const cleanUrl = post.url.replace('posts/', '').replace('.html', '');
             const card = document.createElement("div");
             card.className = "post-card";
             card.innerHTML = `<h2><a href="/${cleanUrl}">${post.title}</a></h2><p style="color:#555;font-size:14px;">${post.description || "Read more..."}</p>`;
@@ -67,14 +68,13 @@
         const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
         const wrapper = document.getElementById("paginationWrapper");
         wrapper.innerHTML = "";
+        if (totalPages <= 1) return;
         for (let i = 1; i <= totalPages; i++) {
-            if (totalPages > 1) {
-                const btn = document.createElement("button");
-                btn.className = `pg-btn ${i === currentPage ? 'active' : ''}`;
-                btn.innerText = i;
-                btn.onclick = () => { currentPage = i; renderPage(); window.scrollTo(0,0); };
-                wrapper.appendChild(btn);
-            }
+            const btn = document.createElement("button");
+            btn.className = `pg-btn ${i === currentPage ? 'active' : ''}`;
+            btn.innerText = i;
+            btn.onclick = () => { currentPage = i; renderPage(); window.scrollTo(0,0); };
+            wrapper.appendChild(btn);
         }
     }
 
