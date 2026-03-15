@@ -1,209 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script type="text/javascript">
-    // Disable Right-Click
-    document.addEventListener('contextmenu', event => event.preventDefault());
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - Namo Narayanaya Bhakthi Channel</title>
+    
+    <script type="text/javascript">
+        // Security: Disable Right-Click & Copying
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 85 || e.keyCode === 83 || e.keyCode === 123 || e.keyCode === 73)) return false;
+            if (e.keyCode === 123) return false;
+        };
+        document.onselectstart = function() { return false; };
+    </script>
 
-    // Disable Shortcuts (Ctrl+C, Ctrl+U, Ctrl+S, F12, Ctrl+Shift+I)
-    document.onkeydown = function(e) {
-        if (e.ctrlKey && 
-            (e.keyCode === 67 || e.keyCode === 85 || 
-             e.keyCode === 83 || e.keyCode === 123 || e.keyCode === 73)) {
-            return false;
-        }
-        if (e.keyCode === 123) { // F12 key
-            return false;
-        }
-    };
+    <style>
+        body { margin:0; font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6f9; display: flex; flex-direction: column; min-height: 100vh; -webkit-user-select: none; user-select: none; }
+        
+        /* NAVIGATION MENU */
+        .nav-menu { background: #C2185B; padding: 10px 5px; text-align: center; position: sticky; top: 0; z-index: 1000; white-space: nowrap; overflow-x: auto; }
+        .nav-menu::-webkit-scrollbar { display: none; }
+        .nav-menu a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; font-size: 14px; display: inline-block; }
+        .nav-menu a.home-btn { background: #fff; color: #C2185B; padding: 5px 15px; border-radius: 4px; }
 
-    // Disable Text Selection
-    document.onselectstart = function() { return false; };
-</script>
+        header { background:#fff9db; padding:20px 10px; text-align:center; font-size:1.6rem; font-weight:bold; color:#C2185B; border-bottom: 3px solid #FFD700; }
+        
+        .error-box { text-align: center; padding: 40px 20px; background: #fff; margin: 20px auto; max-width: 800px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .error-box h1 { color: #C2185B; font-size: 60px; margin: 0; }
+        .error-box p { color: #555; font-size: 18px; margin: 10px 0; }
 
-<style>
-    /* Disable Text Selection via CSS */
-    body {
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-    }
-    /* Disable Image dragging and right-click on images */
-    img {
-        pointer-events: none;
-        -webkit-user-drag: none;
-    }
-</style>
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-
-<meta http-equiv="refresh" content="300">
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title id="pageTitle">Loading... - Namo Narayanaya</title>
-<meta id="metaDesc" name="description" content="Devotional Stotrams and Spiritual Information">
-<meta id="metaKeys" name="keywords" content="bhakthi, stotrams, omnnbc">
-<link id="canonicalUrl" rel="canonical" href="">
-
-<style>
-* { box-sizing: border-box; }
-body { margin:0; font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6f9; line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
-
-/* TOP MENU */
-.nav-menu { 
-    background: #C2185B; padding: 10px 5px; text-align: center; position: sticky; top: 0; z-index: 1000; 
-    white-space: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
-}
-.nav-menu::-webkit-scrollbar { display: none; }
-.nav-menu a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; font-size: 14px; display: inline-block; }
-.nav-menu a.home-btn { background: #fff; color: #C2185B; padding: 5px 15px; border-radius: 4px; }
-
-/* TWO LINE HEADER */
-header { 
-    background:#fff9db; padding:15px 10px; text-align:center; color:#C2185B; border-bottom: 3px solid #FFD700;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-}
-.header-main { font-size: 1.6rem; font-weight: bold; line-height: 1.2; }
-.header-sub { font-size: 1.5rem; font-weight: bold; margin-top: 5px; }
-
-/* CONTAINER & CONTENT AREA */
-.container { width: 100%; max-width: 800px; margin: 0 auto; padding: 15px; flex: 1; }
-
-.content-area { 
-    background: #FFFDE7; /* Light Yellow Background */
-    color: #0D47A1;      /* Deep Blue Content Text */
-    padding: 20px; 
-    border-radius: 12px; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-    width: 100%; 
-    word-wrap: break-word; 
-}
-
-#postTitle { 
-    color: #D81B60;      /* Pink Post Title */
-    text-align: center; 
-    margin-top: 0; 
-    padding-bottom: 15px; 
-    border-bottom: 2px solid #FFD700; 
-    font-size: 1.5rem; 
-}
-
-/* Ensure dynamic content is also blue */
-#postContent { color: #0D47A1; }
-
-/* SHARE BUTTONS */
-.share-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
-.btn-s { padding: 10px 14px; border-radius: 6px; text-decoration: none; color: white; font-weight: bold; font-size: 12px; border: none; cursor: pointer; }
-.wa { background: #25D366; } .fb { background: #1877F2; } .tw { background: #000; } .cp { background: #607D8B; }
-
-footer { background: #C2185B; color: white; text-align: center; padding: 20px; margin-top: auto; }
-
-@media (max-width: 600px) {
-    .header-main { font-size: 1.4rem; }
-    .header-sub { font-size: 1.3rem; }
-}
-</style>
+        .search-container { max-width: 800px; margin: 15px auto; padding: 0 15px; }
+        #postSearch { width: 100%; padding: 12px 20px; font-size: 16px; border: 2px solid #C2185B; border-radius: 30px; outline: none; box-sizing: border-box; }
+        
+        .container { max-width:800px; margin:auto; padding:15px; flex: 1; }
+        .post-card { background:#FFFDE7; padding:20px; margin-bottom:15px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.08); border-left: 6px solid #C2185B; text-align: left; }
+        .post-card h2 { margin: 0; font-size: 1.2rem; }
+        .post-card h2 a { text-decoration: none; color: #002366; }
+        
+        footer { background: #C2185B; color: white; text-align: center; padding: 20px; margin-top: auto; }
+    </style>
 </head>
 <body>
 
 <nav class="nav-menu">
-    <a href="/Omnnbc/" class="home-btn">Home</a>
-    <a href="/manache-shlok/">Manache Shlok</a>
-    <a href="/manache-shlok/hindi/">Manache Shlok (Hindi)</a>
-    <a href="/Omnnbc/about-us">About Us</a>
-    <a href="/Omnnbc/contact-us">Contact Us</a>
-    <a href="/Omnnbc/dmca">DMCA</a>
-    <a href="/Omnnbc/privacy-policy">Privacy</a>
+    <a href="https://omnnbc.in/" class="home-btn">Home</a>
+    <a href="https://dasabodha.omnnbc.in/" target="_blank" style="color:#FFD700;">Dasabodha</a>
+    <a href="https://upasana.omnnbc.in/" target="_blank">Upasana Chandrika</a>
+    <a href="https://shlok.omnnbc.in/" target="_blank">Manache Shlok</a>
 </nav>
 
-<header>
-    <div class="header-main">Namo Narayanaya</div>
-    <div class="header-sub">Bhakthi Channel</div>
-</header>
+<header>Namo Narayanaya Bhakthi Channel</header>
 
-<div class="container">
-    <article class="content-area">
-        <h1 id="postTitle">Loading...</h1>
-        <div id="hiddenKeywords" style="display:none !important; visibility:hidden;" aria-hidden="true"></div>
-        <div id="postContent"></div>
-
-        <div class="share-row" id="shareRow" style="display:none;">
-            <a id="sWA" href="#" target="_blank" class="btn-s wa">WhatsApp</a>
-            <a id="sFB" href="#" target="_blank" class="btn-s fb">Facebook</a>
-            <a id="sTW" href="#" target="_blank" class="btn-s tw">Twitter</a>
-            <button onclick="copyURL()" class="btn-s cp">Copy Link</button>
-        </div>
-    </article>
-
-    <div style="text-align:center; margin-top:20px;">
-        <a href="/Omnnbc/" style="color:#C2185B; font-weight:bold; text-decoration:none;">← Back to Home</a>
-    </div>
+<div class="error-box">
+    <h1>404</h1>
+    <p>Oops! We couldn't find that page.</p>
+    <p>Search our 360+ devotional posts below:</p>
 </div>
+
+<div class="search-container">
+    <input type="text" id="postSearch" placeholder="Search for stotrams, mantras, or lyrics...">
+</div>
+
+<div class="container" id="postsContainer">Loading recommendations...</div>
 
 <footer><p>© 2026 Namo Narayanaya Bhakthi Channel</p></footer>
 
 <script>
-const path = window.location.pathname;
-const cleanId = path.split('/').filter(Boolean).pop();
-const repo = "/Omnnbc"; 
+    let allPosts = [];
+    
+    // Fetching the posts database from your data folder
+    fetch('/data/posts.json')
+    .then(res => res.json())
+    .then(data => {
+        allPosts = data;
+        renderSuggestions();
+    }).catch(() => {
+        document.getElementById("postsContainer").innerHTML = "<p style='text-align:center;'>Unable to load posts. Please visit our Home page.</p>";
+    });
 
-function copyURL() { 
-    navigator.clipboard.writeText(window.location.href); 
-    alert("Link copied successfully!"); /* English Alert */
-}
+    function renderSuggestions() {
+        const container = document.getElementById("postsContainer");
+        container.innerHTML = "<h3 style='color:#C2185B;'>Recent Post Suggestions:</h3>";
+        
+        // Show the 5 latest posts without .html extension
+        allPosts.slice(0, 5).forEach(post => {
+            const card = document.createElement("div");
+            card.className = "post-card";
+            const cleanUrl = post.url.replace('.html', '').replace('posts/', '');
+            card.innerHTML = `
+                <h2><a href="/${cleanUrl}">${post.title}</a></h2>
+                <p style="font-size:14px; color:#666; margin-top:8px;">${post.description || "Click to read full lyrics..."}</p>
+            `;
+            container.appendChild(card);
+        });
+    }
 
-if (cleanId && cleanId !== 'Omnnbc') {
-    fetch(`${repo}/data/posts.json`).then(res => res.json()).then(posts => {
-        const post = posts.find(p => p.url.includes(cleanId));
-        if (post) {
-            updateSEO(post.title, post.description);
-            loadContent(`${repo}/posts/${cleanId}.html`, post.title, true);
+    document.getElementById('postSearch').addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const filtered = allPosts.filter(p => p.title.toLowerCase().includes(searchTerm));
+        const container = document.getElementById("postsContainer");
+        container.innerHTML = "";
+
+        if(filtered.length > 0) {
+            filtered.slice(0, 10).forEach(post => {
+                const card = document.createElement("div");
+                card.className = "post-card";
+                const cleanUrl = post.url.replace('.html', '').replace('posts/', '');
+                card.innerHTML = `<h2><a href="/${cleanUrl}">${post.title}</a></h2>`;
+                container.appendChild(card);
+            });
         } else {
-            return fetch(`${repo}/data/pages.json`).then(res => res.json());
-        }
-    }).then(pages => {
-        if (!pages) return;
-        const page = pages.find(p => p.id === cleanId);
-        if (page) {
-            updateSEO(page.title, "");
-            loadContent(`${repo}/${page.file}`, page.title, false);
-        }
-    }).catch(() => { document.getElementById('postTitle').innerText = "Page Not Found"; });
-}
-
-function updateSEO(title, desc) {
-    const words = title.split(' ');
-    const focusKey = words.slice(0, 4).join(' ');
-    document.title = title + " - Namo Narayanaya";
-    const finalDesc = desc || "Read " + title + " on Namo Narayanaya Bhakthi Channel.";
-    document.getElementById('metaDesc').setAttribute("content", finalDesc);
-    const metaKeys = `${focusKey}, ${title}, bhakti, stotrams, omnnbc`;
-    document.getElementById('metaKeys').setAttribute("content", metaKeys);
-    document.getElementById('canonicalUrl').setAttribute("href", window.location.href);
-    document.getElementById('hiddenKeywords').innerText = `${focusKey}, ${title}, Namo Narayanaya Bhakthi Channel`;
-}
-
-function loadContent(url, title, isPost) {
-    document.getElementById('postTitle').innerText = title;
-    fetch(url).then(res => res.text()).then(html => {
-        const temp = document.createElement('div');
-        temp.innerHTML = html;
-        const extras = temp.querySelectorAll('header, footer, nav, style, script');
-        extras.forEach(e => e.remove());
-        document.getElementById('postContent').innerHTML = temp.innerHTML;
-        if (isPost) {
-            const u = encodeURIComponent(window.location.href);
-            const m = encodeURIComponent(title + "\n\n"); 
-            document.getElementById('sWA').href = `https://api.whatsapp.com/send?text=${m}${u}`;
-            document.getElementById('sFB').href = `https://www.facebook.com/sharer/sharer.php?u=${u}`;
-            document.getElementById('sTW').href = `https://twitter.com/intent/tweet?text=${m}&url=${u}`;
-            document.getElementById('shareRow').style.display = 'flex';
+            container.innerHTML = "<p style='text-align:center;'>No matching devotional content found.</p>";
         }
     });
-}
 </script>
 </body>
 </html>
