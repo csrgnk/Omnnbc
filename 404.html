@@ -1,6 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script type="text/javascript">
+    // Disable Right-Click
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+    // Disable Shortcuts (Ctrl+C, Ctrl+U, Ctrl+S, F12, Ctrl+Shift+I)
+    document.onkeydown = function(e) {
+        if (e.ctrlKey && 
+            (e.keyCode === 67 || e.keyCode === 85 || 
+             e.keyCode === 83 || e.keyCode === 123 || e.keyCode === 73)) {
+            return false;
+        }
+        if (e.keyCode === 123) { // F12 key
+            return false;
+        }
+    };
+
+    // Disable Text Selection
+    document.onselectstart = function() { return false; };
+</script>
+
+<style>
+    /* Disable Text Selection via CSS */
+    body {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    /* Disable Image dragging and right-click on images */
+    img {
+        pointer-events: none;
+        -webkit-user-drag: none;
+    }
+</style>
+  
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title id="pageTitle">Loading... - Namo Narayanaya</title>
