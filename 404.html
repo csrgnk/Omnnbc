@@ -4,20 +4,21 @@
     <meta charset="utf-8">
     <title>Redirecting...</title>
     <script type="text/javascript">
-        // 1. Get the path segment (e.g., 'sri-rama-ashtottara-shatanamavali')
+        // 1. Extract post name from URL
         var path = window.location.pathname;
         var segment = path.split('/').filter(Boolean).pop();
         
-        // 2. If it's not a folder or a direct file, route to /posts/
-        if (segment && !path.includes('/posts/') && !segment.includes('.')) {
+        // 2. If it's a clean link, redirect to the real file in /posts/ folder
+        if (segment && !path.includes('.html') && segment !== "posts") {
             window.location.replace("/posts/" + segment + ".html");
-        } else if (path === "/" || path === "/index.html") {
+        } 
+        // 3. Fallback for broken links or direct folder access
+        else if (path === "/" || path === "/index.html" || segment === "posts") {
             window.location.replace("/");
         } else {
-            // 3. Fallback: If page not found in /posts/, show home after delay
             setTimeout(function() {
                 window.location.replace("/");
-            }, 3000);
+            }, 2000);
         }
     </script>
     <style>
@@ -29,6 +30,6 @@
 <body>
     <h2>Namo Narayanaya Bhakthi Channel</h2>
     <div class="spinner"></div>
-    <p>Loading your page, please wait...</p>
+    <p>Loading content, please wait...</p>
 </body>
 </html>
