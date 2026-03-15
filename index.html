@@ -13,30 +13,31 @@
     <style>
         body { margin:0; font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6f9; display: flex; flex-direction: column; min-height: 100vh; -webkit-user-select: none; user-select: none; }
         .nav-menu { background: #C2185B; padding: 10px 5px; text-align: center; position: sticky; top: 0; z-index: 1000; overflow-x: auto; white-space: nowrap; }
-        .nav-menu a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; font-size: 14px; }
+        .nav-menu a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; font-size: 14px; display: inline-block; }
         .nav-menu a.home-btn { background: #fff; color: #C2185B; padding: 5px 15px; border-radius: 4px; }
         header { background:#fff9db; padding:20px; text-align:center; font-size:1.6rem; font-weight:bold; color:#C2185B; border-bottom: 3px solid #FFD700; }
         .search-container { max-width: 800px; margin: 15px auto; padding: 0 15px; }
         #postSearch { width: 100%; padding: 12px 20px; border: 2px solid #C2185B; border-radius: 30px; outline: none; box-sizing: border-box; }
         .container { max-width:800px; margin:auto; padding:15px; flex: 1; }
         .post-card { background:#FFFDE7; padding:20px; margin-bottom:15px; border-radius:12px; border-left: 6px solid #C2185B; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
-        .post-card a { text-decoration: none; color: #002366; font-size: 1.2rem; font-weight: bold; }
-        .pagination-wrapper { display: flex; justify-content: center; padding: 20px; gap: 10px; }
-        .pg-btn { padding: 8px 15px; border: 1px solid #C2185B; background: #fff; cursor: pointer; border-radius: 5px; }
+        .post-card h2 { margin: 0; font-size: 1.25rem; }
+        .post-card h2 a { text-decoration: none; color: #002366; }
+        .pagination-wrapper { display: flex; justify-content: center; padding: 20px; gap: 8px; }
+        .pg-btn { padding: 8px 12px; border: 1px solid #C2185B; background: #fff; cursor: pointer; border-radius: 5px; font-weight: bold; }
         .pg-btn.active { background: #C2185B; color: #fff; }
         footer { background: #C2185B; color: white; text-align: center; padding: 20px; }
     </style>
 </head>
 <body>
 <nav class="nav-menu">
-    <a href="https://omnnbc.in/" class="home-btn">Home</a>
+    <a href="/" class="home-btn">Home</a>
     <a href="https://dasabodha.omnnbc.in/">Dasabodha</a>
     <a href="https://upasana.omnnbc.in/">Upasana Chandrika</a>
     <a href="https://shlok.omnnbc.in/">Manache Shlok</a>
 </nav>
 <header>Namo Narayanaya Bhakthi Channel</header>
-<div class="search-container"><input type="text" id="postSearch" placeholder="Search stotrams..."></div>
-<div class="container" id="postsContainer">Loading...</div>
+<div class="search-container"><input type="text" id="postSearch" placeholder="Search devotional content..."></div>
+<div class="container" id="postsContainer">Loading posts...</div>
 <div class="pagination-wrapper" id="paginationWrapper"></div>
 <footer><p>© 2026 Namo Narayanaya Bhakthi Channel</p></footer>
 
@@ -53,12 +54,17 @@
         container.innerHTML = "";
         const start = (currentPage - 1) * postsPerPage;
         const currentItems = filteredPosts.slice(start, start + postsPerPage);
+        
         currentItems.forEach(post => {
-            // Logic: Removing 'posts/' and '.html' from URL for display
-            const cleanUrl = post.url.replace('posts/', '').replace('.html', '');
+            // Clean URL Logic: Extracts filename from path and removes .html
+            const cleanName = post.url.split('/').pop().replace('.html', '');
             const card = document.createElement("div");
             card.className = "post-card";
-            card.innerHTML = `<h2><a href="/${cleanUrl}">${post.title}</a></h2><p style="color:#555;font-size:14px;">${post.description || "Read more..."}</p>`;
+            card.innerHTML = `
+                <h2><a href="/${cleanName}">${post.title}</a></h2>
+                <p style="color:#555;font-size:14px;margin-top:10px;">${post.description || "Click to read more..."}</p>
+                <a href="/${cleanName}" style="color:#C2185B;font-weight:bold;text-decoration:none;font-size:13px;">READ MORE →</a>
+            `;
             container.appendChild(card);
         });
         setupPagination();
