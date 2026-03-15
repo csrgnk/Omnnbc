@@ -4,29 +4,27 @@
     <meta charset="utf-8">
     <title>Redirecting...</title>
     <script type="text/javascript">
-        // 1. Get the requested page name
-        var segment = window.location.pathname.split('/').pop();
+        // Get the requested page name from URL
+        var path = window.location.pathname;
+        var segment = path.split('/').filter(Boolean).pop();
         
-        // 2. Try to redirect to /posts/ folder with .html extension
-        if (segment && segment !== "" && !segment.includes('.')) {
+        // If not already in /posts/, redirect there with .html extension
+        if (segment && !path.includes('/posts/')) {
             window.location.replace("/posts/" + segment + ".html");
+        } else if (path === "/" || path === "/index.html") {
+            // Safety check for home
         } else {
-            // 3. If it's a broken link, send to home
+            // If the link is totally wrong, go to home after 2 seconds
             setTimeout(function() {
                 window.location.replace("/");
-            }, 3000);
+            }, 2000);
         }
     </script>
-    <style>
-        body { font-family: sans-serif; text-align: center; padding: 50px; background: #f4f6f9; }
-        .loader { border: 5px solid #f3f3f3; border-top: 5px solid #C2185B; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
 </head>
-<body>
-    <header style="color: #C2185B; font-size: 24px; font-weight: bold;">Namo Narayanaya Bhakthi Channel</header>
-    <div class="loader"></div>
-    <p>Loading your page, please wait...</p>
-    <p>If not redirected, <a href="/">click here to go home</a>.</p>
+<body style="text-align:center; padding:50px; font-family:sans-serif; background:#f4f6f9;">
+    <h2 style="color:#C2185B;">Namo Narayanaya Bhakthi Channel</h2>
+    <div style="border: 4px solid #f3f3f3; border-top: 4px solid #C2185B; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto;"></div>
+    <p>Loading your content, please wait...</p>
+    <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
 </body>
 </html>
