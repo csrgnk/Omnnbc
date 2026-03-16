@@ -4,40 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Namo Narayanaya Bhakthi Channel</title>
-    <script type="text/javascript">
-        // Domain Guard: Stay on omnnbc.in
-        if (window.location.hostname.includes('github.io')) {
-            window.location.replace("https://omnnbc.in" + window.location.pathname.replace('/Omnnbc', ''));
-        }
-    </script>
     <style>
         body { margin:0; font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6f9; display: flex; flex-direction: column; min-height: 100vh; }
-        .nav-menu { background: #C2185B; padding: 10px 5px; text-align: center; position: sticky; top: 0; z-index: 1000; }
+        .nav-menu { background: #C2185B; padding: 10px; text-align: center; position: sticky; top: 0; z-index: 1000; }
         .nav-menu a { color: white; text-decoration: none; margin: 0 10px; font-weight: bold; }
         header { background:#fff9db; padding:20px; text-align:center; font-size:1.6rem; font-weight:bold; color:#C2185B; border-bottom: 3px solid #FFD700; }
+        .search-container { max-width: 800px; margin: 15px auto; padding: 0 15px; }
+        #postSearch { width: 100%; padding: 12px 20px; border: 2px solid #C2185B; border-radius: 30px; outline: none; box-sizing: border-box; font-size: 16px; }
         .container { max-width:800px; margin:auto; padding:15px; flex: 1; }
         .post-card { background:#FFFDE7; padding:20px; margin-bottom:15px; border-radius:12px; border-left: 6px solid #C2185B; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+        .post-card h2 { margin: 0 0 10px 0; font-size: 1.3rem; }
         .post-card h2 a { text-decoration: none; color: #002366; }
-        .pagination-wrapper { display: flex; justify-content: center; padding: 20px; gap: 8px; }
-        .pg-btn { padding: 8px 12px; border: 1px solid #C2185B; background: #fff; cursor: pointer; border-radius: 5px; }
-        .pg-btn.active { background: #C2185B; color: #fff; }
-        footer { background: #C2185B; color: white; text-align: center; padding: 20px; }
+        footer { background: #C2185B; color: white; text-align: center; padding: 20px; margin-top: 20px; }
     </style>
 </head>
 <body>
-<nav class="nav-menu">
-    <a href="/">Home</a>
-    <a href="https://dasabodha.omnnbc.in/">Dasabodha</a>
-</nav>
+<nav class="nav-menu"><a href="/" style="color:white; text-decoration:none; font-weight:bold;">HOME</a></nav>
 <header>Namo Narayanaya Bhakthi Channel</header>
-<div class="container" id="postsContainer">Loading devotional posts...</div>
-<div class="pagination-wrapper" id="paginationWrapper"></div>
+
+<div class="search-container">
+    <input type="text" id="postSearch" placeholder="Search from 110+ devotional posts...">
+</div>
+
+<div class="container" id="postsContainer">Loading posts...</div>
+
 <footer><p>© 2026 Namo Narayanaya Bhakthi Channel</p></footer>
 
 <script>
-    let allPosts = [], filteredPosts = [], currentPage = 1, postsPerPage = 25;
+    let allPosts = [], filteredPosts = [];
 
-    // Loading your JSON data
+    // Fetching the JSON
     fetch('/data/posts.json')
     .then(res => res.json())
     .then(data => {
@@ -49,36 +45,36 @@
     function renderPage() {
         const container = document.getElementById("postsContainer");
         container.innerHTML = "";
-        const start = (currentPage - 1) * postsPerPage;
-        const currentItems = filteredPosts.slice(start, start + postsPerPage);
         
-        currentItems.forEach(post => {
-            // Logic: Link directly to the folder name provided in JSON
+        if(filteredPosts.length === 0) {
+            container.innerHTML = "<p style='text-align:center;'>No posts found matching your search.</p>";
+            return;
+        }
+
+        filteredPosts.forEach(post => {
+            // This turns "posts/my-post.html" into "my-post"
+            const slug = post.url.split('/').pop().replace('.html', '');
+            
             const card = document.createElement("div");
             card.className = "post-card";
             card.innerHTML = `
-                <h2><a href="/${post.url}/">${post.title}</a></h2>
-                <p style="color:#555;font-size:14px;margin-top:10px;">${post.description || ""}</p>
-                <a href="/${post.url}/" style="color:#C2185B;font-weight:bold;text-decoration:none;">READ MORE →</a>
+                <h2><a href="/${slug}">${post.title}</a></h2>
+                <p style="color:#555; font-size:14px;">${post.description || "Read devotional lyrics and meanings..."}</p>
+                <a href="/${slug}" style="color:#C2185B; font-weight:bold; text-decoration:none; font-size:13px;">READ MORE →</a>
             `;
             container.appendChild(card);
         });
-        setupPagination();
     }
 
-    function setupPagination() {
-        const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
-        const wrapper = document.getElementById("paginationWrapper");
-        wrapper.innerHTML = "";
-        if (totalPages <= 1) return;
-        for (let i = 1; i <= totalPages; i++) {
-            const btn = document.createElement("button");
-            btn.className = `pg-btn ${i === currentPage ? 'active' : ''}`;
-            btn.innerText = i;
-            btn.onclick = () => { currentPage = i; renderPage(); window.scrollTo(0,0); };
-            wrapper.appendChild(btn);
-        }
-    }
+    // Search Logic
+    document.getElementById('postSearch').addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        filteredPosts = allPosts.filter(p => 
+            p.title.toLowerCase().includes(term) || 
+            (p.description && p.description.toLowerCase().includes(term))
+        );
+        renderPage();
+    });
 </script>
 </body>
 </html>
