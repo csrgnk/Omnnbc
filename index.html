@@ -1,37 +1,112 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Namo Narayanaya Bhakthi Channel</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Segoe UI,Arial;
+background:#f4f6f9;
+}
+
+.nav-menu{
+background:#C2185B;
+padding:10px;
+text-align:center;
+}
+
+.nav-menu a{
+color:white;
+text-decoration:none;
+margin:0 10px;
+font-weight:bold;
+}
+
+header{
+background:#fff9db;
+padding:20px;
+text-align:center;
+font-size:1.6rem;
+font-weight:bold;
+color:#C2185B;
+border-bottom:3px solid #FFD700;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+padding:15px;
+}
+
+.post-card{
+background:#FFFDE7;
+padding:20px;
+margin-bottom:15px;
+border-radius:12px;
+box-shadow:0 2px 8px rgba(0,0,0,0.08);
+border-left:6px solid #C2185B;
+}
+
+.post-card h2{
+margin:0 0 8px;
+color:#002366;
+}
+
+.post-meta-desc{
+color:#555;
+font-size:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<nav class="nav-menu">
+<a href="/">Home</a>
+<a href="/about-us">About</a>
+<a href="/contact-us">Contact</a>
+</nav>
+
+<header>Namo Narayanaya Bhakthi Channel</header>
+
+<div class="container" id="postsContainer">Loading...</div>
+
 <script>
 
-let allPosts = [];
-let filteredPosts = [];
-let currentPage = 1;
-const postsPerPage = 25;
+let allPosts=[];
 
-fetch('./data/posts.json?v=' + Date.now())
-.then(res => res.json())
-.then(data => {
+fetch("./data/posts.json?v="+Date.now())
+.then(r=>r.json())
+.then(data=>{
 
-allPosts = data.sort((a,b)=> new Date(b.publish_date)-new Date(a.publish_date));
-filteredPosts = [...allPosts];
+allPosts=data.sort((a,b)=>new Date(b.publish_date)-new Date(a.publish_date));
 
-renderPage();
+renderPosts();
+
+})
+.catch(()=>{
+
+document.getElementById("postsContainer").innerHTML="Posts loading error";
 
 });
 
-function renderPage(){
+function renderPosts(){
 
-const container = document.getElementById("postsContainer");
+const container=document.getElementById("postsContainer");
 
 container.innerHTML="";
 
-const start = (currentPage-1)*postsPerPage;
-const end = start+postsPerPage;
+allPosts.forEach(post=>{
 
-const items = filteredPosts.slice(start,end);
+const slug=post.url;
 
-items.forEach(post=>{
-
-const slug = post.url;
-
-const card = document.createElement("div");
+const card=document.createElement("div");
 
 card.className="post-card";
 
@@ -44,10 +119,10 @@ ${post.title}
 </h2>
 
 <div class="post-meta-desc">
-${post.description || "మరింత సమాచారం కోసం ఇక్కడ క్లిక్ చేయండి..."}
+${post.description||""}
 </div>
 
-<a href="/${slug}/" style="color:#FF9800;font-weight:bold;text-decoration:none;font-size:13px;">
+<a href="/${slug}/" style="color:#FF9800;font-weight:bold;text-decoration:none;">
 READ MORE →
 </a>
 
@@ -60,3 +135,6 @@ container.appendChild(card);
 }
 
 </script>
+
+</body>
+</html>
