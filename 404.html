@@ -4,15 +4,13 @@
     <meta charset="utf-8">
     <title>Redirecting...</title>
     <script type="text/javascript">
-        // 1. Get the post name (e.g., 'runa-vimochana-angaraka-stotram')
         var path = window.location.pathname;
         var segment = path.split('/').filter(Boolean).pop();
 
-        // 2. Map Clean URL back to the real file inside /posts/
         if (segment && !path.includes('.html') && segment !== "posts") {
+            // Redirects to the real location: /posts/subrahmanya-pancha-ratna-stotram.html
             window.location.replace("/posts/" + segment + ".html");
         } else {
-            // Go home if it's a broken link
             window.location.replace("/");
         }
     </script>
