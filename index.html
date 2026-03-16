@@ -11,12 +11,14 @@
 
 body{
 margin:0;
-font-family:Segoe UI,Arial;
+font-family:'Segoe UI',Arial,sans-serif;
 background:#f4f6f9;
 display:flex;
 flex-direction:column;
 min-height:100vh;
 }
+
+/* HEADER */
 
 header{
 background:#fff9db;
@@ -28,20 +30,34 @@ color:#C2185B;
 border-bottom:3px solid #FFD700;
 }
 
+/* SEARCH */
+
 .search-container{
 max-width:800px;
 margin:15px auto;
 padding:0 15px;
+display:flex;
+justify-content:center;
 }
 
 #postSearch{
 width:100%;
-padding:12px 20px;
+max-width:500px;
+padding:12px 18px;
 font-size:16px;
 border:2px solid #C2185B;
 border-radius:30px;
 outline:none;
+box-sizing:border-box;
+text-align:center;
 }
+
+#postSearch:focus{
+border-color:#FF9800;
+box-shadow:0 0 6px rgba(255,152,0,0.4);
+}
+
+/* POSTS */
 
 .container{
 max-width:800px;
@@ -86,6 +102,7 @@ display:flex;
 gap:8px;
 overflow-x:auto;
 padding:5px;
+scrollbar-width:none;
 }
 
 .page-numbers-container::-webkit-scrollbar{
@@ -109,11 +126,14 @@ background:#C2185B;
 color:#FFD700;
 }
 
+/* FOOTER */
+
 footer{
 background:#C2185B;
 color:white;
 text-align:center;
 padding:20px;
+margin-top:auto;
 }
 
 </style>
@@ -145,7 +165,7 @@ let currentPage=1;
 const postsPerPage=25;
 
 fetch("./data/posts.json?v="+Date.now())
-.then(r=>r.json())
+.then(res=>res.json())
 .then(data=>{
 
 allPosts=data.sort((a,b)=>new Date(b.publish_date)-new Date(a.publish_date));
@@ -163,7 +183,6 @@ const container=document.getElementById("postsContainer");
 container.innerHTML="";
 
 const start=(currentPage-1)*postsPerPage;
-
 const end=start+postsPerPage;
 
 const items=filteredPosts.slice(start,end);
@@ -171,7 +190,6 @@ const items=filteredPosts.slice(start,end);
 if(items.length===0){
 
 container.innerHTML="<p style='text-align:center;'>No posts found</p>";
-
 return;
 
 }
@@ -233,11 +251,8 @@ prev.innerHTML="«";
 prev.disabled=currentPage===1;
 
 prev.onclick=()=>{
-
 currentPage--;
-
 renderPage();
-
 };
 
 wrapper.appendChild(prev);
@@ -255,11 +270,8 @@ btn.className="pg-btn"+(i===currentPage?" active":"");
 btn.innerText=i;
 
 btn.onclick=()=>{
-
 currentPage=i;
-
 renderPage();
-
 };
 
 numbersDiv.appendChild(btn);
@@ -277,11 +289,8 @@ next.innerHTML="»";
 next.disabled=currentPage===totalPages;
 
 next.onclick=()=>{
-
 currentPage++;
-
 renderPage();
-
 };
 
 wrapper.appendChild(next);
