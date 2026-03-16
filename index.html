@@ -5,52 +5,40 @@ let filteredPosts = [];
 let currentPage = 1;
 const postsPerPage = 25;
 
-// Load posts.json (cache bypass)
 fetch('./data/posts.json?v=' + Date.now())
 .then(res => res.json())
 .then(data => {
 
-allPosts = data.sort((a, b) => new Date(b.publish_date) - new Date(a.publish_date));
-
+allPosts = data.sort((a,b)=> new Date(b.publish_date)-new Date(a.publish_date));
 filteredPosts = [...allPosts];
 
 renderPage();
 
 });
 
-function renderPage() {
+function renderPage(){
 
 const container = document.getElementById("postsContainer");
 
-container.innerHTML = "";
+container.innerHTML="";
 
-const start = (currentPage - 1) * postsPerPage;
+const start = (currentPage-1)*postsPerPage;
+const end = start+postsPerPage;
 
-const end = start + postsPerPage;
+const items = filteredPosts.slice(start,end);
 
-const currentItems = filteredPosts.slice(start, end);
+items.forEach(post=>{
 
-if (currentItems.length === 0) {
-
-container.innerHTML = "<p style='text-align:center;'>నిర్దిష్ట ఫలితాలేవీ లేవు.</p>";
-
-document.getElementById("paginationWrapper").innerHTML = "";
-
-return;
-
-}
-
-currentItems.forEach(post => {
-
-const cleanId = post.url; // direct URL use
+const slug = post.url;
 
 const card = document.createElement("div");
 
-card.className = "post-card";
+card.className="post-card";
 
-card.innerHTML = `
+card.innerHTML=`
+
 <h2>
-<a href="${cleanId}" style="text-decoration:none; color:#002366;">
+<a href="/${slug}/" style="text-decoration:none;color:#002366;">
 ${post.title}
 </a>
 </h2>
@@ -59,93 +47,16 @@ ${post.title}
 ${post.description || "మరింత సమాచారం కోసం ఇక్కడ క్లిక్ చేయండి..."}
 </div>
 
-<a href="${cleanId}" style="color:#FF9800; font-weight:bold; text-decoration:none; font-size:13px;">
+<a href="/${slug}/" style="color:#FF9800;font-weight:bold;text-decoration:none;font-size:13px;">
 READ MORE →
 </a>
+
 `;
 
 container.appendChild(card);
 
 });
 
-setupPagination();
-
-window.scrollTo(0, 0);
-
 }
-
-function setupPagination() {
-
-const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
-
-const wrapper = document.getElementById("paginationWrapper");
-
-wrapper.innerHTML = "";
-
-if (totalPages <= 1) return;
-
-// Previous button
-const prev = document.createElement("button");
-
-prev.className = "pg-btn";
-
-prev.innerHTML = "«";
-
-prev.disabled = currentPage === 1;
-
-prev.onclick = () => { currentPage--; renderPage(); };
-
-wrapper.appendChild(prev);
-
-// Numbers container
-const numbersDiv = document.createElement("div");
-
-numbersDiv.className = "page-numbers-container";
-
-for (let i = 1; i <= totalPages; i++) {
-
-const btn = document.createElement("button");
-
-btn.className = `pg-btn ${i === currentPage ? 'active' : ''}`;
-
-btn.innerText = i;
-
-btn.onclick = () => { currentPage = i; renderPage(); };
-
-numbersDiv.appendChild(btn);
-
-}
-
-wrapper.appendChild(numbersDiv);
-
-// Next button
-const next = document.createElement("button");
-
-next.className = "pg-btn";
-
-next.innerHTML = "»";
-
-next.disabled = currentPage === totalPages;
-
-next.onclick = () => { currentPage++; renderPage(); };
-
-wrapper.appendChild(next);
-
-}
-
-// Search
-document.getElementById('postSearch').addEventListener('input', (e) => {
-
-const searchTerm = e.target.value.toLowerCase();
-
-filteredPosts = allPosts.filter(p =>
-p.title.toLowerCase().includes(searchTerm)
-);
-
-currentPage = 1;
-
-renderPage();
-
-});
 
 </script>
