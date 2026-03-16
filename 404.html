@@ -2,25 +2,23 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Loading...</title>
+    <title>Redirecting...</title>
     <script type="text/javascript">
-        // 1. Get the post name from the URL
+        // 1. Get the post name (e.g., 'runa-vimochana-angaraka-stotram')
         var path = window.location.pathname;
         var segment = path.split('/').filter(Boolean).pop();
 
-        // 2. Redirect to the real file in the posts folder
+        // 2. Map Clean URL back to the real file inside /posts/
         if (segment && !path.includes('.html') && segment !== "posts") {
             window.location.replace("/posts/" + segment + ".html");
         } else {
-            // If it's a truly broken link, go to home
+            // Go home if it's a broken link
             window.location.replace("/");
         }
     </script>
 </head>
-<body>
-    <div style="text-align:center; padding-top:100px; font-family:sans-serif;">
-        <h2 style="color:#C2185B;">Namo Narayanaya Bhakthi Channel</h2>
-        <p>Opening your devotional post...</p>
-    </div>
+<body style="text-align:center; padding-top:100px; font-family:sans-serif;">
+    <h2 style="color:#C2185B;">Namo Narayanaya Bhakthi Channel</h2>
+    <p>Opening your page...</p>
 </body>
 </html>
