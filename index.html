@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Namo Narayanaya Bhakthi Channel</title>
     <script type="text/javascript">
-        // Security: Disable Right-Click & Copying
+        // 1. DOMAIN GUARD: Force redirect to custom domain
+        if (window.location.hostname.includes('github.io')) {
+            window.location.replace("https://omnnbc.in" + window.location.pathname.replace('/Omnnbc', ''));
+        }
+
+        // 2. SECURITY: Protection scripts
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.onkeydown = e => { if (e.ctrlKey && [67, 85, 83, 123, 73].includes(e.keyCode)) return false; };
         document.onselectstart = () => false;
@@ -43,7 +48,11 @@
 
 <script>
     let allPosts = [], filteredPosts = [], currentPage = 1, postsPerPage = 25;
-    fetch('./data/posts.json').then(res => res.json()).then(data => {
+
+    // Fetching from the root /data/ folder
+    fetch('/data/posts.json')
+    .then(res => res.json())
+    .then(data => {
         allPosts = data.sort((a,b) => new Date(b.publish_date) - new Date(a.publish_date));
         filteredPosts = [...allPosts];
         renderPage();
@@ -56,14 +65,14 @@
         const currentItems = filteredPosts.slice(start, start + postsPerPage);
         
         currentItems.forEach(post => {
-            // Clean URL Logic: Points to root domain without /posts/ folder
-            let cleanName = post.url.split('/').pop().replace('.html', '');
+            // Logic: Removes folder and .html to create the clean slug
+            const slug = post.url.split('/').pop().replace('.html', '');
             const card = document.createElement("div");
             card.className = "post-card";
             card.innerHTML = `
-                <h2><a href="/${cleanName}">${post.title}</a></h2>
-                <p style="color:#555;font-size:14px;margin-top:10px;">${post.description || "Click to read more..."}</p>
-                <a href="/${cleanName}" style="color:#C2185B;font-weight:bold;text-decoration:none;font-size:13px;">READ MORE →</a>
+                <h2><a href="/${slug}/">${post.title}</a></h2>
+                <p style="color:#555;font-size:14px;margin-top:10px;">${post.description || "Read more..."}</p>
+                <a href="/${slug}/" style="color:#C2185B;font-weight:bold;text-decoration:none;">READ MORE →</a>
             `;
             container.appendChild(card);
         });
