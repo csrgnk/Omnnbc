@@ -1,13 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Redirecting...</title>
-    <script>
-        // If someone hits a 404, just send them back to the Home page of the domain
-        window.location.replace("https://omnnbc.in/");
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting - Namo Narayanaya Bhakthi Channel</title>
+    <script type="text/javascript">
+        // 1. DOMAIN GUARD
+        // If the user is on the old github.io/Omnnbc path, send them to the clean domain
+        if (window.location.hostname.includes('github.io')) {
+            window.location.replace("https://omnnbc.in" + window.location.pathname.replace('/Omnnbc', ''));
+        } else {
+            // 2. SAFETY REDIRECT
+            // If they reach this page on omnnbc.in, it means the post folder/file doesn't exist.
+            // After 3 seconds, send them back to the Home page so they don't get stuck.
+            setTimeout(function() {
+                window.location.replace("https://omnnbc.in/");
+            }, 3000);
+        }
     </script>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            text-align: center; 
+            padding: 100px 20px; 
+            background-color: #f4f6f9; 
+            color: #C2185B; 
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 { font-size: 48px; margin-bottom: 10px; }
+        p { font-size: 18px; color: #555; }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #C2185B;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        a { color: #C2185B; font-weight: bold; text-decoration: none; border-bottom: 2px solid #C2185B; }
+    </style>
 </head>
 <body>
-    <p>Redirecting to Home...</p>
+    <div class="container">
+        <h1>404</h1>
+        <h2>Page Not Found</h2>
+        <div class="spinner"></div>
+        <p>Redirecting you to the main site...</p>
+        <p>Or <a href="https://omnnbc.in/">Click Here</a> to go Home now.</p>
+    </div>
 </body>
 </html>
