@@ -1,38 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Redirecting...</title>
-    <script type="text/javascript">
-        // 1. DOMAIN GUARD: Fix domain and remove /Omnnbc/ if present
-        if (window.location.hostname.includes('github.io')) {
-            window.location.replace("https://omnnbc.in" + window.location.pathname.replace('/Omnnbc', ''));
-        }
-
-        // 2. CLEAN URL REDIRECT: Map request to /posts/ folder
-        var path = window.location.pathname;
-        // Strip out /Omnnbc/ if it's still in the path
-        var cleanPath = path.replace('/Omnnbc/', '/');
-        var segment = cleanPath.split('/').filter(Boolean).pop();
-        
-        if (segment && !cleanPath.includes('.html') && segment !== "posts") {
-            // Find the file in the hidden posts folder
-            window.location.replace("/posts/" + segment + ".html");
-        } else if (cleanPath === "/" || cleanPath === "/index.html" || segment === "posts") {
-            window.location.replace("/");
-        } else {
-            setTimeout(function() { window.location.replace("/"); }, 2000);
-        }
+    <script>
+        // If someone hits a 404, just send them back to the Home page of the domain
+        window.location.replace("https://omnnbc.in/");
     </script>
-    <style>
-        body { font-family: sans-serif; text-align: center; padding: 100px 20px; background: #f4f6f9; color: #C2185B; }
-        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #C2185B; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
 </head>
 <body>
-    <h2>Namo Narayanaya Bhakthi Channel</h2>
-    <div class="spinner"></div>
-    <p>Redirecting to secure content...</p>
+    <p>Redirecting to Home...</p>
 </body>
 </html>
