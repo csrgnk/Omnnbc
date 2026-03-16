@@ -1,61 +1,151 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namo Narayanaya Bhakthi Channel</title>
-    <style>
-        body { margin:0; font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6f9; }
-        .nav-menu { background: #C2185B; padding: 10px; text-align: center; position: sticky; top: 0; z-index: 1000; }
-        header { background:#fff9db; padding:20px; text-align:center; font-size:1.6rem; font-weight:bold; color:#C2185B; border-bottom: 3px solid #FFD700; }
-        .search-container { max-width: 800px; margin: 15px auto; padding: 0 15px; }
-        #postSearch { width: 100%; padding: 12px 20px; border: 2px solid #C2185B; border-radius: 30px; outline: none; }
-        .container { max-width:800px; margin:auto; padding:15px; }
-        .post-card { background:#FFFDE7; padding:20px; margin-bottom:15px; border-radius:12px; border-left: 6px solid #C2185B; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
-        .post-card h2 a { text-decoration: none; color: #002366; }
-    </style>
-</head>
-<body>
-<nav class="nav-menu"><a href="/" style="color:white; text-decoration:none; font-weight:bold;">HOME</a></nav>
-<header>Namo Narayanaya Bhakthi Channel</header>
+<script>
 
-<div class="search-container">
-    <input type="text" id="postSearch" placeholder="Search 110+ devotional posts...">
+let allPosts = [];
+let filteredPosts = [];
+let currentPage = 1;
+const postsPerPage = 25;
+
+// Load posts.json (cache bypass)
+fetch('./data/posts.json?v=' + Date.now())
+.then(res => res.json())
+.then(data => {
+
+allPosts = data.sort((a, b) => new Date(b.publish_date) - new Date(a.publish_date));
+
+filteredPosts = [...allPosts];
+
+renderPage();
+
+});
+
+function renderPage() {
+
+const container = document.getElementById("postsContainer");
+
+container.innerHTML = "";
+
+const start = (currentPage - 1) * postsPerPage;
+
+const end = start + postsPerPage;
+
+const currentItems = filteredPosts.slice(start, end);
+
+if (currentItems.length === 0) {
+
+container.innerHTML = "<p style='text-align:center;'>నిర్దిష్ట ఫలితాలేవీ లేవు.</p>";
+
+document.getElementById("paginationWrapper").innerHTML = "";
+
+return;
+
+}
+
+currentItems.forEach(post => {
+
+const cleanId = post.url; // direct URL use
+
+const card = document.createElement("div");
+
+card.className = "post-card";
+
+card.innerHTML = `
+<h2>
+<a href="${cleanId}" style="text-decoration:none; color:#002366;">
+${post.title}
+</a>
+</h2>
+
+<div class="post-meta-desc">
+${post.description || "మరింత సమాచారం కోసం ఇక్కడ క్లిక్ చేయండి..."}
 </div>
 
-<div class="container" id="postsContainer">Loading...</div>
+<a href="${cleanId}" style="color:#FF9800; font-weight:bold; text-decoration:none; font-size:13px;">
+READ MORE →
+</a>
+`;
 
-<script>
-    let allPosts = [], filteredPosts = [];
+container.appendChild(card);
 
-    fetch('/data/posts.json').then(res => res.json()).then(data => {
-        allPosts = data.sort((a,b) => new Date(b.publish_date) - new Date(a.publish_date));
-        filteredPosts = [...allPosts];
-        renderPage();
-    });
+});
 
-    function renderPage() {
-        const container = document.getElementById("postsContainer");
-        container.innerHTML = "";
-        filteredPosts.forEach(post => {
-            // This turns the long URL into a Clean Slug
-            const slug = post.url.split('/').pop().replace('.html', '');
-            const card = document.createElement("div");
-            card.className = "post-card";
-            card.innerHTML = `
-                <h2><a href="/${slug}">${post.title}</a></h2>
-                <p style="color:#555; font-size:14px;">${post.description || "Read lyrics..."}</p>
-                <a href="/${slug}" style="color:#C2185B; font-weight:bold; text-decoration:none;">READ MORE →</a>
-            `;
-            container.appendChild(card);
-        });
-    }
+setupPagination();
 
-    document.getElementById('postSearch').addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        filteredPosts = allPosts.filter(p => p.title.toLowerCase().includes(term));
-        renderPage();
-    });
+window.scrollTo(0, 0);
+
+}
+
+function setupPagination() {
+
+const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+
+const wrapper = document.getElementById("paginationWrapper");
+
+wrapper.innerHTML = "";
+
+if (totalPages <= 1) return;
+
+// Previous button
+const prev = document.createElement("button");
+
+prev.className = "pg-btn";
+
+prev.innerHTML = "«";
+
+prev.disabled = currentPage === 1;
+
+prev.onclick = () => { currentPage--; renderPage(); };
+
+wrapper.appendChild(prev);
+
+// Numbers container
+const numbersDiv = document.createElement("div");
+
+numbersDiv.className = "page-numbers-container";
+
+for (let i = 1; i <= totalPages; i++) {
+
+const btn = document.createElement("button");
+
+btn.className = `pg-btn ${i === currentPage ? 'active' : ''}`;
+
+btn.innerText = i;
+
+btn.onclick = () => { currentPage = i; renderPage(); };
+
+numbersDiv.appendChild(btn);
+
+}
+
+wrapper.appendChild(numbersDiv);
+
+// Next button
+const next = document.createElement("button");
+
+next.className = "pg-btn";
+
+next.innerHTML = "»";
+
+next.disabled = currentPage === totalPages;
+
+next.onclick = () => { currentPage++; renderPage(); };
+
+wrapper.appendChild(next);
+
+}
+
+// Search
+document.getElementById('postSearch').addEventListener('input', (e) => {
+
+const searchTerm = e.target.value.toLowerCase();
+
+filteredPosts = allPosts.filter(p =>
+p.title.toLowerCase().includes(searchTerm)
+);
+
+currentPage = 1;
+
+renderPage();
+
+});
+
 </script>
-</body>
-</html>
