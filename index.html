@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="te">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -12,19 +13,9 @@ body{
 margin:0;
 font-family:Segoe UI,Arial;
 background:#f4f6f9;
-}
-
-.nav-menu{
-background:#C2185B;
-padding:10px;
-text-align:center;
-}
-
-.nav-menu a{
-color:white;
-text-decoration:none;
-margin:0 10px;
-font-weight:bold;
+display:flex;
+flex-direction:column;
+min-height:100vh;
 }
 
 header{
@@ -37,10 +28,26 @@ color:#C2185B;
 border-bottom:3px solid #FFD700;
 }
 
+.search-container{
+max-width:800px;
+margin:15px auto;
+padding:0 15px;
+}
+
+#postSearch{
+width:100%;
+padding:12px 20px;
+font-size:16px;
+border:2px solid #C2185B;
+border-radius:30px;
+outline:none;
+}
+
 .container{
 max-width:800px;
 margin:auto;
 padding:15px;
+flex:1;
 }
 
 .post-card{
@@ -55,31 +62,87 @@ border-left:6px solid #C2185B;
 .post-card h2{
 margin:0 0 8px;
 color:#002366;
+font-size:1.3rem;
 }
 
 .post-meta-desc{
 color:#555;
 font-size:14px;
+margin:8px 0;
+line-height:1.5;
+}
+
+/* PAGINATION */
+
+.pagination-wrapper{
+display:flex;
+justify-content:center;
+margin:30px 0;
+gap:10px;
+}
+
+.page-numbers-container{
+display:flex;
+gap:8px;
+overflow-x:auto;
+padding:5px;
+}
+
+.page-numbers-container::-webkit-scrollbar{
+display:none;
+}
+
+.pg-btn{
+min-width:40px;
+height:40px;
+border:2px solid #C2185B;
+border-radius:50%;
+background:#fff9db;
+color:#C2185B;
+font-weight:bold;
+cursor:pointer;
+flex-shrink:0;
+}
+
+.pg-btn.active{
+background:#C2185B;
+color:#FFD700;
+}
+
+footer{
+background:#C2185B;
+color:white;
+text-align:center;
+padding:20px;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<nav class="nav-menu">
-<a href="/">Home</a>
-<a href="/about-us">About</a>
-<a href="/contact-us">Contact</a>
-</nav>
-
 <header>Namo Narayanaya Bhakthi Channel</header>
 
+<div class="search-container">
+<input type="text" id="postSearch" placeholder="Search stotrams...">
+</div>
+
 <div class="container" id="postsContainer">Loading...</div>
+
+<div class="pagination-wrapper" id="paginationWrapper"></div>
+
+<footer>
+<p>© 2026 Namo Narayanaya Bhakthi Channel</p>
+</footer>
 
 <script>
 
 let allPosts=[];
+let filteredPosts=[];
+let currentPage=1;
+
+const postsPerPage=25;
 
 fetch("./data/posts.json?v="+Date.now())
 .then(r=>r.json())
@@ -87,24 +150,37 @@ fetch("./data/posts.json?v="+Date.now())
 
 allPosts=data.sort((a,b)=>new Date(b.publish_date)-new Date(a.publish_date));
 
-renderPosts();
+filteredPosts=[...allPosts];
 
-})
-.catch(()=>{
-
-document.getElementById("postsContainer").innerHTML="Posts loading error";
+renderPage();
 
 });
 
-function renderPosts(){
+function renderPage(){
 
 const container=document.getElementById("postsContainer");
 
 container.innerHTML="";
 
-allPosts.forEach(post=>{
+const start=(currentPage-1)*postsPerPage;
+
+const end=start+postsPerPage;
+
+const items=filteredPosts.slice(start,end);
+
+if(items.length===0){
+
+container.innerHTML="<p style='text-align:center;'>No posts found</p>";
+
+return;
+
+}
+
+items.forEach(post=>{
 
 const slug=post.url;
+
+const desc=(post.description||"").substring(0,200);
 
 const card=document.createElement("div");
 
@@ -119,10 +195,10 @@ ${post.title}
 </h2>
 
 <div class="post-meta-desc">
-${post.description||""}
+${desc}
 </div>
 
-<a href="/${slug}/" style="color:#FF9800;font-weight:bold;text-decoration:none;">
+<a href="/${slug}/" style="color:#FF9800;font-weight:bold;text-decoration:none;font-size:13px;">
 READ MORE →
 </a>
 
@@ -132,7 +208,97 @@ container.appendChild(card);
 
 });
 
+setupPagination();
+
+window.scrollTo(0,0);
+
 }
+
+function setupPagination(){
+
+const totalPages=Math.ceil(filteredPosts.length/postsPerPage);
+
+const wrapper=document.getElementById("paginationWrapper");
+
+wrapper.innerHTML="";
+
+if(totalPages<=1)return;
+
+const prev=document.createElement("button");
+
+prev.className="pg-btn";
+
+prev.innerHTML="«";
+
+prev.disabled=currentPage===1;
+
+prev.onclick=()=>{
+
+currentPage--;
+
+renderPage();
+
+};
+
+wrapper.appendChild(prev);
+
+const numbersDiv=document.createElement("div");
+
+numbersDiv.className="page-numbers-container";
+
+for(let i=1;i<=totalPages;i++){
+
+const btn=document.createElement("button");
+
+btn.className="pg-btn"+(i===currentPage?" active":"");
+
+btn.innerText=i;
+
+btn.onclick=()=>{
+
+currentPage=i;
+
+renderPage();
+
+};
+
+numbersDiv.appendChild(btn);
+
+}
+
+wrapper.appendChild(numbersDiv);
+
+const next=document.createElement("button");
+
+next.className="pg-btn";
+
+next.innerHTML="»";
+
+next.disabled=currentPage===totalPages;
+
+next.onclick=()=>{
+
+currentPage++;
+
+renderPage();
+
+};
+
+wrapper.appendChild(next);
+
+}
+
+document.getElementById("postSearch").addEventListener("input",(e)=>{
+
+const term=e.target.value.toLowerCase();
+
+filteredPosts=allPosts.filter(p=>p.title.toLowerCase().includes(term));
+
+currentPage=1;
+
+renderPage();
+
+});
 
 </script>
 
