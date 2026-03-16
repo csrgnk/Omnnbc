@@ -1,22 +1,82 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Redirecting...</title>
-    <script type="text/javascript">
-        var path = window.location.pathname;
-        var segment = path.split('/').filter(Boolean).pop();
-
-        if (segment && !path.includes('.html') && segment !== "posts") {
-            // Redirects to the real location: /posts/subrahmanya-pancha-ratna-stotram.html
-            window.location.replace("/posts/" + segment + ".html");
-        } else {
-            window.location.replace("/");
-        }
-    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Namo Narayanaya Bhakthi Channel</title>
+    <style>
+        /* Site Design Styles */
+        body { margin:0; font-family: 'Segoe UI', sans-serif; background:#f4f6f9; }
+        .site-header { background: #C2185B; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 1.5rem; border-bottom: 4px solid #FFD700; }
+        .nav-links { background: #fff9db; padding: 10px; text-align: center; border-bottom: 1px solid #ddd; }
+        .nav-links a { margin: 0 10px; color: #C2185B; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .post-wrapper { max-width: 800px; margin: 20px auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); min-height: 400px; }
+        .share-box { margin-bottom: 20px; padding: 10px; background: #e3f2fd; border-radius: 8px; text-align: center; }
+        .btn-ws { background: #25D366; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-weight: bold; display: inline-block; margin: 5px; }
+        footer { background: #C2185B; color: white; text-align: center; padding: 20px; margin-top: 40px; }
+        #post-content { line-height: 1.6; color: #333; font-size: 18px; }
+        .loading-text { text-align: center; color: #C2185B; font-weight: bold; margin-top: 50px; }
+    </style>
 </head>
-<body style="text-align:center; padding-top:100px; font-family:sans-serif;">
-    <h2 style="color:#C2185B;">Namo Narayanaya Bhakthi Channel</h2>
-    <p>Opening your page...</p>
+<body>
+
+<div class="site-header">Namo Narayanaya Bhakthi Channel</div>
+
+<div class="nav-links">
+    <a href="/">HOME</a> | 
+    <a href="https://dasabodha.omnnbc.in/">DASABODHA</a> | 
+    <a href="https://omnnbc.com">OMNNBC.COM</a>
+</div>
+
+<div class="post-wrapper">
+    <div class="share-box">
+        <p style="margin:0 0 10px 0; font-weight:bold; color:#002366;">Share with Bhakthas:</p>
+        <a href="#" id="wsLink" class="btn-ws" target="_blank">Share on WhatsApp</a>
+    </div>
+
+    <div id="post-content">
+        <p class="loading-text">Loading devotional content...</p>
+    </div>
+</div>
+
+<footer>
+    <p>© 2026 Namo Narayanaya Bhakthi Channel</p>
+    <p style="font-size:12px;">Managed by Sangameshwar - omnnbc.com</p>
+</footer>
+
+<script>
+    // THE MAGIC LOGIC
+    const path = window.location.pathname;
+    const shareUrl = "https://omnnbc.in" + path;
+    
+    // Set WhatsApp Link
+    document.getElementById('wsLink').href = "https://api.whatsapp.com/send?text=Read this on Namo Narayanaya: " + shareUrl;
+
+    // Load the actual .html file content into this template
+    if (path.includes('.html')) {
+        fetch(path)
+            .then(response => {
+                if (!response.ok) throw new Error('Not Found');
+                return response.text();
+            })
+            .then(html => {
+                // Extract body content from the loaded file
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const content = doc.body.innerHTML;
+                document.getElementById('post-content').innerHTML = content;
+                
+                // Set Title
+                if(doc.title) document.title = doc.title;
+            })
+            .catch(err => {
+                document.getElementById('post-content').innerHTML = "<h2>Post Not Found</h2><p>Sorry, we couldn't find the requested stotram. <a href='/'>Go back to Home</a></p>";
+            });
+    } else {
+        // If it's a completely wrong link, go home
+        window.location.replace("/");
+    }
+</script>
+
 </body>
 </html>
