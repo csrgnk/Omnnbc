@@ -1,81 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="te">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namo Narayanaya Bhakthi Channel</title>
-    <style>
-        /* Site Design Styles */
-        body { margin:0; font-family: 'Segoe UI', sans-serif; background:#f4f6f9; }
-        .site-header { background: #C2185B; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 1.5rem; border-bottom: 4px solid #FFD700; }
-        .nav-links { background: #fff9db; padding: 10px; text-align: center; border-bottom: 1px solid #ddd; }
-        .nav-links a { margin: 0 10px; color: #C2185B; text-decoration: none; font-weight: bold; font-size: 14px; }
-        .post-wrapper { max-width: 800px; margin: 20px auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); min-height: 400px; }
-        .share-box { margin-bottom: 20px; padding: 10px; background: #e3f2fd; border-radius: 8px; text-align: center; }
-        .btn-ws { background: #25D366; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-weight: bold; display: inline-block; margin: 5px; }
-        footer { background: #C2185B; color: white; text-align: center; padding: 20px; margin-top: 40px; }
-        #post-content { line-height: 1.6; color: #333; font-size: 18px; }
-        .loading-text { text-align: center; color: #C2185B; font-weight: bold; margin-top: 50px; }
-    </style>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title id="pageTitle">Loading...</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Segoe UI,Arial;
+background:#f4f6f9;
+}
+
+header{
+background:#fff9db;
+padding:20px;
+text-align:center;
+font-size:1.6rem;
+font-weight:bold;
+color:#C2185B;
+border-bottom:3px solid #FFD700;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+padding:20px;
+background:white;
+margin-top:20px;
+border-radius:12px;
+}
+
+</style>
+
 </head>
+
 <body>
 
-<div class="site-header">Namo Narayanaya Bhakthi Channel</div>
+<header>Namo Narayanaya Bhakthi Channel</header>
 
-<div class="nav-links">
-    <a href="/">HOME</a> | 
-    <a href="https://dasabodha.omnnbc.in/">DASABODHA</a> | 
-    <a href="https://omnnbc.com">OMNNBC.COM</a>
+<div class="container">
+
+<h1 id="postTitle">Loading...</h1>
+
+<div id="postContent"></div>
+
 </div>
-
-<div class="post-wrapper">
-    <div class="share-box">
-        <p style="margin:0 0 10px 0; font-weight:bold; color:#002366;">Share with Bhakthas:</p>
-        <a href="#" id="wsLink" class="btn-ws" target="_blank">Share on WhatsApp</a>
-    </div>
-
-    <div id="post-content">
-        <p class="loading-text">Loading devotional content...</p>
-    </div>
-</div>
-
-<footer>
-    <p>© 2026 Namo Narayanaya Bhakthi Channel</p>
-    <p style="font-size:12px;">Managed by Sangameshwar - omnnbc.com</p>
-</footer>
 
 <script>
-    // THE MAGIC LOGIC
-    const path = window.location.pathname;
-    const shareUrl = "https://omnnbc.in" + path;
-    
-    // Set WhatsApp Link
-    document.getElementById('wsLink').href = "https://api.whatsapp.com/send?text=Read this on Namo Narayanaya: " + shareUrl;
 
-    // Load the actual .html file content into this template
-    if (path.includes('.html')) {
-        fetch(path)
-            .then(response => {
-                if (!response.ok) throw new Error('Not Found');
-                return response.text();
-            })
-            .then(html => {
-                // Extract body content from the loaded file
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const content = doc.body.innerHTML;
-                document.getElementById('post-content').innerHTML = content;
-                
-                // Set Title
-                if(doc.title) document.title = doc.title;
-            })
-            .catch(err => {
-                document.getElementById('post-content').innerHTML = "<h2>Post Not Found</h2><p>Sorry, we couldn't find the requested stotram. <a href='/'>Go back to Home</a></p>";
-            });
-    } else {
-        // If it's a completely wrong link, go home
-        window.location.replace("/");
-    }
+const repo = window.location.hostname.includes("github.io") ? "/Omnnbc" : "";
+
+const path = window.location.pathname;
+
+const slug = path.split('/').filter(Boolean).pop();
+
+if(!slug){
+
+window.location.href = repo + "/";
+
+}
+
+fetch(`${repo}/data/posts.json`)
+.then(r=>r.json())
+.then(posts=>{
+
+const post=posts.find(p=>p.url===slug);
+
+if(post){
+
+document.title=post.title+" - Namo Narayanaya";
+
+document.getElementById("postTitle").innerText=post.title;
+
+fetch(`${repo}/posts/${slug}.html`)
+.then(r=>r.text())
+.then(html=>{
+
+const temp=document.createElement("div");
+
+temp.innerHTML=html;
+
+const extras=temp.querySelectorAll("header,footer,nav,script,style");
+
+extras.forEach(e=>e.remove());
+
+document.getElementById("postContent").innerHTML=temp.innerHTML;
+
+});
+
+}else{
+
+document.getElementById("postTitle").innerText="Page Not Found";
+
+}
+
+});
+
 </script>
 
 </body>
