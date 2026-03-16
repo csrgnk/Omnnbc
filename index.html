@@ -23,7 +23,7 @@
 <header>Namo Narayanaya Bhakthi Channel</header>
 
 <div class="search-container">
-    <input type="text" id="postSearch" placeholder="Search from 110+ devotional posts...">
+    <input type="text" id="postSearch" placeholder="Search 110+ devotional posts...">
 </div>
 
 <div class="container" id="postsContainer">Loading posts...</div>
@@ -33,7 +33,7 @@
 <script>
     let allPosts = [], filteredPosts = [];
 
-    // Fetching the JSON
+    // Fetching the JSON from your data folder
     fetch('/data/posts.json')
     .then(res => res.json())
     .then(data => {
@@ -47,20 +47,20 @@
         container.innerHTML = "";
         
         if(filteredPosts.length === 0) {
-            container.innerHTML = "<p style='text-align:center;'>No posts found matching your search.</p>";
+            container.innerHTML = "<p style='text-align:center;'>No posts found.</p>";
             return;
         }
 
         filteredPosts.forEach(post => {
-            // This turns "posts/my-post.html" into "my-post"
+            // This is the "Cleaner" - It removes 'posts/' and '.html'
             const slug = post.url.split('/').pop().replace('.html', '');
             
             const card = document.createElement("div");
             card.className = "post-card";
             card.innerHTML = `
                 <h2><a href="/${slug}">${post.title}</a></h2>
-                <p style="color:#555; font-size:14px;">${post.description || "Read devotional lyrics and meanings..."}</p>
-                <a href="/${slug}" style="color:#C2185B; font-weight:bold; text-decoration:none; font-size:13px;">READ MORE →</a>
+                <p style="color:#555; font-size:14px;">${post.description || "Read lyrics and meaning..."}</p>
+                <a href="/${slug}" style="color:#C2185B; font-weight:bold; text-decoration:none;">READ MORE →</a>
             `;
             container.appendChild(card);
         });
@@ -69,10 +69,7 @@
     // Search Logic
     document.getElementById('postSearch').addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase();
-        filteredPosts = allPosts.filter(p => 
-            p.title.toLowerCase().includes(term) || 
-            (p.description && p.description.toLowerCase().includes(term))
-        );
+        filteredPosts = allPosts.filter(p => p.title.toLowerCase().includes(term));
         renderPage();
     });
 </script>
