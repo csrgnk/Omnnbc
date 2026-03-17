@@ -5,14 +5,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Dasabodha Grantha Telugu Lyrics</title>
+<title>Namo Narayanaya Bhakthi Channel</title>
 
 <style>
 
 body{
 margin:0;
-font-family:Arial;
+font-family:Segoe UI,Arial;
 background:#f4f6f9;
+display:flex;
+flex-direction:column;
+min-height:100vh;
 }
 
 header{
@@ -25,10 +28,26 @@ color:#C2185B;
 border-bottom:3px solid #FFD700;
 }
 
+.search-container{
+max-width:800px;
+margin:15px auto;
+padding:0 15px;
+}
+
+#postSearch{
+width:100%;
+padding:12px 20px;
+font-size:16px;
+border:2px solid #C2185B;
+border-radius:30px;
+outline:none;
+}
+
 .container{
 max-width:800px;
 margin:auto;
 padding:15px;
+flex:1;
 }
 
 .post-card{
@@ -36,42 +55,57 @@ background:#FFFDE7;
 padding:20px;
 margin-bottom:15px;
 border-radius:12px;
+box-shadow:0 2px 8px rgba(0,0,0,0.08);
 border-left:6px solid #C2185B;
 }
 
 .post-card h2{
 margin:0 0 8px;
 color:#002366;
+font-size:1.3rem;
 }
+
+.post-meta-desc{
+color:#555;
+font-size:14px;
+margin:8px 0;
+line-height:1.5;
+}
+
+/* PAGINATION */
 
 .pagination-wrapper{
 display:flex;
-flex-direction:column;
-align-items:center;
+justify-content:center;
 margin:30px 0;
+gap:10px;
 }
 
 .page-numbers-container{
 display:flex;
-gap:10px;
+gap:8px;
 overflow-x:auto;
-width:100%;
-padding:10px;
+padding:5px;
+}
+
+.page-numbers-container::-webkit-scrollbar{
+display:none;
 }
 
 .pg-btn{
-min-width:120px;
-padding:8px;
-border:2px solid #002366;
-border-radius:25px;
-background:white;
-color:#002366;
+min-width:40px;
+height:40px;
+border:2px solid #C2185B;
+border-radius:50%;
+background:#fff9db;
+color:#C2185B;
 font-weight:bold;
 cursor:pointer;
+flex-shrink:0;
 }
 
 .pg-btn.active{
-background:#002366;
+background:#C2185B;
 color:#FFD700;
 }
 
@@ -88,53 +122,35 @@ padding:20px;
 
 <body>
 
-<header>
-Dasabodha Grantha Telugu Lyrics
-</header>
+<header>Namo Narayanaya Bhakthi Channel</header>
 
-<div class="container" id="postsContainer">
-Loading posts...
+<div class="search-container">
+<input type="text" id="postSearch" placeholder="Search stotrams...">
 </div>
 
-<div class="pagination-wrapper">
+<div class="container" id="postsContainer">Loading...</div>
 
-<p style="font-weight:bold;color:#C2185B;">
-Select Dashakam
-</p>
-
-<div class="page-numbers-container" id="paginationWrapper"></div>
-
-</div>
+<div class="pagination-wrapper" id="paginationWrapper"></div>
 
 <footer>
-© 2026 Namo Narayanaya Bhakthi Channel
+<p>© 2026 Namo Narayanaya Bhakthi Channel</p>
 </footer>
 
 <script>
 
 let allPosts=[];
-let currentDashakam=1;
+let filteredPosts=[];
+let currentPage=1;
+
+const postsPerPage=25;
 
 fetch("./data/posts.json?v="+Date.now())
-
-.then(res=>res.json())
-
+.then(r=>r.json())
 .then(data=>{
 
-allPosts=data.sort((a,b)=>{
+allPosts=data.sort((a,b)=>new Date(b.publish_date)-new Date(a.publish_date));
 
-if(a.dashakam!=b.dashakam){
-
-return a.dashakam-b.dashakam;
-
-}
-
-const numA=parseInt(a.url.match(/samasam-(\d+)/)[1]);
-const numB=parseInt(b.url.match(/samasam-(\d+)/)[1]);
-
-return numA-numB;
-
-});
+filteredPosts=[...allPosts];
 
 renderPage();
 
@@ -146,19 +162,25 @@ const container=document.getElementById("postsContainer");
 
 container.innerHTML="";
 
-const posts=allPosts.filter(p=>p.dashakam==currentDashakam);
+const start=(currentPage-1)*postsPerPage;
 
-if(posts.length===0){
+const end=start+postsPerPage;
 
-container.innerHTML="Posts coming soon for this Dashakam";
+const items=filteredPosts.slice(start,end);
 
-setupPagination();
+if(items.length===0){
+
+container.innerHTML="<p style='text-align:center;'>No posts found</p>";
 
 return;
 
 }
 
-posts.forEach(post=>{
+items.forEach(post=>{
+
+const slug=post.url;
+
+const desc=(post.description||"").substring(0,200);
 
 const card=document.createElement("div");
 
@@ -167,15 +189,17 @@ card.className="post-card";
 card.innerHTML=`
 
 <h2>
-<a href="./${post.url}/">
+<a href="/${slug}/" style="text-decoration:none;color:#002366;">
 ${post.title}
 </a>
 </h2>
 
-<p>${post.description||""}</p>
+<div class="post-meta-desc">
+${desc}
+</div>
 
-<a href="./${post.url}/">
-Read Lyrics →
+<a href="/${slug}/" style="color:#FF9800;font-weight:bold;text-decoration:none;font-size:13px;">
+READ MORE →
 </a>
 
 `;
@@ -186,35 +210,95 @@ container.appendChild(card);
 
 setupPagination();
 
+window.scrollTo(0,0);
+
 }
 
 function setupPagination(){
+
+const totalPages=Math.ceil(filteredPosts.length/postsPerPage);
 
 const wrapper=document.getElementById("paginationWrapper");
 
 wrapper.innerHTML="";
 
-for(let i=1;i<=20;i++){
+if(totalPages<=1)return;
 
-const btn=document.createElement("button");
+const prev=document.createElement("button");
 
-btn.className="pg-btn"+(i===currentDashakam?" active":"");
+prev.className="pg-btn";
 
-btn.innerText="Dashakam "+i;
+prev.innerHTML="«";
 
-btn.onclick=()=>{
+prev.disabled=currentPage===1;
 
-currentDashakam=i;
+prev.onclick=()=>{
+
+currentPage--;
 
 renderPage();
 
 };
 
-wrapper.appendChild(btn);
+wrapper.appendChild(prev);
+
+const numbersDiv=document.createElement("div");
+
+numbersDiv.className="page-numbers-container";
+
+for(let i=1;i<=totalPages;i++){
+
+const btn=document.createElement("button");
+
+btn.className="pg-btn"+(i===currentPage?" active":"");
+
+btn.innerText=i;
+
+btn.onclick=()=>{
+
+currentPage=i;
+
+renderPage();
+
+};
+
+numbersDiv.appendChild(btn);
 
 }
 
+wrapper.appendChild(numbersDiv);
+
+const next=document.createElement("button");
+
+next.className="pg-btn";
+
+next.innerHTML="»";
+
+next.disabled=currentPage===totalPages;
+
+next.onclick=()=>{
+
+currentPage++;
+
+renderPage();
+
+};
+
+wrapper.appendChild(next);
+
 }
+
+document.getElementById("postSearch").addEventListener("input",(e)=>{
+
+const term=e.target.value.toLowerCase();
+
+filteredPosts=allPosts.filter(p=>p.title.toLowerCase().includes(term));
+
+currentPage=1;
+
+renderPage();
+
+});
 
 </script>
 
