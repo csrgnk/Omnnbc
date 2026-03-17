@@ -13,20 +13,22 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    /* Prevents horizontal scrolling on the whole page */
-    overflow-x: hidden; 
+    overflow-x: hidden;
   }
 
-  /* HEADER - Updated to Light Yellow */
+  /* HEADER - Two lines, light yellow, centered */
   header {
-    background: #FFFDE7; /* Light Yellow */
-    padding: 25px 15px;
+    background: #FFFDE7;
+    padding: 20px 15px;
     text-align: center;
     font-size: 1.8rem;
     font-weight: bold;
     color: #C2185B;
     border-bottom: 3px solid #FFD700;
-    word-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.2;
   }
 
   /* MAIN CONTAINER */
@@ -36,7 +38,7 @@
     margin: auto;
     padding: 15px;
     flex: 1;
-    box-sizing: border-box; /* Ensures padding doesn't cause overflow */
+    box-sizing: border-box;
   }
 
   /* POST TITLE */
@@ -53,24 +55,22 @@
     word-wrap: break-word;
   }
 
-  /* POST CONTENT - Increased text size & Mobile Fix */
+  /* POST CONTENT - High readability & Mobile fix */
   .post-content {
     background: #FFFDE7;
     padding: 20px;
     border-radius: 12px;
     color: #1A237E;
     line-height: 1.8;
-    font-size: 20px; /* Increased for better readability */
-    word-wrap: break-word; /* Forces long words/links to wrap */
+    font-size: 20px; /* Increased font size */
+    word-wrap: break-word;
     overflow-wrap: break-word;
-    overflow-x: hidden; /* Prevents internal scrolling */
   }
 
-  /* Fix for images or tables inside posts that might overflow */
+  /* Prevent images/tables from causing horizontal scroll */
   .post-content img, .post-content table {
     max-width: 100%;
     height: auto;
-    display: block;
   }
 
   /* SHARE BUTTONS */
@@ -83,14 +83,14 @@
   }
 
   .share-btn {
-    padding: 12px 16px;
+    padding: 12px 14px;
     border-radius: 8px;
     color: white;
     font-weight: bold;
     text-decoration: none;
     font-size: 14px;
-    flex: 1; /* Buttons grow to fit screen width on mobile */
-    min-width: 120px;
+    flex: 1;
+    min-width: 100px;
     text-align: center;
   }
 
@@ -121,17 +121,20 @@
     margin-top: auto;
   }
 
-  /* Mobile Specific Adjustments */
+  /* MOBILE OPTIMIZATION */
   @media (max-width: 600px) {
-    header { font-size: 1.4rem; }
-    .post-title { font-size: 1.3rem; }
-    .post-content { font-size: 18px; padding: 15px; }
+    header { font-size: 1.5rem; }
+    .post-title { font-size: 1.4rem; }
+    .post-content { font-size: 19px; padding: 15px; }
   }
 </style>
 </head>
 <body>
 
-<header>Namo Narayanaya Bhakthi Channel</header>
+<header>
+  <div>Namo Narayanaya</div>
+  <div>Bhakthi Channel</div>
+</header>
 
 <div class="container">
   <div class="post-title" id="postTitle">Loading...</div>
@@ -154,6 +157,7 @@
 </footer>
 
 <script>
+  // Detect if running on GitHub Pages subfolder
   const repo = window.location.hostname.includes("github.io") ? "/Omnnbc" : "";
   const path = window.location.pathname;
   const slug = path.split('/').filter(Boolean).pop();
@@ -164,32 +168,43 @@
   }
 
   fetch(`${repo}/data/posts.json`)
-    .then(r=>r.json())
-    .then(posts=>{
-      const post=posts.find(p=>p.url===slug);
-      if(post){
-        document.title=post.title+" - Namo Narayanaya";
-        document.getElementById("postTitle").innerText=post.title;
-        
-        fetch(`${repo}/posts/${slug}.html`)
-          .then(r=>r.text())
-          .then(html=>{
-            const temp=document.createElement("div");
-            temp.innerHTML=html;
-            const extras=temp.querySelectorAll("header,footer,nav,script,style");
-            extras.forEach(e=>e.remove());
-            document.getElementById("postContent").innerHTML=temp.innerHTML;
+    .then(r => r.json())
+    .then(posts => {
+      const post = posts.find(p => p.url === slug);
 
-            const u=encodeURIComponent(window.location.href);
-            const m=encodeURIComponent(post.title+"\n\n");
-            document.getElementById("sWA").href=`https://api.whatsapp.com/send?text=${m}${u}`;
-            document.getElementById("sFB").href=`https://www.facebook.com/sharer/sharer.php?u=${u}`;
-            document.getElementById("sTW").href=`https://twitter.com/intent/tweet?text=${m}&url=${u}`;
-            document.getElementById("shareRow").style.display="flex";
+      if(post) {
+        document.title = post.title + " - Namo Narayanaya";
+        document.getElementById("postTitle").innerText = post.title;
+
+        fetch(`${repo}/posts/${slug}.html`)
+          .then(r => r.text())
+          .then(html => {
+            const temp = document.createElement("div");
+            temp.innerHTML = html;
+            
+            // Clean up extra elements from the fetched post
+            const extras = temp.querySelectorAll("header,footer,nav,script,style");
+            extras.forEach(e => e.remove());
+
+            document.getElementById("postContent").innerHTML = temp.innerHTML;
+
+            // Generate Share Links
+            const u = encodeURIComponent(window.location.href);
+            const m = encodeURIComponent(post.title + "\n\n");
+
+            document.getElementById("sWA").href = `https://api.whatsapp.com/send?text=${m}${u}`;
+            document.getElementById("sFB").href = `https://www.facebook.com/sharer/sharer.php?u=${u}`;
+            document.getElementById("sTW").href = `https://twitter.com/intent/tweet?text=${m}&url=${u}`;
+            document.getElementById("shareRow").style.display = "flex";
           });
       } else {
-        document.getElementById("postTitle").innerText="Page Not Found";
+        document.getElementById("postTitle").innerText = "Post Not Found";
+        document.getElementById("postContent").innerHTML = "<p style='text-align:center;'>క్షమించండి, మీరు వెతుకుతున్న పేజీ అందుబాటులో లేదు.</p>";
       }
+    })
+    .catch(err => {
+      document.getElementById("postTitle").innerText = "Error Loading";
+      console.error(err);
     });
 </script>
 
