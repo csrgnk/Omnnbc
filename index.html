@@ -5,20 +5,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Namo Narayanaya Bhakthi Channel</title>
+<title>Dasabodha Grantha Telugu Lyrics</title>
 
 <style>
 
 body{
 margin:0;
-font-family:'Segoe UI',Arial,sans-serif;
+font-family:Arial;
 background:#f4f6f9;
-display:flex;
-flex-direction:column;
-min-height:100vh;
 }
-
-/* HEADER */
 
 header{
 background:#fff9db;
@@ -30,40 +25,10 @@ color:#C2185B;
 border-bottom:3px solid #FFD700;
 }
 
-/* SEARCH */
-
-.search-container{
-max-width:800px;
-margin:15px auto;
-padding:0 15px;
-display:flex;
-justify-content:center;
-}
-
-#postSearch{
-width:100%;
-max-width:500px;
-padding:12px 18px;
-font-size:16px;
-border:2px solid #C2185B;
-border-radius:30px;
-outline:none;
-box-sizing:border-box;
-text-align:center;
-}
-
-#postSearch:focus{
-border-color:#FF9800;
-box-shadow:0 0 6px rgba(255,152,0,0.4);
-}
-
-/* POSTS */
-
 .container{
 max-width:800px;
 margin:auto;
 padding:15px;
-flex:1;
 }
 
 .post-card{
@@ -71,69 +36,50 @@ background:#FFFDE7;
 padding:20px;
 margin-bottom:15px;
 border-radius:12px;
-box-shadow:0 2px 8px rgba(0,0,0,0.08);
 border-left:6px solid #C2185B;
 }
 
 .post-card h2{
 margin:0 0 8px;
 color:#002366;
-font-size:1.3rem;
 }
-
-.post-meta-desc{
-color:#555;
-font-size:14px;
-margin:8px 0;
-line-height:1.5;
-}
-
-/* PAGINATION */
 
 .pagination-wrapper{
 display:flex;
-justify-content:center;
+flex-direction:column;
+align-items:center;
 margin:30px 0;
-gap:10px;
 }
 
 .page-numbers-container{
 display:flex;
-gap:8px;
+gap:10px;
 overflow-x:auto;
-padding:5px;
-scrollbar-width:none;
-}
-
-.page-numbers-container::-webkit-scrollbar{
-display:none;
+width:100%;
+padding:10px;
 }
 
 .pg-btn{
-min-width:40px;
-height:40px;
-border:2px solid #C2185B;
-border-radius:50%;
-background:#fff9db;
-color:#C2185B;
+min-width:120px;
+padding:8px;
+border:2px solid #002366;
+border-radius:25px;
+background:white;
+color:#002366;
 font-weight:bold;
 cursor:pointer;
-flex-shrink:0;
 }
 
 .pg-btn.active{
-background:#C2185B;
+background:#002366;
 color:#FFD700;
 }
-
-/* FOOTER */
 
 footer{
 background:#C2185B;
 color:white;
 text-align:center;
 padding:20px;
-margin-top:auto;
 }
 
 </style>
@@ -142,35 +88,53 @@ margin-top:auto;
 
 <body>
 
-<header>Namo Narayanaya Bhakthi Channel</header>
+<header>
+Dasabodha Grantha Telugu Lyrics
+</header>
 
-<div class="search-container">
-<input type="text" id="postSearch" placeholder="Search stotrams...">
+<div class="container" id="postsContainer">
+Loading posts...
 </div>
 
-<div class="container" id="postsContainer">Loading...</div>
+<div class="pagination-wrapper">
 
-<div class="pagination-wrapper" id="paginationWrapper"></div>
+<p style="font-weight:bold;color:#C2185B;">
+Select Dashakam
+</p>
+
+<div class="page-numbers-container" id="paginationWrapper"></div>
+
+</div>
 
 <footer>
-<p>© 2026 Namo Narayanaya Bhakthi Channel</p>
+© 2026 Namo Narayanaya Bhakthi Channel
 </footer>
 
 <script>
 
 let allPosts=[];
-let filteredPosts=[];
-let currentPage=1;
-
-const postsPerPage=25;
+let currentDashakam=1;
 
 fetch("./data/posts.json?v="+Date.now())
+
 .then(res=>res.json())
+
 .then(data=>{
 
-allPosts=data.sort((a,b)=>new Date(b.publish_date)-new Date(a.publish_date));
+allPosts=data.sort((a,b)=>{
 
-filteredPosts=[...allPosts];
+if(a.dashakam!=b.dashakam){
+
+return a.dashakam-b.dashakam;
+
+}
+
+const numA=parseInt(a.url.match(/samasam-(\d+)/)[1]);
+const numB=parseInt(b.url.match(/samasam-(\d+)/)[1]);
+
+return numA-numB;
+
+});
 
 renderPage();
 
@@ -182,23 +146,19 @@ const container=document.getElementById("postsContainer");
 
 container.innerHTML="";
 
-const start=(currentPage-1)*postsPerPage;
-const end=start+postsPerPage;
+const posts=allPosts.filter(p=>p.dashakam==currentDashakam);
 
-const items=filteredPosts.slice(start,end);
+if(posts.length===0){
 
-if(items.length===0){
+container.innerHTML="Posts coming soon for this Dashakam";
 
-container.innerHTML="<p style='text-align:center;'>No posts found</p>";
+setupPagination();
+
 return;
 
 }
 
-items.forEach(post=>{
-
-const slug=post.url;
-
-const desc=(post.description||"").substring(0,200);
+posts.forEach(post=>{
 
 const card=document.createElement("div");
 
@@ -207,17 +167,15 @@ card.className="post-card";
 card.innerHTML=`
 
 <h2>
-<a href="/${slug}/" style="text-decoration:none;color:#002366;">
+<a href="./${post.url}/">
 ${post.title}
 </a>
 </h2>
 
-<div class="post-meta-desc">
-${desc}
-</div>
+<p>${post.description||""}</p>
 
-<a href="/${slug}/" style="color:#FF9800;font-weight:bold;text-decoration:none;font-size:13px;">
-READ MORE →
+<a href="./${post.url}/">
+Read Lyrics →
 </a>
 
 `;
@@ -228,86 +186,35 @@ container.appendChild(card);
 
 setupPagination();
 
-window.scrollTo(0,0);
-
 }
 
 function setupPagination(){
-
-const totalPages=Math.ceil(filteredPosts.length/postsPerPage);
 
 const wrapper=document.getElementById("paginationWrapper");
 
 wrapper.innerHTML="";
 
-if(totalPages<=1)return;
-
-const prev=document.createElement("button");
-
-prev.className="pg-btn";
-
-prev.innerHTML="«";
-
-prev.disabled=currentPage===1;
-
-prev.onclick=()=>{
-currentPage--;
-renderPage();
-};
-
-wrapper.appendChild(prev);
-
-const numbersDiv=document.createElement("div");
-
-numbersDiv.className="page-numbers-container";
-
-for(let i=1;i<=totalPages;i++){
+for(let i=1;i<=20;i++){
 
 const btn=document.createElement("button");
 
-btn.className="pg-btn"+(i===currentPage?" active":"");
+btn.className="pg-btn"+(i===currentDashakam?" active":"");
 
-btn.innerText=i;
+btn.innerText="Dashakam "+i;
 
 btn.onclick=()=>{
-currentPage=i;
+
+currentDashakam=i;
+
 renderPage();
+
 };
 
-numbersDiv.appendChild(btn);
+wrapper.appendChild(btn);
 
 }
 
-wrapper.appendChild(numbersDiv);
-
-const next=document.createElement("button");
-
-next.className="pg-btn";
-
-next.innerHTML="»";
-
-next.disabled=currentPage===totalPages;
-
-next.onclick=()=>{
-currentPage++;
-renderPage();
-};
-
-wrapper.appendChild(next);
-
 }
-
-document.getElementById("postSearch").addEventListener("input",(e)=>{
-
-const term=e.target.value.toLowerCase();
-
-filteredPosts=allPosts.filter(p=>p.title.toLowerCase().includes(term));
-
-currentPage=1;
-
-renderPage();
-
-});
 
 </script>
 
