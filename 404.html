@@ -1,210 +1,224 @@
 <!DOCTYPE html>
 <html lang="te">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="pageTitle">Loading...</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Loading...</title>
+    <style>
+        /* General Page Setup */
+        body { 
+            margin: 0; 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            background: #f4f6f9; 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh; 
+            overflow-x: hidden; 
+        }
 
-<style>
-  body {
-    margin: 0;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: #f4f6f9;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+        /* HEADER - Two Lines, Light Yellow, Centered */
+        header { 
+            background: #FFFDE7; 
+            padding: 20px 10px; 
+            text-align: center; 
+            color: #C2185B; 
+            border-bottom: 3px solid #FFD700; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            font-weight: bold; 
+            font-size: 1.8rem;
+            line-height: 1.2;
+        }
 
-  /* HEADER - Two lines, light yellow, centered */
-  header {
-    background: #FFFDE7;
-    padding: 20px 15px;
-    text-align: center;
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #C2185B;
-    border-bottom: 3px solid #FFD700;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    line-height: 1.2;
-  }
+        /* MAIN CONTAINER */
+        .container { 
+            max-width: 800px; 
+            margin: auto; 
+            padding: 15px; 
+            flex: 1; 
+            width: 100%; 
+            box-sizing: border-box; 
+        }
 
-  /* MAIN CONTAINER */
-  .container {
-    max-width: 800px;
-    width: 100%;
-    margin: auto;
-    padding: 15px;
-    flex: 1;
-    box-sizing: border-box;
-  }
+        /* POST TITLE CARD */
+        .post-title { 
+            background: #C2185B; 
+            color: white; 
+            text-align: center; 
+            padding: 15px; 
+            font-size: 1.6rem; 
+            font-weight: bold; 
+            border-radius: 15px; 
+            margin-bottom: 15px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            word-wrap: break-word;
+        }
 
-  /* POST TITLE */
-  .post-title {
-    background: #C2185B;
-    color: white;
-    text-align: center;
-    padding: 15px;
-    font-size: 1.6rem;
-    font-weight: bold;
-    border-radius: 15px;
-    margin-bottom: 15px;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-    word-wrap: break-word;
-  }
+        /* POST CONTENT - Increased Readability */
+        .post-content { 
+            background: #FFFDE7; 
+            padding: 25px 20px; 
+            border-radius: 12px; 
+            color: #1A237E; 
+            line-height: 1.8; 
+            font-size: 21px; /* Improved for mobile reading */
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
 
-  /* POST CONTENT - High readability & Mobile fix */
-  .post-content {
-    background: #FFFDE7;
-    padding: 20px;
-    border-radius: 12px;
-    color: #1A237E;
-    line-height: 1.8;
-    font-size: 20px; /* Increased font size */
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-  }
+        .post-content img { 
+            max-width: 100%; 
+            height: auto; 
+            border-radius: 8px; 
+            margin: 10px 0;
+        }
 
-  /* Prevent images/tables from causing horizontal scroll */
-  .post-content img, .post-content table {
-    max-width: 100%;
-    height: auto;
-  }
+        /* SHARE BUTTONS */
+        .share-row { 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            gap: 10px; 
+            margin-top: 25px; 
+        }
 
-  /* SHARE BUTTONS */
-  .share-row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 25px;
-  }
+        .share-btn { 
+            padding: 12px 14px; 
+            border-radius: 8px; 
+            color: white; 
+            font-weight: bold; 
+            text-decoration: none; 
+            font-size: 14px; 
+            flex: 1; 
+            min-width: 100px; 
+            text-align: center; 
+        }
 
-  .share-btn {
-    padding: 12px 14px;
-    border-radius: 8px;
-    color: white;
-    font-weight: bold;
-    text-decoration: none;
-    font-size: 14px;
-    flex: 1;
-    min-width: 100px;
-    text-align: center;
-  }
+        .wa { background: #25D366; } 
+        .fb { background: #1877F2; } 
+        .tw { background: #000; } 
+        .cp { background: #607D8B; border: none; cursor: pointer; }
+        
+        /* NAVIGATION */
+        .back-home { 
+            text-align: center; 
+            margin: 30px 0; 
+        }
 
-  .wa { background: #25D366; }
-  .fb { background: #1877F2; }
-  .tw { background: #000; }
-  .cp { background: #607D8B; border: none; cursor: pointer; }
+        .back-home a { 
+            color: #C2185B; 
+            font-weight: bold; 
+            text-decoration: none; 
+            font-size: 18px; 
+            border: 1px solid #C2185B;
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
 
-  /* BACK HOME */
-  .back-home {
-    text-align: center;
-    margin: 25px 0;
-  }
+        /* FOOTER */
+        footer { 
+            background: #C2185B; 
+            color: white; 
+            text-align: center; 
+            padding: 20px; 
+            margin-top: auto; 
+        }
 
-  .back-home a {
-    color: #C2185B;
-    font-weight: bold;
-    text-decoration: none;
-    font-size: 18px;
-  }
-
-  /* FOOTER */
-  footer {
-    background: #C2185B;
-    color: white;
-    text-align: center;
-    padding: 20px;
-    margin-top: auto;
-  }
-
-  /* MOBILE OPTIMIZATION */
-  @media (max-width: 600px) {
-    header { font-size: 1.5rem; }
-    .post-title { font-size: 1.4rem; }
-    .post-content { font-size: 19px; padding: 15px; }
-  }
-</style>
+        /* MOBILE FIXES */
+        @media (max-width: 600px) {
+            header { font-size: 1.5rem; }
+            .post-title { font-size: 1.3rem; }
+            .post-content { font-size: 19px; padding: 15px; }
+        }
+    </style>
 </head>
 <body>
 
 <header>
-  <div>Namo Narayanaya</div>
-  <div>Bhakthi Channel</div>
+    <div>Namo Narayanaya</div>
+    <div>Bhakthi Channel</div>
 </header>
 
 <div class="container">
-  <div class="post-title" id="postTitle">Loading...</div>
-  <div class="post-content" id="postContent"></div>
+    <div class="post-title" id="postTitle">Loading...</div>
+    <div class="post-content" id="postContent"></div>
 
-  <div class="share-row" id="shareRow" style="display:none;">
-    <a id="sWA" class="share-btn wa" target="_blank">WhatsApp</a>
-    <a id="sFB" class="share-btn fb" target="_blank">Facebook</a>
-    <a id="sTW" class="share-btn tw" target="_blank">Twitter</a>
-    <button onclick="copyURL()" class="share-btn cp">Copy URL</button>
-  </div>
+    <div class="share-row" id="shareRow" style="display:none;">
+        <a id="sWA" class="share-btn wa" target="_blank">WhatsApp</a>
+        <a id="sFB" class="share-btn fb" target="_blank">Facebook</a>
+        <a id="sTW" class="share-btn tw" target="_blank">Twitter</a>
+        <button onclick="copyURL()" class="share-btn cp">Copy URL</button>
+    </div>
 
-  <div class="back-home">
-    <a href="/">← Back to Home</a>
-  </div>
+    <div class="back-home">
+        <a href="/">← Back to Home</a>
+    </div>
 </div>
 
 <footer>
-  <p>© 2026 Namo Narayanaya Bhakthi Channel</p>
+    <p>© 2026 Namo Narayanaya Bhakthi Channel</p>
 </footer>
 
 <script>
-  // Detect if running on GitHub Pages subfolder
-  const repo = window.location.hostname.includes("github.io") ? "/Omnnbc" : "";
-  const path = window.location.pathname;
-  const slug = path.split('/').filter(Boolean).pop();
+    // Configuration
+    const repoName = "Omnnbc"; 
+    const isGitHub = window.location.hostname.includes("github.io");
+    const baseUrl = isGitHub ? `/${repoName}` : "";
 
-  function copyURL(){
-    navigator.clipboard.writeText(window.location.href);
-    alert("Link copied!");
-  }
+    // URL Logic: Extracts post name even if /Omnnbc/ is in the URL
+    let path = window.location.pathname;
+    let slug = path.split('/').filter(p => p && p !== repoName).pop();
 
-  fetch(`${repo}/data/posts.json`)
+    function copyURL(){
+        navigator.clipboard.writeText(window.location.href);
+        alert("Link Copied!");
+    }
+
+    // Load Data
+    fetch(`${baseUrl}/data/posts.json`)
     .then(r => r.json())
     .then(posts => {
-      const post = posts.find(p => p.url === slug);
+        const post = posts.find(p => p.url === slug);
 
-      if(post) {
-        document.title = post.title + " - Namo Narayanaya";
-        document.getElementById("postTitle").innerText = post.title;
+        if(post) {
+            document.title = post.title + " - Namo Narayanaya";
+            document.getElementById("postTitle").innerText = post.title;
 
-        fetch(`${repo}/posts/${slug}.html`)
-          .then(r => r.text())
-          .then(html => {
-            const temp = document.createElement("div");
-            temp.innerHTML = html;
-            
-            // Clean up extra elements from the fetched post
-            const extras = temp.querySelectorAll("header,footer,nav,script,style");
-            extras.forEach(e => e.remove());
+            // Fetch the actual post file
+            fetch(`${baseUrl}/posts/${slug}.html`)
+            .then(r => r.text())
+            .then(html => {
+                const temp = document.createElement("div");
+                temp.innerHTML = html;
+                
+                // Remove redundant site elements from inside the post
+                const extras = temp.querySelectorAll("header,footer,nav,script,style");
+                extras.forEach(e => e.remove());
 
-            document.getElementById("postContent").innerHTML = temp.innerHTML;
+                document.getElementById("postContent").innerHTML = temp.innerHTML;
 
-            // Generate Share Links
-            const u = encodeURIComponent(window.location.href);
-            const m = encodeURIComponent(post.title + "\n\n");
-
-            document.getElementById("sWA").href = `https://api.whatsapp.com/send?text=${m}${u}`;
-            document.getElementById("sFB").href = `https://www.facebook.com/sharer/sharer.php?u=${u}`;
-            document.getElementById("sTW").href = `https://twitter.com/intent/tweet?text=${m}&url=${u}`;
-            document.getElementById("shareRow").style.display = "flex";
-          });
-      } else {
-        document.getElementById("postTitle").innerText = "Post Not Found";
-        document.getElementById("postContent").innerHTML = "<p style='text-align:center;'>క్షమించండి, మీరు వెతుకుతున్న పేజీ అందుబాటులో లేదు.</p>";
-      }
+                // Configure Share Links
+                const u = encodeURIComponent(window.location.href);
+                const m = encodeURIComponent(post.title + "\n\n");
+                document.getElementById("sWA").href = `https://api.whatsapp.com/send?text=${m}${u}`;
+                document.getElementById("sFB").href = `https://www.facebook.com/sharer/sharer.php?u=${u}`;
+                document.getElementById("sTW").href = `https://twitter.com/intent/tweet?text=${m}&url=${u}`;
+                document.getElementById("shareRow").style.display = "flex";
+            });
+        } else {
+            // Handle Case: Post Not Found
+            document.getElementById("postTitle").innerText = "Page Not Found";
+            document.getElementById("postContent").innerHTML = `
+                <div style="text-align:center;">
+                    <p>Sorry, the page you are looking for does not exist.</p>
+                    <p>క్షమించండి, మీరు వెతుకుతున్న సమాచారం ఇక్కడ లేదు.</p>
+                </div>`;
+        }
     })
-    .catch(err => {
-      document.getElementById("postTitle").innerText = "Error Loading";
-      console.error(err);
+    .catch(e => {
+        document.getElementById("postTitle").innerText = "Error Loading";
+        console.error("Fetch Error:", e);
     });
 </script>
 
