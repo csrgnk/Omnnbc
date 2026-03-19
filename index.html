@@ -74,6 +74,21 @@ body{
   margin:0;
 }
 
+/* SEARCH */
+.search-box{
+  text-align:center;
+  margin:10px 0;
+}
+#searchInput{
+  width:80%;
+  max-width:300px;
+  padding:8px;
+  border-radius:20px;
+  border:2px solid var(--primary-pink);
+  text-align:center;
+  font-size:14px;
+}
+
 /* POSTS */
 .container{
   max-width:700px;
@@ -136,6 +151,7 @@ footer{
 
 <body>
 
+<!-- MENU -->
 <nav class="blue-nav">
   <a href="/">Home</a>
   <a href="/about-us">About Us</a>
@@ -151,6 +167,7 @@ footer{
   <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu</a>
 </div>
 
+<!-- HEADER -->
 <header class="site-header">
   <div class="header-box">
     <img src="assets/images/Omnnbc-new.png" class="logo">
@@ -161,7 +178,15 @@ footer{
   </div>
 </header>
 
+<!-- SEARCH -->
+<div class="search-box">
+  <input type="text" id="searchInput" placeholder="Search stotrams...">
+</div>
+
+<!-- POSTS -->
 <div class="container" id="posts"></div>
+
+<!-- PAGINATION -->
 <div class="pagination" id="pagination"></div>
 
 <footer>© 2026 Namo Narayanaya Bhakthi Channel</footer>
@@ -171,22 +196,38 @@ const repoName="Omnnbc";
 const isGitHub=location.hostname.includes("github.io");
 const baseUrl=isGitHub?"/"+repoName:"";
 
-let posts=[],currentPage=1;
+let allPosts=[],filteredPosts=[];
+let currentPage=1;
 const perPage=25;
 
+/* FETCH POSTS */
 fetch(baseUrl+"/data/posts.json?v="+Date.now())
 .then(r=>r.json())
 .then(data=>{
-  posts=data;
+  allPosts=data;
+  filteredPosts=[...allPosts];
   render();
 });
 
+/* SEARCH */
+document.getElementById("searchInput").addEventListener("input",(e)=>{
+  const val=e.target.value.toLowerCase();
+
+  filteredPosts=allPosts.filter(p=>
+    p.title.toLowerCase().includes(val)
+  );
+
+  currentPage=1;
+  render();
+});
+
+/* RENDER */
 function render(){
   const container=document.getElementById("posts");
   container.innerHTML="";
 
   let start=(currentPage-1)*perPage;
-  let items=posts.slice(start,start+perPage);
+  let items=filteredPosts.slice(start,start+perPage);
 
   items.forEach(p=>{
     let desc=(p.description||"").substring(0,180);
@@ -207,8 +248,9 @@ function render(){
   setupPagination();
 }
 
+/* PAGINATION */
 function setupPagination(){
-  const total=Math.ceil(posts.length/perPage);
+  const total=Math.ceil(filteredPosts.length/perPage);
   const wrap=document.getElementById("pagination");
   wrap.innerHTML="";
 
