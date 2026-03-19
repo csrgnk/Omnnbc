@@ -21,7 +21,7 @@ body{
   min-height:100vh;
 }
 
-/* TOP MENU */
+/* 🔵 TOP MENU */
 .blue-nav{
   background:var(--dark-blue);
   padding:6px 0;
@@ -32,25 +32,31 @@ body{
 .blue-nav a{
   color:#fff;
   text-decoration:none;
-  font-size:13px;
-  padding:4px 15px;
+  font-size:14px;
+  padding:4px 14px;
 }
 
-/* PINK MENU */
+/* 🔴 PINK MENU */
 .scroll-container{
   background:var(--primary-pink);
   padding:6px 0;
   display:flex;
   overflow-x:auto;
+  white-space:nowrap;
+  scrollbar-width:none;
 }
+.scroll-container::-webkit-scrollbar{display:none;}
+
 .scroll-container a{
   background:#fff;
   color:var(--primary-pink);
   text-decoration:none;
   font-size:13px;
-  padding:4px 12px;
-  margin:0 5px;
-  border-radius:4px;
+  padding:6px 14px;
+  margin:0 6px;
+  border-radius:6px;
+  white-space:nowrap;
+  flex-shrink:0;
 }
 
 /* HEADER */
@@ -81,10 +87,9 @@ body{
   line-height:1.05;
 }
 
-/* 🔥 INCREASED SIZE */
 .line1,
 .line2{
-  font-size:1.9rem; /* increased */
+  font-size:1.9rem;
   font-weight:800;
   color:var(--primary-pink);
   white-space:nowrap;
@@ -98,20 +103,20 @@ body{
   }
 }
 
-/* 🔍 SEARCH BOX */
+/* 🔍 SEARCH */
 .search-box{
   text-align:center;
-  margin:12px 0;
+  margin:10px 0;
 }
 
 #searchInput{
-  width:90%;
-  max-width:350px;
-  padding:10px;
-  border-radius:25px;
+  width:80%;
+  max-width:280px;
+  padding:8px;
+  border-radius:20px;
   border:2px solid var(--primary-pink);
-  font-size:15px;
-  outline:none;
+  font-size:14px;
+  text-align:center;
 }
 
 /* POSTS */
@@ -132,11 +137,11 @@ body{
 
 .post-card h2{
   margin:0;
-  font-size:1.15rem; /* increased */
+  font-size:1.15rem;
 }
 
 .post-meta-desc{
-  font-size:14px; /* increased */
+  font-size:14px;
   margin:6px 0;
 }
 
@@ -163,9 +168,9 @@ body{
   font-weight:bold;
   font-size:16px;
   cursor:pointer;
+  box-shadow:0 2px 6px rgba(0,0,0,0.2);
 }
 
-/* ACTIVE */
 .pg-btn.active{
   background:var(--primary-pink);
   color:#fff;
@@ -182,7 +187,7 @@ footer{
 
 <body>
 
-<!-- TOP MENU -->
+<!-- 🔵 TOP MENU -->
 <nav class="blue-nav">
   <a href="/">Home</a>
   <a href="/about-us">About Us</a>
@@ -191,12 +196,13 @@ footer{
   <a href="/privacy-policy">Privacy Policy</a>
 </nav>
 
-<!-- PINK MENU -->
+<!-- 🔴 PINK MENU -->
 <div class="scroll-container">
   <a href="/">Home</a>
   <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
   <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
   <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu</a>
+  <a href="https://csrgnk.github.io/manache-shlok/hindi/">Manache Shlok Hindi</a>
 </div>
 
 <!-- HEADER -->
@@ -210,7 +216,7 @@ footer{
   </div>
 </header>
 
-<!-- 🔍 SEARCH -->
+<!-- SEARCH -->
 <div class="search-box">
   <input type="text" id="searchInput" placeholder="Search stotrams...">
 </div>
@@ -245,7 +251,7 @@ fetch(baseUrl+"/data/posts.json?v="+Date.now())
 });
 
 /* SEARCH */
-document.getElementById("searchInput").addEventListener("input",function(e){
+document.getElementById("searchInput").addEventListener("input",(e)=>{
   const val=e.target.value.toLowerCase();
   filteredPosts=allPosts.filter(p=>p.title.toLowerCase().includes(val));
   currentPage=1;
@@ -285,13 +291,18 @@ function setupPagination(){
 
   if(totalPages<=1) return;
 
+  const div=document.createElement("div");
+  div.className="page-numbers-container";
+
   for(let i=1;i<=totalPages;i++){
     const btn=document.createElement("button");
     btn.className="pg-btn"+(i===currentPage?" active":"");
     btn.innerText=i;
     btn.onclick=()=>{currentPage=i;renderPage();};
-    wrapper.appendChild(btn);
+    div.appendChild(btn);
   }
+
+  wrapper.appendChild(div);
 }
 </script>
 
