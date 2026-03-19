@@ -21,30 +21,70 @@ body{
   background:var(--light-yellow);
 }
 
-/* MENU */
+/* 🔵 TOP MENU */
 .top-links{
   background:var(--dark-blue);
   display:flex;
   overflow-x:auto;
+  white-space:nowrap;
 }
 .top-links a{
   color:#fff;
   padding:8px 16px;
   text-decoration:none;
+  flex-shrink:0;
+  font-weight:600;
+}
+
+/* 🔴 SECOND MENU */
+.outer-links{
+  background:var(--primary-pink);
+  display:flex;
+  overflow-x:auto;
+  white-space:nowrap;
+}
+.outer-links a{
+  background:#fff;
+  color:var(--primary-pink);
+  margin:6px;
+  padding:6px 14px;
+  border-radius:6px;
+  text-decoration:none;
+  flex-shrink:0;
+  font-size:14px;
+  font-weight:600;
 }
 
 /* HEADER */
 header{
   background:#fff9db;
-  text-align:center;
-  padding:12px;
+  padding:10px;
+}
+
+.header-box{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+/* LOGO */
+.logo{
+  width:50px;
+  height:50px;
+  border-radius:50%;
 }
 
 /* TITLE */
+.title-box{
+  display:flex;
+  flex-direction:column;
+}
+
 .line1,.line2{
-  font-size:1.8rem;
+  font-size:1.5rem;
   font-weight:900;
   color:var(--primary-pink);
+  margin:0;
 }
 
 /* CONTENT */
@@ -113,7 +153,7 @@ footer{
 
 <body>
 
-<!-- MENU -->
+<!-- 🔵 TOP MENU -->
 <div class="top-links">
   <a href="/">Home</a>
   <a href="/about-us">About Us</a>
@@ -121,10 +161,23 @@ footer{
   <a href="/privacy-policy">Privacy Policy</a>
 </div>
 
+<!-- 🔴 SECOND MENU -->
+<div class="outer-links">
+  <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
+  <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
+  <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu</a>
+  <a href="https://csrgnk.github.io/manache-shlok/hindi/">Manache Shlok Hindi</a>
+</div>
+
 <!-- HEADER -->
 <header>
-  <div class="line1">Namo Narayanaya</div>
-  <div class="line2">Bhakthi Channel</div>
+  <div class="header-box">
+    <img src="/assets/images/Omnnbc-new.png" class="logo">
+    <div class="title-box">
+      <div class="line1">Namo Narayanaya</div>
+      <div class="line2">Bhakthi Channel</div>
+    </div>
+  </div>
 </header>
 
 <!-- CONTENT -->
@@ -153,64 +206,53 @@ const repoName="Omnnbc";
 const isGitHub=location.hostname.includes("github.io");
 const baseUrl=isGitHub?"/"+repoName:"";
 
-/* GET SLUG */
 let slug=location.pathname.replace(baseUrl,"").replace(/^\/|\/$/g,"");
 
-/* COPY */
 function copyURL(){
   navigator.clipboard.writeText(location.href);
   alert("Link Copied!");
 }
 
-/* 🔥 LOAD PAGE FIRST */
+/* LOAD PAGE */
 fetch(baseUrl+"/pages/"+slug+".html")
 .then(r=>{
   if(r.ok) return r.text();
   throw "no page";
 })
 .then(html=>{
-  setContent(formatTitle(slug),html);
+  setContent(slug.replace(/-/g," "),html);
 })
 .catch(()=>{
   loadPost();
 });
 
-/* 🔥 LOAD POST */
 function loadPost(){
   fetch(baseUrl+"/data/posts.json?v="+Date.now())
   .then(r=>r.json())
   .then(posts=>{
     const post=posts.find(p=>p.url===slug);
-
     if(post){
       fetch(baseUrl+"/posts/"+slug+".html")
       .then(r=>r.text())
-      .then(html=>{
-        setContent(post.title,html);
-      });
+      .then(html=>setContent(post.title,html));
     }else{
       show404();
     }
   });
 }
 
-/* 🔥 SET CONTENT */
 function setContent(title,html){
   document.title=title;
-  document.getElementById("postTitle").innerText=title;
+  postTitle.innerText=title;
 
   const temp=document.createElement("div");
   temp.innerHTML=html;
+  temp.querySelectorAll("header,footer,nav,script,style").forEach(e=>e.remove());
 
-  temp.querySelectorAll("header,footer,nav,script,style,meta,title")
-      .forEach(e=>e.remove());
-
-  document.getElementById("postContent").innerHTML=temp.innerHTML;
-
+  postContent.innerHTML=temp.innerHTML;
   setupShare(title);
 }
 
-/* SHARE */
 function setupShare(title){
   const url=encodeURIComponent(location.href);
   const text=encodeURIComponent(title+"\n\n");
@@ -219,18 +261,12 @@ function setupShare(title){
   sFB.href=`https://www.facebook.com/sharer/sharer.php?u=${url}`;
   sTW.href=`https://twitter.com/intent/tweet?text=${text}&url=${url}`;
 
-  document.getElementById("shareRow").style.display="flex";
+  shareRow.style.display="flex";
 }
 
-/* FORMAT TITLE */
-function formatTitle(slug){
-  return slug.replace(/-/g," ");
-}
-
-/* 404 */
 function show404(){
-  document.getElementById("postTitle").innerText="404 - Not Found";
-  document.getElementById("postContent").innerHTML="Page not found";
+  postTitle.innerText="404 - Not Found";
+  postContent.innerHTML="Page not found";
 }
 </script>
 
