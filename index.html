@@ -87,12 +87,30 @@ body{
   line-height:1.05;
 }
 
+.title-box{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  line-height:1.1;
+}
+
 .line1,
 .line2{
-  font-size:1.9rem;
+  font-size:1.65rem; /* 🔥 MATCHED */
   font-weight:800;
   color:var(--primary-pink);
   white-space:nowrap;
+  margin:0;
+  padding:0;
+}
+
+/* MOBILE */
+@media(max-width:600px){
+  .line1,
+  .line2{
+    font-size:1.2rem;
+  }
 }
 
 /* MOBILE */
