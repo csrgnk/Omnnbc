@@ -8,28 +8,26 @@
 <style>
   :root {
     --primary-pink: #C71585;
-    --primary-blue: #002366;
-    --accent-orange: #FF9800;
-    --light-yellow: #FFFDE7;
+    --dark-blue: #001a4d; /* Deep Dark Blue */
+    --accent-orange: #EF6C00;
+    --card-bg: #FFFDE7;
   }
 
   body {
     margin: 0;
-    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-    background: #f4f6f9;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f1f3f5;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
   }
 
-  /* --- BLUE TOP NAVIGATION --- */
+  /* --- DARK BLUE TOP MENU --- */
   .blue-nav {
-    background-color: var(--primary-blue);
-    padding: 10px 0;
-    overflow-x: auto;
+    background-color: var(--dark-blue);
+    padding: 8px 0;
     display: flex;
     justify-content: center;
-    white-space: nowrap;
     border-bottom: 1px solid rgba(255,255,255,0.1);
   }
 
@@ -38,145 +36,135 @@
     text-decoration: none;
     font-size: 13px;
     font-weight: 500;
-    padding: 5px 15px;
-    margin: 0 5px;
+    padding: 5px 12px;
+    margin: 0 4px;
     border-radius: 3px;
-    transition: background 0.3s;
   }
 
-  .blue-nav a:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  /* --- PINK SCROLL CONTAINER --- */
+  /* --- PINK SCROLL MENU --- */
   .scroll-container {
     background-color: var(--primary-pink);
-    padding: 10px 5px;
+    padding: 8px 5px;
     overflow-x: auto;
     display: flex;
     white-space: nowrap;
-    scrollbar-width: thin;
-    scrollbar-color: #ffffff var(--primary-pink);
+    scrollbar-width: none; /* Hide scrollbar for cleaner look */
   }
+  .scroll-container::-webkit-scrollbar { display: none; }
 
   .scroll-container a {
     background-color: #FFFFFF;
     color: var(--primary-pink);
     text-decoration: none;
     font-weight: 600;
-    font-size: 14px;
-    padding: 6px 15px;
-    margin: 0 5px;
+    font-size: 13px;
+    padding: 5px 12px;
+    margin: 0 4px;
     border-radius: 4px;
-    display: inline-block;
-    flex-shrink: 0;
-    transition: transform 0.2s ease;
   }
 
-  .scroll-container a:hover {
-    background-color: #f0f0f0;
-    transform: translateY(-1px);
-  }
-
-  /* --- HEADER & CONTENT --- */
+  /* --- HEADER --- */
   header {
     background: #fff9db;
-    padding: 25px 20px;
+    padding: 15px;
     text-align: center;
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     font-weight: bold;
     color: var(--primary-pink);
-    border-bottom: 3px solid #FFD700;
+    border-bottom: 2px solid #FFD700;
   }
 
+  /* --- SEARCH --- */
   .search-container {
     max-width: 800px;
-    margin: 20px auto;
+    margin: 15px auto;
     padding: 0 15px;
-    display: flex;
-    justify-content: center;
   }
-
   #postSearch {
     width: 100%;
-    max-width: 500px;
-    padding: 12px 20px;
-    font-size: 16px;
-    border: 2px solid var(--primary-pink);
-    border-radius: 30px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1.5px solid var(--primary-pink);
+    border-radius: 20px;
     outline: none;
     text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-sizing: border-box;
   }
 
+  /* --- COMPACT POST CARDS --- */
   .container {
-    max-width: 800px;
+    max-width: 700px; /* Narrower container for better readability */
     margin: auto;
-    padding: 15px;
+    padding: 10px;
     flex: 1;
   }
 
   .post-card {
-    background: var(--light-yellow);
-    padding: 22px;
-    margin-bottom: 18px;
-    border-radius: 12px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
-    border-left: 6px solid var(--primary-pink);
-    transition: transform 0.2s;
+    background: var(--card-bg);
+    padding: 15px; /* Reduced padding */
+    margin-bottom: 12px; /* Reduced margin */
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    border-left: 4px solid var(--primary-pink);
   }
 
   .post-card h2 {
-    margin: 0 0 10px;
-    color: var(--primary-blue);
-    font-size: 1.4rem;
+    margin: 0 0 5px;
+    color: var(--dark-blue);
+    font-size: 1.15rem; /* Decreased Title Size */
+    line-height: 1.3;
   }
 
   .post-meta-desc {
     color: #444;
-    font-size: 15px;
-    margin: 10px 0;
-    line-height: 1.6;
+    font-size: 13.5px; /* Slightly smaller text */
+    margin: 5px 0;
+    line-height: 1.4;
   }
 
-  /* --- PAGINATION & FOOTER --- */
+  /* --- HORIZONTAL SCROLLABLE PAGINATION --- */
+  .pagination-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 10px;
+    background: #fff;
+    border-top: 1px solid #ddd;
+  }
+
+  .page-numbers-container {
+    display: flex;
+    overflow-x: auto; /* Enable horizontal scroll */
+    max-width: 300px; /* Constrain width */
+    padding: 5px;
+    gap: 5px;
+    scrollbar-width: thin;
+  }
+
   .pg-btn {
-    min-width: 40px;
-    height: 40px;
-    border: 2px solid var(--primary-pink);
-    border-radius: 50%;
-    background: #fff9db;
+    min-width: 35px;
+    height: 35px;
+    border: 1px solid var(--primary-pink);
+    border-radius: 4px;
+    background: #fff;
     color: var(--primary-pink);
     font-weight: bold;
     cursor: pointer;
-    margin: 0 4px;
+    flex-shrink: 0;
   }
 
   .pg-btn.active {
     background: var(--primary-pink);
-    color: #FFD700;
+    color: #fff;
   }
 
+  /* --- FOOTER --- */
   footer {
-    background: var(--primary-blue);
+    background: var(--dark-blue);
     color: white;
     text-align: center;
-    padding: 30px 20px;
-    margin-top: 40px;
+    padding: 20px;
   }
-
-  .footer-links {
-    margin-bottom: 15px;
-  }
-
-  .footer-links a {
-    color: #ccc;
-    text-decoration: none;
-    margin: 0 10px;
-    font-size: 14px;
-  }
-
-  .footer-links a:hover { color: #fff; }
 </style>
 </head>
 
@@ -200,19 +188,14 @@
 <header>Namo Narayanaya Bhakthi Channel</header>
 
 <div class="search-container">
-  <input type="text" id="postSearch" placeholder="Search stotrams or posts...">
+  <input type="text" id="postSearch" placeholder="Search...">
 </div>
 
 <div class="container" id="postsContainer">Loading...</div>
-<div class="pagination-wrapper" style="display:flex; justify-content:center; margin:30px 0;" id="paginationWrapper"></div>
+
+<div class="pagination-wrapper" id="paginationWrapper"></div>
 
 <footer>
-  <div class="footer-links">
-    <a href="https://csrgnk.github.io/Omnnbc/about-us">About</a>
-    <a href="https://csrgnk.github.io/Omnnbc/contact-us">Contact</a>
-    <a href="https://csrgnk.github.io/Omnnbc/dmca">DMCA</a>
-    <a href="https://csrgnk.github.io/Omnnbc/privacy-policy">Privacy Policy</a>
-  </div>
   <p>© 2026 Namo Narayanaya Bhakthi Channel</p>
 </footer>
 
@@ -237,24 +220,17 @@ function renderPage(){
     const end=start+postsPerPage;
     const items=filteredPosts.slice(start,end);
 
-    if(items.length===0){
-        container.innerHTML="<p style='text-align:center;'>No posts found</p>";
-        return;
-    }
-
     items.forEach(post=>{
         const slug=post.url;
-        
-        // LOGIC: Take 200 chars, then remove the last 20 to show ~180
-        let fullDesc = post.description || "";
-        let trimmedDesc = fullDesc.substring(0, 180); // Adjusted to 180 directly for cleaner professional look
+        // Trimming 20 chars from 200 = 180 chars
+        const desc=(post.description||"").substring(0,180);
 
         const card=document.createElement("div");
         card.className="post-card";
         card.innerHTML=`
             <h2><a href="/${slug}/" style="text-decoration:none;color:inherit;">${post.title}</a></h2>
-            <div class="post-meta-desc">${trimmedDesc}...</div>
-            <a href="/${slug}/" style="color:var(--accent-orange);font-weight:bold;text-decoration:none;font-size:14px;">READ MORE →</a>
+            <div class="post-meta-desc">${desc}...</div>
+            <a href="/${slug}/" style="color:var(--accent-orange);font-weight:bold;text-decoration:none;font-size:12px;">READ MORE →</a>
         `;
         container.appendChild(card);
     });
@@ -263,15 +239,16 @@ function renderPage(){
     window.scrollTo(0,0);
 }
 
-// ... (Existing setupPagination and Search Logic remains the same) ...
 function setupPagination(){
     const totalPages=Math.ceil(filteredPosts.length/postsPerPage);
     const wrapper=document.getElementById("paginationWrapper");
     wrapper.innerHTML="";
-    if(totalPages<=1)return;
+    if(totalPages<=1) return;
+
     const numbersDiv=document.createElement("div");
-    numbersDiv.style.display="flex";
-    for(let i=1;i<=totalPages;i++){
+    numbersDiv.className="page-numbers-container";
+
+    for(let i=1; i<=totalPages; i++){
         const btn=document.createElement("button");
         btn.className="pg-btn"+(i===currentPage?" active":"");
         btn.innerText=i;
