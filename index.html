@@ -9,7 +9,6 @@
 :root{
   --primary-pink:#C71585;
   --dark-blue:#001a4d;
-  --accent-orange:#EF6C00;
 }
 
 body{
@@ -18,7 +17,7 @@ body{
   background:#f1f3f5;
 }
 
-/* 🔵 MENU */
+/* MENU */
 .blue-nav{
   background:var(--dark-blue);
   display:flex;
@@ -32,7 +31,7 @@ body{
   flex-shrink:0;
 }
 
-/* 🔴 MENU */
+/* SECOND MENU */
 .scroll-container{
   background:var(--primary-pink);
   display:flex;
@@ -54,7 +53,6 @@ body{
 .site-header{
   background:#fff9db;
   padding:10px;
-  border-bottom:2px solid gold;
 }
 
 .header-box{
@@ -67,11 +65,6 @@ body{
   width:50px;
   height:50px;
   border-radius:50%;
-}
-
-.title-box{
-  display:flex;
-  flex-direction:column;
 }
 
 .line1,.line2{
@@ -96,13 +89,15 @@ body{
   border-left:5px solid var(--primary-pink);
 }
 
-.post-card h3{
-  margin:0;
+.post-link{
+  text-decoration:none;
+  color:inherit;
+  display:block;
 }
 
 .desc{
   font-size:14px;
-  margin:6px 0;
+  margin-top:6px;
 }
 
 /* PAGINATION */
@@ -130,7 +125,6 @@ body{
   color:#fff;
 }
 
-/* FOOTER */
 footer{
   background:var(--dark-blue);
   color:#fff;
@@ -142,7 +136,6 @@ footer{
 
 <body>
 
-<!-- MENU -->
 <nav class="blue-nav">
   <a href="/">Home</a>
   <a href="/about-us">About Us</a>
@@ -158,21 +151,17 @@ footer{
   <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu</a>
 </div>
 
-<!-- HEADER -->
 <header class="site-header">
   <div class="header-box">
     <img src="assets/images/Omnnbc-new.png" class="logo">
-    <div class="title-box">
+    <div>
       <div class="line1">Namo Narayanaya</div>
       <div class="line2">Bhakthi Channel</div>
     </div>
   </div>
 </header>
 
-<!-- POSTS -->
 <div class="container" id="posts"></div>
-
-<!-- PAGINATION -->
 <div class="pagination" id="pagination"></div>
 
 <footer>© 2026 Namo Narayanaya Bhakthi Channel</footer>
@@ -206,8 +195,10 @@ function render(){
     div.className="post-card";
 
     div.innerHTML=`
-      <h3><a href="${baseUrl}/${p.url}">${p.title}</a></h3>
-      <div class="desc">${desc}...</div>
+      <a href="${baseUrl}/${p.url}" class="post-link">
+        <h3>${p.title}</h3>
+        <div class="desc">${desc}...</div>
+      </a>
     `;
 
     container.appendChild(div);
