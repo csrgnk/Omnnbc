@@ -8,9 +8,8 @@
 <style>
   :root {
     --primary-pink: #C71585;
-    --dark-blue: #001a4d; /* Deep Dark Blue */
+    --dark-blue: #001a4d; /* Dark Blue */
     --accent-orange: #EF6C00;
-    --card-bg: #FFFDE7;
   }
 
   body {
@@ -22,12 +21,13 @@
     min-height: 100vh;
   }
 
-  /* --- DARK BLUE TOP MENU --- */
+  /* --- DARK BLUE TOP MENU (Centered) --- */
   .blue-nav {
     background-color: var(--dark-blue);
-    padding: 8px 0;
+    padding: 10px 0;
     display: flex;
-    justify-content: center;
+    justify-content: center; /* Centers the links */
+    flex-wrap: wrap;         /* Allows wrapping on mobile */
     border-bottom: 1px solid rgba(255,255,255,0.1);
   }
 
@@ -37,8 +37,8 @@
     font-size: 13px;
     font-weight: 500;
     padding: 5px 12px;
-    margin: 0 4px;
-    border-radius: 3px;
+    margin: 2px 5px;
+    text-align: center;
   }
 
   /* --- PINK SCROLL MENU --- */
@@ -48,7 +48,7 @@
     overflow-x: auto;
     display: flex;
     white-space: nowrap;
-    scrollbar-width: none; /* Hide scrollbar for cleaner look */
+    scrollbar-width: none;
   }
   .scroll-container::-webkit-scrollbar { display: none; }
 
@@ -63,15 +63,20 @@
     border-radius: 4px;
   }
 
-  /* --- HEADER --- */
+  /* --- HEADER (Two Lines, Centered) --- */
   header {
     background: #fff9db;
-    padding: 15px;
+    padding: 20px 10px;
     text-align: center;
-    font-size: 1.4rem;
-    font-weight: bold;
     color: var(--primary-pink);
     border-bottom: 2px solid #FFD700;
+    line-height: 1.2; /* Keeps lines close together */
+  }
+
+  header .line1, header .line2 {
+    display: block;
+    font-size: 1.5rem; /* Same size for both lines */
+    font-weight: bold;
   }
 
   /* --- SEARCH --- */
@@ -79,45 +84,46 @@
     max-width: 800px;
     margin: 15px auto;
     padding: 0 15px;
+    text-align: center;
   }
   #postSearch {
     width: 100%;
+    max-width: 400px;
     padding: 10px;
     font-size: 14px;
     border: 1.5px solid var(--primary-pink);
     border-radius: 20px;
     outline: none;
     text-align: center;
-    box-sizing: border-box;
   }
 
   /* --- COMPACT POST CARDS --- */
   .container {
-    max-width: 700px; /* Narrower container for better readability */
+    max-width: 700px;
     margin: auto;
     padding: 10px;
     flex: 1;
   }
 
   .post-card {
-    background: var(--card-bg);
-    padding: 15px; /* Reduced padding */
-    margin-bottom: 12px; /* Reduced margin */
+    background: #FFFDE7;
+    padding: 15px;
+    margin-bottom: 12px;
     border-radius: 8px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-    border-left: 4px solid var(--primary-pink);
+    border-left: 5px solid var(--primary-pink);
   }
 
   .post-card h2 {
     margin: 0 0 5px;
     color: var(--dark-blue);
-    font-size: 1.15rem; /* Decreased Title Size */
+    font-size: 1.1rem; /* Decreased title size */
     line-height: 1.3;
   }
 
   .post-meta-desc {
     color: #444;
-    font-size: 13.5px; /* Slightly smaller text */
+    font-size: 13px;
     margin: 5px 0;
     line-height: 1.4;
   }
@@ -125,7 +131,6 @@
   /* --- HORIZONTAL SCROLLABLE PAGINATION --- */
   .pagination-wrapper {
     display: flex;
-    align-items: center;
     justify-content: center;
     padding: 20px 10px;
     background: #fff;
@@ -134,17 +139,17 @@
 
   .page-numbers-container {
     display: flex;
-    overflow-x: auto; /* Enable horizontal scroll */
-    max-width: 300px; /* Constrain width */
+    overflow-x: auto;
+    max-width: 80%; /* Takes up most of the width but scrolls if needed */
     padding: 5px;
-    gap: 5px;
+    gap: 8px;
     scrollbar-width: thin;
   }
 
   .pg-btn {
-    min-width: 35px;
-    height: 35px;
-    border: 1px solid var(--primary-pink);
+    min-width: 36px;
+    height: 36px;
+    border: 1.5px solid var(--primary-pink);
     border-radius: 4px;
     background: #fff;
     color: var(--primary-pink);
@@ -158,12 +163,12 @@
     color: #fff;
   }
 
-  /* --- FOOTER --- */
   footer {
     background: var(--dark-blue);
     color: white;
     text-align: center;
     padding: 20px;
+    font-size: 13px;
   }
 </style>
 </head>
@@ -185,10 +190,13 @@
   <a href="https://csrgnk.github.io/manache-shlok/hindi/">Manache Shlok Hindi</a>
 </div>
 
-<header>Namo Narayanaya Bhakthi Channel</header>
+<header>
+  <span class="line1">Namo Narayanaya</span>
+  <span class="line2">Bhakthi Channel</span>
+</header>
 
 <div class="search-container">
-  <input type="text" id="postSearch" placeholder="Search...">
+  <input type="text" id="postSearch" placeholder="Search stotrams...">
 </div>
 
 <div class="container" id="postsContainer">Loading...</div>
@@ -222,7 +230,7 @@ function renderPage(){
 
     items.forEach(post=>{
         const slug=post.url;
-        // Trimming 20 chars from 200 = 180 chars
+        // Logic: 180 characters (removed 20 from 200)
         const desc=(post.description||"").substring(0,180);
 
         const card=document.createElement("div");
