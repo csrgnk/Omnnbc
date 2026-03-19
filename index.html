@@ -8,7 +8,7 @@
 <style>
   :root {
     --primary-pink: #C71585;
-    --dark-blue: #001a4d; /* Dark Blue */
+    --dark-blue: #001a4d;
     --accent-orange: #EF6C00;
   }
 
@@ -21,30 +21,33 @@
     min-height: 100vh;
   }
 
-  /* --- DARK BLUE TOP MENU (Centered) --- */
+  /* --- DARK BLUE TOP MENU (Scrollable & Compact) --- */
   .blue-nav {
     background-color: var(--dark-blue);
-    padding: 10px 0;
+    padding: 6px 0; /* Reduced vertical space */
     display: flex;
-    justify-content: center; /* Centers the links */
-    flex-wrap: wrap;         /* Allows wrapping on mobile */
+    overflow-x: auto; /* Enable horizontal scroll */
+    white-space: nowrap;
+    scrollbar-width: none;
     border-bottom: 1px solid rgba(255,255,255,0.1);
+    justify-content: flex-start; /* Start from left to allow scrolling */
   }
+  .blue-nav::-webkit-scrollbar { display: none; }
 
   .blue-nav a {
     color: #ffffff;
     text-decoration: none;
     font-size: 13px;
     font-weight: 500;
-    padding: 5px 12px;
-    margin: 2px 5px;
-    text-align: center;
+    padding: 4px 15px;
+    margin: 0 2px;
+    flex-shrink: 0;
   }
 
-  /* --- PINK SCROLL MENU --- */
+  /* --- PINK SCROLL MENU (Compact) --- */
   .scroll-container {
     background-color: var(--primary-pink);
-    padding: 8px 5px;
+    padding: 6px 0; /* Reduced vertical space */
     overflow-x: auto;
     display: flex;
     white-space: nowrap;
@@ -58,38 +61,39 @@
     text-decoration: none;
     font-weight: 600;
     font-size: 13px;
-    padding: 5px 12px;
-    margin: 0 4px;
+    padding: 4px 12px;
+    margin: 0 5px;
     border-radius: 4px;
+    flex-shrink: 0;
   }
 
-  /* --- HEADER (Two Lines, Centered) --- */
+  /* --- HEADER (Compact Two Lines) --- */
   header {
     background: #fff9db;
-    padding: 20px 10px;
+    padding: 12px 5px; /* Reduced padding to remove extra height */
     text-align: center;
     color: var(--primary-pink);
     border-bottom: 2px solid #FFD700;
-    line-height: 1.2; /* Keeps lines close together */
+    line-height: 1.1;
   }
 
   header .line1, header .line2 {
     display: block;
-    font-size: 1.5rem; /* Same size for both lines */
+    font-size: 1.4rem; /* Slightly smaller for better fit */
     font-weight: bold;
   }
 
-  /* --- SEARCH --- */
+  /* --- SEARCH (Compact) --- */
   .search-container {
     max-width: 800px;
-    margin: 15px auto;
+    margin: 10px auto; /* Reduced margin */
     padding: 0 15px;
     text-align: center;
   }
   #postSearch {
     width: 100%;
-    max-width: 400px;
-    padding: 10px;
+    max-width: 380px;
+    padding: 8px;
     font-size: 14px;
     border: 1.5px solid var(--primary-pink);
     border-radius: 20px;
@@ -97,7 +101,7 @@
     text-align: center;
   }
 
-  /* --- COMPACT POST CARDS --- */
+  /* --- POST CARDS (Compact) --- */
   .container {
     max-width: 700px;
     margin: auto;
@@ -107,32 +111,32 @@
 
   .post-card {
     background: #FFFDE7;
-    padding: 15px;
-    margin-bottom: 12px;
+    padding: 12px 15px; /* Tighter padding */
+    margin-bottom: 10px;
     border-radius: 8px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     border-left: 5px solid var(--primary-pink);
   }
 
   .post-card h2 {
-    margin: 0 0 5px;
+    margin: 0 0 4px;
     color: var(--dark-blue);
-    font-size: 1.1rem; /* Decreased title size */
-    line-height: 1.3;
+    font-size: 1.05rem; /* Decreased title size further */
+    line-height: 1.2;
   }
 
   .post-meta-desc {
     color: #444;
     font-size: 13px;
-    margin: 5px 0;
+    margin: 4px 0;
     line-height: 1.4;
   }
 
-  /* --- HORIZONTAL SCROLLABLE PAGINATION --- */
+  /* --- PAGINATION (Horizontal Scroll) --- */
   .pagination-wrapper {
     display: flex;
     justify-content: center;
-    padding: 20px 10px;
+    padding: 15px 10px;
     background: #fff;
     border-top: 1px solid #ddd;
   }
@@ -140,16 +144,16 @@
   .page-numbers-container {
     display: flex;
     overflow-x: auto;
-    max-width: 80%; /* Takes up most of the width but scrolls if needed */
+    max-width: 90%;
     padding: 5px;
     gap: 8px;
     scrollbar-width: thin;
   }
 
   .pg-btn {
-    min-width: 36px;
-    height: 36px;
-    border: 1.5px solid var(--primary-pink);
+    min-width: 34px;
+    height: 34px;
+    border: 1px solid var(--primary-pink);
     border-radius: 4px;
     background: #fff;
     color: var(--primary-pink);
@@ -167,12 +171,11 @@
     background: var(--dark-blue);
     color: white;
     text-align: center;
-    padding: 20px;
-    font-size: 13px;
+    padding: 15px;
+    font-size: 12px;
   }
 </style>
 </head>
-
 <body>
 
 <nav class="blue-nav">
@@ -230,7 +233,7 @@ function renderPage(){
 
     items.forEach(post=>{
         const slug=post.url;
-        // Logic: 180 characters (removed 20 from 200)
+        // Logic: 180 characters (200 - 20)
         const desc=(post.description||"").substring(0,180);
 
         const card=document.createElement("div");
