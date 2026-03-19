@@ -36,7 +36,7 @@ body{
   padding:4px 15px;
 }
 
-/* SECOND MENU */
+/* PINK MENU */
 .scroll-container{
   background:var(--primary-pink);
   padding:6px 0;
@@ -51,6 +51,7 @@ body{
   padding:4px 12px;
   margin:0 5px;
   border-radius:4px;
+  flex-shrink:0;
 }
 
 /* HEADER */
@@ -80,7 +81,6 @@ body{
   line-height:1.1;
 }
 
-/* 🔥 ALWAYS 2 LINES */
 .line1{
   font-size:1.8rem;
   font-weight:800;
@@ -94,7 +94,6 @@ body{
   color:var(--primary-pink);
 }
 
-/* MOBILE FIX */
 @media(max-width:600px){
   .line1{font-size:1.4rem;}
   .line2{font-size:1.05rem;}
@@ -126,7 +125,7 @@ body{
   margin:5px 0;
 }
 
-/* 🔥 PAGINATION */
+/* PAGINATION */
 .pagination-wrapper{
   display:flex;
   justify-content:center;
@@ -137,7 +136,6 @@ body{
   display:flex;
   overflow-x:auto;
   gap:10px;
-  padding:5px;
 }
 
 .pg-btn{
@@ -151,7 +149,6 @@ body{
   font-size:16px;
   cursor:pointer;
   flex-shrink:0;
-  box-shadow:0 2px 6px rgba(0,0,0,0.2);
 }
 
 .pg-btn.active{
@@ -170,7 +167,7 @@ footer{
 
 <body>
 
-<!-- MENU -->
+<!-- 🔵 TOP MENU -->
 <nav class="blue-nav">
   <a href="/">Home</a>
   <a href="/about-us">About Us</a>
@@ -179,8 +176,13 @@ footer{
   <a href="/privacy-policy">Privacy Policy</a>
 </nav>
 
+<!-- 🔴 PINK MENU (ALL LINKS HERE) -->
 <div class="scroll-container">
   <a href="/">Home</a>
+  <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
+  <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
+  <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu</a>
+  <a href="https://csrgnk.github.io/manache-shlok/hindi/">Manache Shlok Hindi</a>
 </div>
 
 <!-- HEADER -->
@@ -207,7 +209,7 @@ const repoName="Omnnbc";
 const isGitHub=location.hostname.includes("github.io");
 const baseUrl=isGitHub?"/"+repoName:"";
 
-/* LOGO PATH AUTO */
+/* LOGO FIX */
 document.getElementById("logoImg").src = baseUrl + "/assets/images/Omnnbc-new.png";
 
 let allPosts=[];
