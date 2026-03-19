@@ -19,7 +19,7 @@ body{
   background:#f1f3f5;
 }
 
-/* 🔵 MENU */
+/* MENU */
 .blue-nav{
   background:var(--dark-blue);
   display:flex;
@@ -33,7 +33,7 @@ body{
   flex-shrink:0;
 }
 
-/* 🔴 MENU */
+/* SECOND MENU */
 .scroll-container{
   background:var(--primary-pink);
   display:flex;
@@ -57,7 +57,6 @@ body{
   padding:12px;
   text-align:center;
 }
-
 .line1,.line2{
   font-size:1.9rem;
   font-weight:900;
@@ -133,7 +132,7 @@ footer{
 
 <body>
 
-<!-- 🔵 MENU -->
+<!-- MENU -->
 <nav class="blue-nav">
   <a href="/">Home</a>
   <a href="/about-us">About Us</a>
@@ -142,7 +141,6 @@ footer{
   <a href="/privacy-policy">Privacy Policy</a>
 </nav>
 
-<!-- 🔴 MENU -->
 <div class="scroll-container">
   <a href="/">Home</a>
   <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
@@ -188,7 +186,7 @@ let path = location.pathname.replace(baseUrl,"").replace(/^\/|\/$/g,"");
 /* PAGE LIST */
 const pages = ["about-us","contact-us","dmca","privacy-policy"];
 
-/* 🔥 PAGES FIX */
+/* PAGE REDIRECT */
 if(pages.includes(path)){
   window.location.href = baseUrl + "/" + path + ".html";
 }
@@ -222,16 +220,16 @@ fetch(baseUrl+"/data/posts.json?v="+Date.now())
   }
 });
 
-/* SHARE */
+/* SHARE FUNCTION (TITLE + URL) */
 function setupShare(title){
-  const u=encodeURIComponent(location.href);
-  const t=encodeURIComponent(title+"\n\n");
+  const url = encodeURIComponent(location.href);
+  const text = encodeURIComponent(title + "\n\n");
 
-  sWA.href=`https://api.whatsapp.com/send?text=${t}${u}`;
-  sFB.href=`https://www.facebook.com/sharer/sharer.php?u=${u}`;
-  sTW.href=`https://twitter.com/intent/tweet?text=${t}&url=${u}`;
+  document.getElementById("sWA").href = `https://api.whatsapp.com/send?text=${text}${url}`;
+  document.getElementById("sFB").href = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+  document.getElementById("sTW").href = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
 
-  document.getElementById("shareRow").style.display="flex";
+  document.getElementById("shareRow").style.display = "flex";
 }
 </script>
 
