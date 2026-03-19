@@ -1,161 +1,161 @@
 <!DOCTYPE html>
 <html lang="te">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="pageTitle">Namo Narayanaya Bhakthi Channel</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Namo Narayanaya Bhakthi Channel</title>
+    <style>
+        :root {
+            --primary-pink: #C71585;
+            --dark-blue: #001a4d;
+            --accent-orange: #EF6C00;
+            --light-yellow: #FFFDE7;
+        }
 
-<style>
-:root {
-    --primary-pink:#C71585;
-    --dark-blue:#001a4d;
-    --accent-orange:#EF6C00;
-    --light-yellow:#FFFDE7;
-}
-body{
-    margin:0;
-    font-family:'Segoe UI',Arial;
-    background:#f1f3f5;
-    display:flex;
-    flex-direction:column;
-    min-height:100vh;
-}
-header{
-    background:#fff9db;
-    padding:12px;
-    text-align:center;
-    color:var(--primary-pink);
-    border-bottom:2px solid #FFD700;
-}
-.container{
-    max-width:750px;
-    margin:auto;
-    padding:15px;
-    flex:1;
-}
-.post-title-box{
-    background:var(--primary-pink);
-    color:#fff;
-    padding:12px;
-    text-align:center;
-    border-radius:8px;
-    font-weight:bold;
-}
-.post-content{
-    background:var(--light-yellow);
-    padding:20px;
-    border-radius:10px;
-    margin-top:15px;
-    line-height:1.8;
-}
-footer{
-    background:var(--dark-blue);
-    color:#fff;
-    text-align:center;
-    padding:12px;
-}
-</style>
+        body { 
+            margin: 0; 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            background: #f1f3f5; 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh; 
+        }
+
+        /* --- NAVIGATION (Scrollable) --- */
+        .blue-nav, .scroll-container {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+            padding: 8px 0;
+        }
+        .blue-nav { background-color: var(--dark-blue); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .scroll-container { background-color: var(--primary-pink); }
+        .blue-nav::-webkit-scrollbar, .scroll-container::-webkit-scrollbar { display: none; }
+        
+        .blue-nav a { color: #fff; text-decoration: none; font-size: 13px; padding: 4px 15px; flex-shrink: 0; }
+        .scroll-container a { background: #fff; color: var(--primary-pink); text-decoration: none; font-weight: 600; font-size: 13px; padding: 4px 12px; margin: 0 5px; border-radius: 4px; flex-shrink: 0; }
+
+        /* --- HEADER --- */
+        header { 
+            background: #fff9db; 
+            padding: 15px 10px; 
+            text-align: center; 
+            color: var(--primary-pink); 
+            border-bottom: 2px solid #FFD700; 
+            line-height: 1.1;
+        }
+        header .line1, header .line2 { display: block; font-size: 1.5rem; font-weight: bold; }
+
+        /* --- CONTENT --- */
+        .container { max-width: 750px; margin: auto; padding: 15px; flex: 1; width: 100%; box-sizing: border-box; }
+        .post-title-box { background: var(--primary-pink); color: white; text-align: center; padding: 12px; font-size: 1.3rem; font-weight: bold; border-radius: 8px; margin-bottom: 15px; }
+        .post-content { background: var(--light-yellow); padding: 25px; border-radius: 12px; color: var(--dark-blue); line-height: 1.8; font-size: 20px; border-left: 6px solid var(--primary-pink); box-shadow: 0 2px 10px rgba(0,0,0,0.05); min-height: 300px; }
+
+        .back-home { text-align: center; margin: 30px 0; }
+        .back-home a { color: var(--primary-pink); font-weight: bold; text-decoration: none; padding: 10px 25px; border: 2px solid var(--primary-pink); border-radius: 30px; }
+
+        footer { background: var(--dark-blue); color: white; text-align: center; padding: 20px; margin-top: auto; font-size: 13px; }
+    </style>
 </head>
-
 <body>
 
+<nav class="blue-nav">
+    <a href="https://omnnbc.in/about-us">About Us</a>
+    <a href="https://omnnbc.in/contact-us">Contact Us</a>
+    <a href="https://omnnbc.in/dmca">DMCA</a>
+    <a href="https://omnnbc.in/privacy-policy">Privacy Policy</a>
+</nav>
+
+<div class="scroll-container">
+    <a href="https://omnnbc.in/">Home</a>
+    <a href="https://omnnbc.in/Dasabodha/">Dasabodha</a>
+    <a href="https://omnnbc.in/Upasana-Chandrika/">Upasana Chandrika</a>
+    <a href="https://omnnbc.in/manache-shlok/">Manache Shlok Telugu</a>
+</div>
+
 <header>
-    <h2>Namo Narayanaya Bhakthi Channel</h2>
+    <span class="line1">Namo Narayanaya</span>
+    <span class="line2">Bhakthi Channel</span>
 </header>
 
 <div class="container">
-    <div class="post-title-box" id="postTitle">Loading...</div>
-    <div class="post-content" id="postContent"></div>
+    <div class="post-title-box" id="postTitle">Loading Content...</div>
+    <div id="postContent" class="post-content">
+        </div>
+
+    <div class="back-home">
+        <a href="https://omnnbc.in/">← Back to Home Page</a>
+    </div>
 </div>
 
-<footer>
-© 2026 Namo Narayanaya Bhakthi Channel
-</footer>
+<footer><p>© 2026 Namo Narayanaya Bhakthi Channel</p></footer>
 
 <script>
-const repoName = "Omnnbc";
-const isGitHub = location.hostname.includes("github.io");
-const baseUrl = isGitHub ? "/" + repoName : "";
+    const baseUrl = "https://omnnbc.in"; 
 
-// 🔥 GET SLUG
-let path = location.pathname.replace(baseUrl,"");
+    // Extract slug from URL (e.g., "about-us" or "shiva-stotram")
+    let path = window.location.pathname;
+    let slug = path.split('/').filter(p => p).pop();
+    
+    // Safety cleanup: Remove .html if someone types it manually
+    if(slug) slug = slug.replace('.html', '');
 
-if(path.startsWith("/")) path = path.slice(1);
-if(path.endsWith(".html")) path = path.replace(".html","");
+    // List of names that exist in the /pages/ folder
+    const pagesList = ['about-us', 'contact-us', 'dmca', 'privacy-policy'];
 
-let slug = path;
+    if (slug && pagesList.includes(slug)) {
+        // --- LOGIC FOR STATIC PAGES ---
+        const pageTitle = slug.replace(/-/g, ' ').toUpperCase();
+        document.getElementById("postTitle").innerText = pageTitle;
 
-// HOME redirect
-if(slug === ""){
-    location.href = baseUrl + "/";
-}
-
-// 🔥 LOAD PAGES FIRST
-fetch(baseUrl + "/data/pages.json")
-.then(r=>r.json())
-.then(pages=>{
-
-    const page = pages.find(p=>p.id === slug);
-
-    if(page){
-        document.getElementById("pageTitle").innerText = page.title;
-        document.getElementById("postTitle").innerText = page.title;
-
-        fetch(baseUrl + "/pages/" + page.file + ".html")
-        .then(r=>r.text())
-        .then(html=>render(html))
-        .catch(()=>show404());
-
-    } else {
-
-        // 🔥 LOAD POSTS
-        fetch(baseUrl + "/data/posts.json")
-        .then(r=>r.json())
-        .then(posts=>{
-
-            const post = posts.find(p=>p.url === slug);
-
-            if(post){
+        fetch(`${baseUrl}/pages/${slug}.html`)
+        .then(r => { if(!r.ok) throw new Error(); return r.text(); })
+        .then(html => renderCleanContent(html))
+        .catch(() => show404());
+        
+    } else if (slug) {
+        // --- LOGIC FOR DYNAMIC POSTS ---
+        fetch(`${baseUrl}/data/posts.json`)
+        .then(r => r.json())
+        .then(posts => {
+            const post = posts.find(p => p.url === slug);
+            if(post) {
                 document.getElementById("pageTitle").innerText = post.title;
                 document.getElementById("postTitle").innerText = post.title;
-
-                fetch(baseUrl + "/posts/" + slug + ".html")
-                .then(r=>r.text())
-                .then(html=>render(html))
-                .catch(()=>show404());
-
+                fetch(`${baseUrl}/posts/${slug}.html`)
+                .then(r => r.text())
+                .then(html => renderCleanContent(html))
+                .catch(() => show404());
             } else {
                 show404();
             }
-
         })
-        .catch(()=>show404());
-
+        .catch(() => show404());
+    } else {
+        show404();
     }
 
-})
-.catch(()=>show404());
+    function renderCleanContent(html) {
+        const temp = document.createElement("div");
+        temp.innerHTML = html;
+        // Strip out duplicated site elements (headers, etc.) from the source file
+        const extras = temp.querySelectorAll("header,footer,nav,script,style");
+        extras.forEach(e => e.remove());
+        document.getElementById("postContent").innerHTML = temp.innerHTML;
+        document.getElementById("pageTitle").innerText = document.getElementById("postTitle").innerText;
+    }
 
-function render(html){
-    const temp = document.createElement("div");
-    temp.innerHTML = html;
-
-    const remove = temp.querySelectorAll("header,footer,nav,script,style");
-    remove.forEach(e=>e.remove());
-
-    document.getElementById("postContent").innerHTML = temp.innerHTML;
-}
-
-function show404(){
-    document.getElementById("pageTitle").innerText="404";
-    document.getElementById("postTitle").innerText="Page Not Found";
-    document.getElementById("postContent").innerHTML=`
-    <div style="text-align:center;">
-        <h3>Page Not Found</h3>
-        <p>క్షమించండి, ఈ పేజీ అందుబాటులో లేదు</p>
-        <a href="${baseUrl}/" style="color:#EF6C00;font-weight:bold;">Go Home</a>
-    </div>`;
-}
+    function show404() {
+        document.getElementById("postTitle").innerText = "404 - Not Found";
+        document.getElementById("postContent").innerHTML = `
+            <div style="text-align:center;">
+                <h2 style="color:var(--primary-pink); margin-bottom:10px;">క్షమించండి! ఈ పేజీ అందుబాటులో లేదు.</h2>
+                <p>The page you are looking for has been moved or doesn't exist.</p>
+                <p>దయచేసి సరైన లింక్‌ని తనిఖీ చేయండి.</p>
+                <a href="${baseUrl}/" style="color:var(--accent-orange); font-weight:bold; text-decoration:none;">మళ్ళీ ప్రయత్నించండి →</a>
+            </div>`;
+    }
 </script>
 
 </body>
