@@ -11,6 +11,7 @@
   --dark-blue:#001a4d;
   --accent-orange:#EF6C00;
 }
+
 body{
   margin:0;
   font-family:'Segoe UI',Arial;
@@ -19,57 +20,87 @@ body{
   flex-direction:column;
   min-height:100vh;
 }
+
+/* TOP MENU */
 .blue-nav{
   background:var(--dark-blue);
   padding:6px 0;
   display:flex;
   overflow-x:auto;
   white-space:nowrap;
-  scrollbar-width:none;
 }
-.blue-nav::-webkit-scrollbar{display:none;}
 .blue-nav a{
   color:#fff;
   text-decoration:none;
   font-size:13px;
   padding:4px 15px;
-  flex-shrink:0;
 }
+
+/* PINK MENU */
 .scroll-container{
   background:var(--primary-pink);
   padding:6px 0;
   display:flex;
   overflow-x:auto;
-  white-space:nowrap;
 }
-.scroll-container::-webkit-scrollbar{display:none;}
 .scroll-container a{
   background:#fff;
   color:var(--primary-pink);
   text-decoration:none;
-  font-weight:600;
   font-size:13px;
   padding:4px 12px;
   margin:0 5px;
   border-radius:4px;
 }
-header{
+
+/* 🔥 HEADER WITH LOGO */
+.site-header{
   background:#fff9db;
-  padding:12px;
-  text-align:center;
-  color:var(--primary-pink);
+  padding:10px;
   border-bottom:2px solid #FFD700;
 }
-header span{
-  display:block;
-  font-weight:bold;
+
+.header-box{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
 }
+
+/* LOGO */
+.logo{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+}
+
+/* TITLE */
+.title-box{
+  text-align:left;
+}
+
+.line1{
+  display:block;
+  font-size:1.9rem;   /* 🔥 BIG */
+  font-weight:800;
+  color:var(--primary-pink);
+}
+
+.line2{
+  display:block;
+  font-size:1.3rem;
+  font-weight:700;
+  color:var(--primary-pink);
+}
+
+/* POSTS */
 .container{
   max-width:700px;
   margin:auto;
   padding:10px;
   flex:1;
 }
+
 .post-card{
   background:#FFFDE7;
   padding:12px;
@@ -77,35 +108,23 @@ header span{
   border-radius:8px;
   border-left:5px solid var(--primary-pink);
 }
+
 .post-card h2{
   margin:0;
   font-size:1.05rem;
 }
+
 .post-meta-desc{
   font-size:13px;
   margin:5px 0;
 }
+
 .pagination-wrapper{
   display:flex;
   justify-content:center;
   padding:15px;
 }
-.page-numbers-container{
-  display:flex;
-  overflow-x:auto;
-  gap:8px;
-}
-.pg-btn{
-  min-width:34px;
-  height:34px;
-  border:1px solid var(--primary-pink);
-  background:#fff;
-  color:var(--primary-pink);
-}
-.pg-btn.active{
-  background:var(--primary-pink);
-  color:#fff;
-}
+
 footer{
   background:var(--dark-blue);
   color:#fff;
@@ -117,7 +136,7 @@ footer{
 
 <body>
 
-<!-- ✅ NAV (CLEAN URL) -->
+<!-- MENU -->
 <nav class="blue-nav">
   <a href="/about-us">About Us</a>
   <a href="/contact-us">Contact Us</a>
@@ -127,17 +146,20 @@ footer{
 
 <div class="scroll-container">
   <a href="/">Home</a>
-  <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
-  <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
-  <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu</a>
-  <a href="https://csrgnk.github.io/manache-shlok/hindi/">Manache Shlok Hindi</a>
 </div>
 
-<header>
-  <span class="line1">Namo Narayanaya</span>
-  <span class="line2">Bhakthi Channel</span>
+<!-- 🔥 HEADER -->
+<header class="site-header">
+  <div class="header-box">
+    <img id="logoImg" class="logo">
+    <div class="title-box">
+      <span class="line1">Namo Narayanaya</span>
+      <span class="line2">Bhakthi Channel</span>
+    </div>
+  </div>
 </header>
 
+<!-- POSTS -->
 <div class="container" id="postsContainer">Loading...</div>
 <div class="pagination-wrapper" id="paginationWrapper"></div>
 
@@ -146,17 +168,18 @@ footer{
 </footer>
 
 <script>
-// ✅ BASE URL FIX
 const repoName="Omnnbc";
 const isGitHub=location.hostname.includes("github.io");
 const baseUrl=isGitHub?"/"+repoName:"";
+
+/* 🔥 LOGO AUTO PATH FIX */
+document.getElementById("logoImg").src = baseUrl + "/assets/images/Omnnbc-new.png";
 
 let allPosts=[];
 let filteredPosts=[];
 let currentPage=1;
 const postsPerPage=25;
 
-// ✅ LOAD POSTS
 fetch(baseUrl+"/data/posts.json?v="+Date.now())
 .then(r=>r.json())
 .then(data=>{
@@ -165,7 +188,6 @@ fetch(baseUrl+"/data/posts.json?v="+Date.now())
   renderPage();
 });
 
-// ✅ RENDER
 function renderPage(){
   const container=document.getElementById("postsContainer");
   container.innerHTML="";
@@ -196,10 +218,8 @@ function renderPage(){
   });
 
   setupPagination();
-  window.scrollTo(0,0);
 }
 
-// ✅ PAGINATION
 function setupPagination(){
   const totalPages=Math.ceil(filteredPosts.length/postsPerPage);
   const wrapper=document.getElementById("paginationWrapper");
@@ -207,18 +227,12 @@ function setupPagination(){
 
   if(totalPages<=1) return;
 
-  const div=document.createElement("div");
-  div.className="page-numbers-container";
-
   for(let i=1;i<=totalPages;i++){
     const btn=document.createElement("button");
-    btn.className="pg-btn"+(i===currentPage?" active":"");
     btn.innerText=i;
     btn.onclick=()=>{currentPage=i;renderPage();};
-    div.appendChild(btn);
+    wrapper.appendChild(btn);
   }
-
-  wrapper.appendChild(div);
 }
 </script>
 
