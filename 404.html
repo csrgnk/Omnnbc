@@ -1,106 +1,125 @@
 <!DOCTYPE html>
-<html lang="te">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Namo Narayanaya</title>
 
-<title id="pageTitle">Namo Narayanaya Bhakthi Channel</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-:root{
-  --primary-pink:#C71585;
-  --dark-blue:#001a4d;
-  --light-yellow:#FFFDE7;
+:root {
+    --primary: #3FA3A1;
+    --secondary: #1A1A1A;
+    --accent: #F4D03F;
+    --bg: #F4FBFB;
+    --top-links-bg: #145A5A;
+    --outer-links-bg: #3FA3A1;
 }
 
 body{
-  margin:0;
-  font-family:'Segoe UI',Arial;
-  background:#f1f3f5;
+    margin:0;
+    padding-top:95px;
+    font-family:'Inter',sans-serif;
+    background:var(--bg);
 }
 
-/* MENU */
-.blue-nav{
-  background:var(--dark-blue);
-  display:flex;
-  overflow-x:auto;
-}
-.blue-nav a{
-  color:#fff;
-  font-size:16px;
-  padding:8px 16px;
-  text-decoration:none;
-  flex-shrink:0;
+/* NAV */
+.fixed-nav-wrapper{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:1000;
 }
 
-/* SECOND MENU */
-.scroll-container{
-  background:var(--primary-pink);
-  display:flex;
-  overflow-x:auto;
+.top-links, .outer-links{
+    display:flex;
+    overflow-x:auto;
+    white-space:nowrap;
+    scrollbar-width:none;
 }
-.scroll-container a{
-  background:#fff;
-  color:var(--primary-pink);
-  padding:8px 16px;
-  margin:6px;
-  border-radius:6px;
-  text-decoration:none;
-  flex-shrink:0;
-  font-size:15px;
-  font-weight:600;
+.top-links{background:var(--top-links-bg);padding:10px 12px;gap:18px;}
+.outer-links{background:var(--outer-links-bg);padding:12px 14px;gap:20px;}
+.top-links::-webkit-scrollbar,
+.outer-links::-webkit-scrollbar{display:none;}
+
+.fixed-nav-wrapper a{
+    color:#fff;
+    text-decoration:none;
+    font-size:0.9rem;
+    font-weight:700;
 }
 
 /* HEADER */
-.site-header{
-  background:#fff9db;
-  padding:12px;
-  text-align:center;
+header{
+    background:#fff;
+    padding:15px 10px;
+    border-bottom:3px solid var(--accent);
 }
-.line1,.line2{
-  font-size:1.9rem;
-  font-weight:900;
-  color:var(--primary-pink);
+
+.header-flex{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+}
+
+.header-logo{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+}
+
+.site-title-main{
+    font-family:'Crimson Text',serif;
+    font-size:1.4rem;
+    font-weight:700;
+    color:#E91E63;
+}
+
+.site-title-sub{
+    font-size:0.75rem;
 }
 
 /* CONTENT */
 .container{
-  max-width:750px;
-  margin:auto;
-  padding:15px;
+    max-width:800px;
+    margin:auto;
+    padding:20px;
 }
 
 .post-title{
-  background:var(--primary-pink);
-  color:#fff;
-  text-align:center;
-  padding:12px;
-  font-size:1.3rem;
-  border-radius:8px;
+    background:linear-gradient(135deg,#2E8B87,#3FA3A1);
+    color:#fff;
+    text-align:center;
+    padding:12px;
+    font-size:1.5rem;
+    border-radius:10px;
 }
 
 .post-content{
-  background:var(--light-yellow);
-  padding:20px;
-  margin-top:15px;
-  border-radius:10px;
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+    font-size:19px;
 }
 
 /* SHARE */
 .share-row{
-  display:flex;
-  gap:8px;
-  margin-top:20px;
-  flex-wrap:wrap;
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+    flex-wrap:wrap;
 }
 .share-btn{
-  flex:1;
-  padding:10px;
-  border-radius:6px;
-  color:#fff;
-  text-align:center;
-  font-weight:bold;
-  text-decoration:none;
+    flex:1;
+    padding:10px;
+    border-radius:6px;
+    color:#fff;
+    text-align:center;
+    font-weight:bold;
+    text-decoration:none;
 }
 .wa{background:#25D366;}
 .fb{background:#1877F2;}
@@ -109,127 +128,131 @@ body{
 
 /* BACK */
 .back-home{
-  text-align:center;
-  margin:25px 0;
+    text-align:center;
+    margin-top:20px;
 }
 .back-home a{
-  color:var(--primary-pink);
-  border:2px solid var(--primary-pink);
-  padding:8px 20px;
-  border-radius:25px;
-  text-decoration:none;
-  font-weight:bold;
+    color:#3FA3A1;
+    font-weight:bold;
 }
 
+/* FOOTER */
 footer{
-  background:var(--dark-blue);
-  color:#fff;
-  text-align:center;
-  padding:12px;
+    background:#2E8B87;
+    color:#fff;
+    text-align:center;
+    padding:20px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- MENU -->
-<nav class="blue-nav">
-  <a href="/">Home</a>
-  <a href="/about-us">About Us</a>
-  <a href="/contact-us">Contact Us</a>
-  <a href="/dmca">DMCA</a>
-  <a href="/privacy-policy">Privacy Policy</a>
-</nav>
+<!-- NAV -->
+<div class="fixed-nav-wrapper">
+    <div class="top-links">
+        <a href="https://dasabodha.omnnbc.in/">Home</a>
+        <a href="/about-us">About Us</a>
+        <a href="/contact-us">Contact Us</a>
+        <a href="/privacy-policy">Privacy Policy</a>
+    </div>
 
-<div class="scroll-container">
-  <a href="/">Home</a>
-  <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
-  <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
-  <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu</a>
+    <div class="outer-links">
+        <a href="https://csrgnk.github.io/Omnnbc/">Main site</a>
+        <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
+        <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu</a>
+    </div>
 </div>
 
-<!-- HEADER -->
-<header class="site-header">
-  <div class="line1">Namo Narayanaya</div>
-  <div class="line2">Bhakthi Channel</div>
+<header>
+<div class="header-flex">
+<img src="https://csrgnk.github.io/Omnnbc/assets/images/Omnnbc-new.png" class="header-logo">
+<div>
+<div class="site-title-main">Namo Narayanaya Bhakthi Channel</div>
+<div class="site-title-sub">Dasabodha Grantha Telugu Lyrics</div>
+</div>
+</div>
 </header>
 
-<!-- CONTENT -->
 <div class="container">
-  <div id="postTitle" class="post-title">Loading...</div>
-  <div id="postContent" class="post-content"></div>
+    <div class="post-title" id="postTitle">Loading...</div>
+    <div class="post-content" id="postContent">Loading...</div>
 
-  <!-- SHARE -->
-  <div class="share-row" id="shareRow" style="display:none;">
-    <a id="sWA" class="share-btn wa" target="_blank">WhatsApp</a>
-    <a id="sFB" class="share-btn fb" target="_blank">Facebook</a>
-    <a id="sTW" class="share-btn tw" target="_blank">Twitter</a>
-    <button onclick="copyURL()" class="share-btn cp">Copy Link</button>
-  </div>
+    <!-- SHARE -->
+    <div class="share-row" id="shareRow" style="display:none;">
+        <a id="sWA" class="share-btn wa" target="_blank">WhatsApp</a>
+        <a id="sFB" class="share-btn fb" target="_blank">Facebook</a>
+        <a id="sTW" class="share-btn tw" target="_blank">Twitter</a>
+        <button onclick="copyURL()" class="share-btn cp">Copy Link</button>
+    </div>
 
-  <!-- BACK -->
-  <div class="back-home">
-    <a href="/">← Back to Home</a>
-  </div>
+    <!-- BACK -->
+    <div class="back-home">
+        <a href="https://dasabodha.omnnbc.in/">← Back to Home</a>
+    </div>
 </div>
 
 <footer>© 2026 Namo Narayanaya Bhakthi Channel</footer>
 
 <script>
-const repoName="Omnnbc";
-const isGitHub=location.hostname.includes("github.io");
-const baseUrl=isGitHub?"/"+repoName:"";
-
-/* GET PATH */
-let path = location.pathname.replace(baseUrl,"").replace(/^\/|\/$/g,"");
-
-/* PAGE LIST */
-const pages = ["about-us","contact-us","dmca","privacy-policy"];
-
-/* PAGE REDIRECT */
-if(pages.includes(path)){
-  window.location.href = baseUrl + "/" + path + ".html";
-}
+const repoName="Dasabodha";
+const base=`/${repoName}`;
+const slug=location.pathname.replace(base,"").replace(/^\/|\/$/g,"");
 
 /* COPY */
 function copyURL(){
-  navigator.clipboard.writeText(location.href);
-  alert("Link Copied!");
+    navigator.clipboard.writeText(location.href);
+    alert("Link Copied!");
 }
 
-/* LOAD POSTS */
-fetch(baseUrl+"/data/posts.json?v="+Date.now())
-.then(r=>r.json())
-.then(posts=>{
-  const post = posts.find(p=>p.url===path);
-
-  if(post){
-    document.title = post.title;
-    document.getElementById("postTitle").innerText = post.title;
-
-    fetch(baseUrl+"/posts/"+path+".html")
-    .then(r=>r.text())
-    .then(html=>{
-      document.getElementById("postContent").innerHTML = html;
-      setupShare(post.title);
+/* LOAD */
+fetch(`${base}/pages/${slug}.html`)
+.then(r=>{
+    if(r.ok) return r.text();
+    throw "no page";
+})
+.then(html=>{
+    setContent(slug.replace(/-/g," "),html);
+})
+.catch(()=>{
+    fetch(`${base}/data/posts.json`)
+    .then(r=>r.json())
+    .then(posts=>{
+        const post=posts.find(p=>p.url===slug);
+        if(post){
+            fetch(`${base}/posts/${slug}.html`)
+            .then(r=>r.text())
+            .then(html=>{
+                setContent(post.title,html);
+            });
+        }else{
+            show404();
+        }
     });
-
-  } else {
-    document.getElementById("postTitle").innerText = "404 - Not Found";
-    document.getElementById("postContent").innerHTML = "Page not found";
-  }
 });
 
-/* SHARE FUNCTION (TITLE + URL) */
+function setContent(title,html){
+    document.title=title;
+    postTitle.innerText=title;
+    postContent.innerHTML=html;
+    setupShare(title);
+}
+
+/* SHARE */
 function setupShare(title){
-  const url = encodeURIComponent(location.href);
-  const text = encodeURIComponent(title + "\n\n");
+    const url=encodeURIComponent(location.href);
+    const text=encodeURIComponent(title+"\n\n");
 
-  document.getElementById("sWA").href = `https://api.whatsapp.com/send?text=${text}${url}`;
-  document.getElementById("sFB").href = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-  document.getElementById("sTW").href = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+    sWA.href=`https://api.whatsapp.com/send?text=${text}${url}`;
+    sFB.href=`https://www.facebook.com/sharer/sharer.php?u=${url}`;
+    sTW.href=`https://twitter.com/intent/tweet?text=${text}&url=${url}`;
 
-  document.getElementById("shareRow").style.display = "flex";
+    shareRow.style.display="flex";
+}
+
+function show404(){
+    postTitle.innerText="404";
+    postContent.innerHTML="Page not found";
 }
 </script>
 
