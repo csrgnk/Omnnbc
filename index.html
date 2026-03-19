@@ -1,7 +1,54 @@
 <!DOCTYPE html>
 <html lang="te">
 <head>
-<a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu </a>
+<style>
+  /* Container for the scrollable menu */
+  .scroll-nav {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    gap: 10px;
+    padding: 10px;
+    background-color: #f8f8f8; /* Light background for contrast */
+    scrollbar-width: thin; /* For Firefox */
+  }
+
+  /* Styling the links as pink boxes */
+  .scroll-nav a {
+    display: inline-block;
+    background-color: #FF69B4; /* Hot Pink */
+    color: white;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    flex-shrink: 0; /* Prevents boxes from squishing */
+    transition: background-color 0.3s ease;
+  }
+
+  /* Hover effect */
+  .scroll-nav a:hover {
+    background-color: #ff1493; /* Darker pink on hover */
+  }
+
+  /* Optional: Hide scrollbar for Chrome/Safari for a cleaner look */
+  .scroll-nav::-webkit-scrollbar {
+    height: 5px;
+  }
+  .scroll-nav::-webkit-scrollbar-thumb {
+    background: #FF69B4;
+    border-radius: 10px;
+  }
+</style>
+
+<div class="scroll-nav">
+  <a href="https://csrgnk.github.io/Omnnbc/">Home</a>
+  <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
+  <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
+  <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu</a>
+  <a href="https://csrgnk.github.io/manache-shlok/hindi/">Manache Shlok Hindi</a>
+</div>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
