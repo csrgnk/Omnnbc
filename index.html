@@ -2,53 +2,60 @@
 <html lang="te">
 <head>
 <style>
-  /* Container for the scrollable menu */
-  .scroll-nav {
-    display: flex;
+  /* Dark Pink Container */
+  .scroll-container {
+    background-color: #C71585; /* Medium Violet Red (Dark Pink) */
+    padding: 10px 5px;
     overflow-x: auto;
+    display: flex;
     white-space: nowrap;
-    gap: 10px;
-    padding: 10px;
-    background-color: #f8f8f8; /* Light background for contrast */
-    scrollbar-width: thin; /* For Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: #ffffff #C71585;
   }
 
-  /* Styling the links as pink boxes */
-  .scroll-nav a {
-    display: inline-block;
-    background-color: #FF69B4; /* Hot Pink */
-    color: white;
+  /* White Boxes with Dark Pink Text */
+  .scroll-container a {
+    background-color: #FFFFFF; /* White Background */
+    color: #C71585;            /* Dark Pink Text */
     text-decoration: none;
-    padding: 12px 20px;
-    border-radius: 5px;
-    font-family: Arial, sans-serif;
-    font-weight: bold;
-    flex-shrink: 0; /* Prevents boxes from squishing */
-    transition: background-color 0.3s ease;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    
+    /* Reduced Height Settings */
+    padding: 6px 15px;         /* Lowered vertical padding (6px) */
+    margin: 0 5px;
+    border-radius: 4px;
+    
+    display: inline-block;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
   }
 
-  /* Hover effect */
-  .scroll-nav a:hover {
-    background-color: #ff1493; /* Darker pink on hover */
+  /* Hover effect for interactivity */
+  .scroll-container a:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-1px);
   }
 
-  /* Optional: Hide scrollbar for Chrome/Safari for a cleaner look */
-  .scroll-nav::-webkit-scrollbar {
-    height: 5px;
+  /* Custom scrollbar for Chrome/Safari */
+  .scroll-container::-webkit-scrollbar {
+    height: 4px;
   }
-  .scroll-nav::-webkit-scrollbar-thumb {
-    background: #FF69B4;
+  .scroll-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
     border-radius: 10px;
   }
 </style>
 
-<div class="scroll-nav">
+<div class="scroll-container">
   <a href="https://csrgnk.github.io/Omnnbc/">Home</a>
   <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
   <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
   <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu</a>
   <a href="https://csrgnk.github.io/manache-shlok/hindi/">Manache Shlok Hindi</a>
 </div>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
