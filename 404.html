@@ -31,7 +31,6 @@ body{
   color:#fff;
   padding:8px 16px;
   text-decoration:none;
-  flex-shrink:0;
 }
 
 /* HEADER */
@@ -157,52 +156,75 @@ const baseUrl=isGitHub?"/"+repoName:"";
 /* GET SLUG */
 let slug=location.pathname.replace(baseUrl,"").replace(/^\/|\/$/g,"");
 
-/* PAGE LIST */
-const pages=["about-us","contact-us","dmca","privacy-policy"];
-
-/* PAGE REDIRECT */
-if(pages.includes(slug)){
-  window.location.href=baseUrl+"/"+slug+".html";
-}
-
 /* COPY */
 function copyURL(){
   navigator.clipboard.writeText(location.href);
   alert("Link Copied!");
 }
 
-/* LOAD POSTS */
-fetch(baseUrl+"/data/posts.json?v="+Date.now())
-.then(r=>r.json())
-.then(posts=>{
-  const post=posts.find(p=>p.url===slug);
-
-  if(post){
-    document.title=post.title;
-    document.getElementById("postTitle").innerText=post.title;
-
-    fetch(baseUrl+"/posts/"+slug+".html")
-    .then(r=>r.text())
-    .then(html=>{
-      document.getElementById("postContent").innerHTML=html;
-      setupShare(post.title);
-    });
-
-  }else{
-    show404();
-  }
+/* 🔥 LOAD PAGE FIRST */
+fetch(baseUrl+"/pages/"+slug+".html")
+.then(r=>{
+  if(r.ok) return r.text();
+  throw "no page";
+})
+.then(html=>{
+  setContent(formatTitle(slug),html);
+})
+.catch(()=>{
+  loadPost();
 });
+
+/* 🔥 LOAD POST */
+function loadPost(){
+  fetch(baseUrl+"/data/posts.json?v="+Date.now())
+  .then(r=>r.json())
+  .then(posts=>{
+    const post=posts.find(p=>p.url===slug);
+
+    if(post){
+      fetch(baseUrl+"/posts/"+slug+".html")
+      .then(r=>r.text())
+      .then(html=>{
+        setContent(post.title,html);
+      });
+    }else{
+      show404();
+    }
+  });
+}
+
+/* 🔥 SET CONTENT */
+function setContent(title,html){
+  document.title=title;
+  document.getElementById("postTitle").innerText=title;
+
+  const temp=document.createElement("div");
+  temp.innerHTML=html;
+
+  temp.querySelectorAll("header,footer,nav,script,style,meta,title")
+      .forEach(e=>e.remove());
+
+  document.getElementById("postContent").innerHTML=temp.innerHTML;
+
+  setupShare(title);
+}
 
 /* SHARE */
 function setupShare(title){
   const url=encodeURIComponent(location.href);
   const text=encodeURIComponent(title+"\n\n");
 
-  document.getElementById("sWA").href=`https://api.whatsapp.com/send?text=${text}${url}`;
-  document.getElementById("sFB").href=`https://www.facebook.com/sharer/sharer.php?u=${url}`;
-  document.getElementById("sTW").href=`https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+  sWA.href=`https://api.whatsapp.com/send?text=${text}${url}`;
+  sFB.href=`https://www.facebook.com/sharer/sharer.php?u=${url}`;
+  sTW.href=`https://twitter.com/intent/tweet?text=${text}&url=${url}`;
 
   document.getElementById("shareRow").style.display="flex";
+}
+
+/* FORMAT TITLE */
+function formatTitle(slug){
+  return slug.replace(/-/g," ");
 }
 
 /* 404 */
