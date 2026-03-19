@@ -70,24 +70,39 @@ body{
   gap:5px;
 }
 
+/* LOGO */
 .logo{
   width:52px;
   height:52px;
   border-radius:50%;
 }
 
+/* TITLE */
 .title-box{
   display:flex;
   flex-direction:column;
   align-items:center;
   text-align:center;
-  line-height:1.05;
+  line-height:1.1;
 }
 
-.line1,.line2{
-  font-size:1.9rem;
+/* 🔥 FIXED SIZE + 2 LINES ONLY */
+.line1,
+.line2{
+  font-size:1.65rem;
   font-weight:800;
   color:var(--primary-pink);
+  white-space:nowrap;
+  margin:0;
+  padding:0;
+}
+
+/* MOBILE */
+@media(max-width:600px){
+  .line1,
+  .line2{
+    font-size:1.2rem;
+  }
 }
 
 /* CONTENT */
@@ -181,7 +196,7 @@ if(path.startsWith("/")) path = path.slice(1);
 if(path.endsWith(".html")) path = path.replace(".html","");
 let slug = path;
 
-/* LOAD */
+/* LOAD CONTENT */
 fetch(baseUrl+"/data/pages.json")
 .then(r=>r.json())
 .then(pages=>{
