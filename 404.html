@@ -1,285 +1,161 @@
 <!DOCTYPE html>
 <html lang="te">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">Namo Narayanaya Bhakthi Channel</title>
-    <style>
-        :root {
-            --primary-pink: #C71585;
-            --dark-blue: #001a4d;
-            --accent-orange: #EF6C00;
-            --light-yellow: #FFFDE7;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">Namo Narayanaya Bhakthi Channel</title>
 
-        body { 
-            margin: 0; 
-            font-family: 'Segoe UI', Arial, sans-serif; 
-            background: #f1f3f5; 
-            display: flex; 
-            flex-direction: column; 
-            min-height: 100vh; 
-        }
-
-        /* --- DARK BLUE TOP MENU (Scrollable) --- */
-        .blue-nav {
-            background-color: var(--dark-blue);
-            padding: 6px 0;
-            display: flex;
-            overflow-x: auto;
-            white-space: nowrap;
-            scrollbar-width: none;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .blue-nav::-webkit-scrollbar { display: none; }
-        .blue-nav a {
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 13px;
-            padding: 4px 15px;
-            flex-shrink: 0;
-        }
-
-        /* --- PINK SCROLL MENU --- */
-        .scroll-container {
-            background-color: var(--primary-pink);
-            padding: 6px 0;
-            overflow-x: auto;
-            display: flex;
-            white-space: nowrap;
-            scrollbar-width: none;
-        }
-        .scroll-container::-webkit-scrollbar { display: none; }
-        .scroll-container a {
-            background-color: #FFFFFF;
-            color: var(--primary-pink);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 13px;
-            padding: 4px 12px;
-            margin: 0 5px;
-            border-radius: 4px;
-            flex-shrink: 0;
-        }
-
-        /* --- HEADER (Compact Two Lines) --- */
-        header { 
-            background: #fff9db; 
-            padding: 12px 10px; 
-            text-align: center; 
-            color: var(--primary-pink); 
-            border-bottom: 2px solid #FFD700; 
-            line-height: 1.1;
-        }
-        header .line1, header .line2 {
-            display: block;
-            font-size: 1.4rem;
-            font-weight: bold;
-        }
-
-        /* --- MAIN CONTENT AREA --- */
-        .container { 
-            max-width: 750px; 
-            margin: auto; 
-            padding: 15px; 
-            flex: 1; 
-            width: 100%; 
-            box-sizing: border-box; 
-        }
-
-        .post-title-box { 
-            background: var(--primary-pink); 
-            color: white; 
-            text-align: center; 
-            padding: 12px; 
-            font-size: 1.3rem; 
-            font-weight: bold; 
-            border-radius: 8px; 
-            margin-bottom: 15px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .post-content { 
-            background: var(--light-yellow); 
-            padding: 20px; 
-            border-radius: 10px; 
-            color: var(--dark-blue); 
-            line-height: 1.8; 
-            font-size: 20px; 
-            border-left: 5px solid var(--primary-pink);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            min-height: 200px;
-        }
-
-        /* SHARE BUTTONS */
-        .share-row { 
-            display: flex; 
-            flex-wrap: wrap; 
-            justify-content: center; 
-            gap: 8px; 
-            margin-top: 20px; 
-        }
-        .share-btn { 
-            padding: 10px; 
-            border-radius: 5px; 
-            color: white; 
-            font-weight: bold; 
-            text-decoration: none; 
-            font-size: 13px; 
-            flex: 1; 
-            text-align: center; 
-        }
-        .wa { background: #25D366; } 
-        .fb { background: #1877F2; } 
-        .cp { background: #607D8B; border: none; cursor: pointer; }
-
-        .back-home { text-align: center; margin: 25px 0; }
-        .back-home a { 
-            color: var(--primary-pink); 
-            font-weight: bold; 
-            text-decoration: none; 
-            padding: 8px 20px;
-            border: 2px solid var(--primary-pink);
-            border-radius: 25px;
-        }
-
-        footer { 
-            background: var(--dark-blue); 
-            color: white; 
-            text-align: center; 
-            padding: 15px; 
-            margin-top: auto; 
-            font-size: 12px;
-        }
-
-        @media (max-width: 600px) {
-            header .line1, header .line2 { font-size: 1.2rem; }
-            .post-content { font-size: 18px; }
-        }
-    </style>
+<style>
+:root {
+    --primary-pink:#C71585;
+    --dark-blue:#001a4d;
+    --accent-orange:#EF6C00;
+    --light-yellow:#FFFDE7;
+}
+body{
+    margin:0;
+    font-family:'Segoe UI',Arial;
+    background:#f1f3f5;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+header{
+    background:#fff9db;
+    padding:12px;
+    text-align:center;
+    color:var(--primary-pink);
+    border-bottom:2px solid #FFD700;
+}
+.container{
+    max-width:750px;
+    margin:auto;
+    padding:15px;
+    flex:1;
+}
+.post-title-box{
+    background:var(--primary-pink);
+    color:#fff;
+    padding:12px;
+    text-align:center;
+    border-radius:8px;
+    font-weight:bold;
+}
+.post-content{
+    background:var(--light-yellow);
+    padding:20px;
+    border-radius:10px;
+    margin-top:15px;
+    line-height:1.8;
+}
+footer{
+    background:var(--dark-blue);
+    color:#fff;
+    text-align:center;
+    padding:12px;
+}
+</style>
 </head>
+
 <body>
 
-<nav class="blue-nav">
-    <a href="https://csrgnk.github.io/Omnnbc/pages/about-us.html">About Us</a>
-    <a href="https://csrgnk.github.io/Omnnbc/pages/contact-us.html">Contact Us</a>
-    <a href="https://csrgnk.github.io/Omnnbc/pages/dmca.html">DMCA</a>
-    <a href="https://csrgnk.github.io/Omnnbc/pages/privacy-policy.html">Privacy Policy</a>
-</nav>
-
-<div class="scroll-container">
-    <a href="https://csrgnk.github.io/Omnnbc/">Home</a>
-    <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
-    <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
-    <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu</a>
-    <a href="https://csrgnk.github.io/manache-shlok/hindi/">Manache Shlok Hindi</a>
-</div>
-
 <header>
-    <span class="line1">Namo Narayanaya</span>
-    <span class="line2">Bhakthi Channel</span>
+    <h2>Namo Narayanaya Bhakthi Channel</h2>
 </header>
 
 <div class="container">
-    <div class="post-title-box" id="postTitle">Loading Content...</div>
-    <div class="post-content" id="postContent">
-        </div>
-
-    <div class="share-row" id="shareRow" style="display:none;">
-        <a id="sWA" class="share-btn wa" target="_blank">WhatsApp</a>
-        <a id="sFB" class="share-btn fb" target="_blank">Facebook</a>
-        <button onclick="copyURL()" class="share-btn cp">Copy Link</button>
-    </div>
-
-    <div class="back-home">
-        <a href="https://csrgnk.github.io/Omnnbc/">← Back to Home</a>
-    </div>
+    <div class="post-title-box" id="postTitle">Loading...</div>
+    <div class="post-content" id="postContent"></div>
 </div>
 
 <footer>
-    <p>© 2026 Namo Narayanaya Bhakthi Channel</p>
+© 2026 Namo Narayanaya Bhakthi Channel
 </footer>
 
 <script>
-    const repoName = "Omnnbc"; 
-    const isGitHub = window.location.hostname.includes("github.io");
-    const baseUrl = isGitHub ? `/${repoName}` : "";
+const repoName = "Omnnbc";
+const isGitHub = location.hostname.includes("github.io");
+const baseUrl = isGitHub ? "/" + repoName : "";
 
-    // Parse current URL to find the slug
-    let path = window.location.pathname;
-    let slug = path.split('/').filter(p => p && p !== repoName && p !== 'pages').pop();
-    if(slug) slug = slug.replace('.html', '');
+// 🔥 GET SLUG
+let path = location.pathname.replace(baseUrl,"");
 
-    function copyURL(){
-        navigator.clipboard.writeText(window.location.href);
-        alert("Link Copied!");
-    }
+if(path.startsWith("/")) path = path.slice(1);
+if(path.endsWith(".html")) path = path.replace(".html","");
 
-    // List of static pages to check in /pages/ folder
-    const staticPages = ['about-us', 'contact-us', 'dmca', 'privacy-policy'];
+let slug = path;
 
-    if (slug && staticPages.includes(slug)) {
-        // --- HANDLE PAGES ---
-        const pageTitle = slug.replace('-', ' ').toUpperCase();
-        document.getElementById("postTitle").innerText = pageTitle;
+// HOME redirect
+if(slug === ""){
+    location.href = baseUrl + "/";
+}
 
-        fetch(`${baseUrl}/pages/${slug}.html`)
-        .then(r => { if(!r.ok) throw new Error(); return r.text(); })
-        .then(html => renderCleanContent(html))
-        .catch(() => show404());
-    } else if (slug) {
-        // --- HANDLE POSTS ---
-        fetch(`${baseUrl}/data/posts.json`)
-        .then(r => r.json())
-        .then(posts => {
-            const post = posts.find(p => p.url === slug);
-            if(post) {
+// 🔥 LOAD PAGES FIRST
+fetch(baseUrl + "/data/pages.json")
+.then(r=>r.json())
+.then(pages=>{
+
+    const page = pages.find(p=>p.id === slug);
+
+    if(page){
+        document.getElementById("pageTitle").innerText = page.title;
+        document.getElementById("postTitle").innerText = page.title;
+
+        fetch(baseUrl + "/pages/" + page.file + ".html")
+        .then(r=>r.text())
+        .then(html=>render(html))
+        .catch(()=>show404());
+
+    } else {
+
+        // 🔥 LOAD POSTS
+        fetch(baseUrl + "/data/posts.json")
+        .then(r=>r.json())
+        .then(posts=>{
+
+            const post = posts.find(p=>p.url === slug);
+
+            if(post){
                 document.getElementById("pageTitle").innerText = post.title;
                 document.getElementById("postTitle").innerText = post.title;
 
-                fetch(`${baseUrl}/posts/${slug}.html`)
-                .then(r => r.text())
-                .then(html => {
-                    renderCleanContent(html);
-                    setupSocialShare(post.title);
-                });
+                fetch(baseUrl + "/posts/" + slug + ".html")
+                .then(r=>r.text())
+                .then(html=>render(html))
+                .catch(()=>show404());
+
             } else {
                 show404();
             }
+
         })
-        .catch(() => show404());
-    } else {
-        show404();
+        .catch(()=>show404());
+
     }
 
-    function renderCleanContent(html) {
-        const temp = document.createElement("div");
-        temp.innerHTML = html;
-        // Strip out any nested site headers/footers from the fetched file
-        const extras = temp.querySelectorAll("header,footer,nav,script,style");
-        extras.forEach(e => e.remove());
-        document.getElementById("postContent").innerHTML = temp.innerHTML;
-    }
+})
+.catch(()=>show404());
 
-    function setupSocialShare(title) {
-        const u = encodeURIComponent(window.location.href);
-        const m = encodeURIComponent(title + "\n\n");
-        document.getElementById("sWA").href = `https://api.whatsapp.com/send?text=${m}${u}`;
-        document.getElementById("sFB").href = `https://www.facebook.com/sharer/sharer.php?u=${u}`;
-        document.getElementById("shareRow").style.display = "flex";
-    }
+function render(html){
+    const temp = document.createElement("div");
+    temp.innerHTML = html;
 
-    function show404() {
-        document.getElementById("pageTitle").innerText = "404 - Not Found";
-        document.getElementById("postTitle").innerText = "404 - Page Not Found";
-        document.getElementById("postContent").innerHTML = `
-            <div style="text-align:center; padding: 30px 10px;">
-                <h2 style="color:var(--primary-pink); margin-top:0;">Oops! సమాచారం అందుబాటులో లేదు.</h2>
-                <p>The page you are looking for has been moved or doesn't exist.</p>
-                <p>క్షమించండి, ఈ పేజీ అందుబాటులో లేదు.</p>
-                <a href="https://csrgnk.github.io/Omnnbc/" style="color:var(--accent-orange); font-weight:bold; text-decoration:none;">మళ్ళీ ప్రయత్నించండి →</a>
-            </div>`;
-    }
+    const remove = temp.querySelectorAll("header,footer,nav,script,style");
+    remove.forEach(e=>e.remove());
+
+    document.getElementById("postContent").innerHTML = temp.innerHTML;
+}
+
+function show404(){
+    document.getElementById("pageTitle").innerText="404";
+    document.getElementById("postTitle").innerText="Page Not Found";
+    document.getElementById("postContent").innerHTML=`
+    <div style="text-align:center;">
+        <h3>Page Not Found</h3>
+        <p>క్షమించండి, ఈ పేజీ అందుబాటులో లేదు</p>
+        <a href="${baseUrl}/" style="color:#EF6C00;font-weight:bold;">Go Home</a>
+    </div>`;
+}
 </script>
 
 </body>
