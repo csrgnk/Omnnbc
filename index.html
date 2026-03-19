@@ -51,7 +51,6 @@ body{
   padding:4px 12px;
   margin:0 5px;
   border-radius:4px;
-  flex-shrink:0;
 }
 
 /* HEADER */
@@ -65,46 +64,54 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:5px; /* 🔥 reduced gap */
-  flex-wrap:nowrap;
+  gap:5px;
 }
 
-/* LOGO */
 .logo{
   width:52px;
   height:52px;
   border-radius:50%;
 }
 
-/* TITLE */
 .title-box{
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:center;
   text-align:center;
   line-height:1.05;
-  margin:0;
-  padding:0;
 }
 
-/* 🔥 SAME SIZE + BIG */
+/* 🔥 INCREASED SIZE */
 .line1,
 .line2{
-  font-size:1.75rem;
+  font-size:1.9rem; /* increased */
   font-weight:800;
   color:var(--primary-pink);
   white-space:nowrap;
-  margin:0;
-  padding:0;
 }
 
 /* MOBILE */
 @media(max-width:600px){
   .line1,
   .line2{
-    font-size:1.25rem;
+    font-size:1.3rem;
   }
+}
+
+/* 🔍 SEARCH BOX */
+.search-box{
+  text-align:center;
+  margin:12px 0;
+}
+
+#searchInput{
+  width:90%;
+  max-width:350px;
+  padding:10px;
+  border-radius:25px;
+  border:2px solid var(--primary-pink);
+  font-size:15px;
+  outline:none;
 }
 
 /* POSTS */
@@ -117,20 +124,20 @@ body{
 
 .post-card{
   background:#FFFDE7;
-  padding:12px;
-  margin-bottom:10px;
+  padding:14px;
+  margin-bottom:12px;
   border-radius:8px;
   border-left:5px solid var(--primary-pink);
 }
 
 .post-card h2{
   margin:0;
-  font-size:1.05rem;
+  font-size:1.15rem; /* increased */
 }
 
 .post-meta-desc{
-  font-size:13px;
-  margin:5px 0;
+  font-size:14px; /* increased */
+  margin:6px 0;
 }
 
 /* PAGINATION */
@@ -156,10 +163,9 @@ body{
   font-weight:bold;
   font-size:16px;
   cursor:pointer;
-  flex-shrink:0;
-  box-shadow:0 2px 6px rgba(0,0,0,0.2);
 }
 
+/* ACTIVE */
 .pg-btn.active{
   background:var(--primary-pink);
   color:#fff;
@@ -191,7 +197,6 @@ footer{
   <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
   <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
   <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu</a>
-  <a href="https://csrgnk.github.io/manache-shlok/hindi/">Manache Shlok Hindi</a>
 </div>
 
 <!-- HEADER -->
@@ -204,6 +209,11 @@ footer{
     </div>
   </div>
 </header>
+
+<!-- 🔍 SEARCH -->
+<div class="search-box">
+  <input type="text" id="searchInput" placeholder="Search stotrams...">
+</div>
 
 <!-- POSTS -->
 <div class="container" id="postsContainer">Loading...</div>
@@ -218,7 +228,7 @@ const repoName="Omnnbc";
 const isGitHub=location.hostname.includes("github.io");
 const baseUrl=isGitHub?"/"+repoName:"";
 
-/* LOGO AUTO PATH */
+/* LOGO */
 document.getElementById("logoImg").src = baseUrl + "/assets/images/Omnnbc-new.png";
 
 let allPosts=[];
@@ -231,6 +241,14 @@ fetch(baseUrl+"/data/posts.json?v="+Date.now())
 .then(data=>{
   allPosts=data.sort((a,b)=>new Date(b.publish_date)-new Date(a.publish_date));
   filteredPosts=[...allPosts];
+  renderPage();
+});
+
+/* SEARCH */
+document.getElementById("searchInput").addEventListener("input",function(e){
+  const val=e.target.value.toLowerCase();
+  filteredPosts=allPosts.filter(p=>p.title.toLowerCase().includes(val));
+  currentPage=1;
   renderPage();
 });
 
@@ -249,15 +267,9 @@ function renderPage(){
     card.className="post-card";
 
     card.innerHTML=`
-      <h2>
-        <a href="${baseUrl}/${slug}" style="text-decoration:none;color:inherit;">
-          ${post.title}
-        </a>
-      </h2>
+      <h2><a href="${baseUrl}/${slug}" style="text-decoration:none;color:inherit;">${post.title}</a></h2>
       <div class="post-meta-desc">${desc}...</div>
-      <a href="${baseUrl}/${slug}" style="color:var(--accent-orange);font-weight:bold;text-decoration:none;font-size:12px;">
-        READ MORE →
-      </a>
+      <a href="${baseUrl}/${slug}" style="color:var(--accent-orange);font-weight:bold;text-decoration:none;">READ MORE →</a>
     `;
 
     container.appendChild(card);
@@ -273,18 +285,13 @@ function setupPagination(){
 
   if(totalPages<=1) return;
 
-  const div=document.createElement("div");
-  div.className="page-numbers-container";
-
   for(let i=1;i<=totalPages;i++){
     const btn=document.createElement("button");
     btn.className="pg-btn"+(i===currentPage?" active":"");
     btn.innerText=i;
     btn.onclick=()=>{currentPage=i;renderPage();};
-    div.appendChild(btn);
+    wrapper.appendChild(btn);
   }
-
-  wrapper.appendChild(div);
 }
 </script>
 
