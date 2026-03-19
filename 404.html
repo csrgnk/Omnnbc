@@ -3,7 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title id="pageTitle">Namo Narayanaya Bhakthi Channel</title>
+
+<!-- 🔥 SEO META -->
+<meta name="description" id="metaDesc" content="Bhakthi stotrams, Dasabodha, Upasana Chandrika, Manache Shlok Telugu lyrics and more.">
+<meta name="keywords" content="Telugu stotrams, bhakthi songs, Dasabodha, Manache Shlok, devotional">
+<meta name="author" content="Namo Narayanaya Bhakthi Channel">
+
+<!-- 🔥 OPEN GRAPH (WhatsApp / Facebook) -->
+<meta property="og:title" id="ogTitle" content="Namo Narayanaya Bhakthi Channel">
+<meta property="og:description" id="ogDesc" content="Devotional Telugu content and stotrams">
+<meta property="og:type" content="article">
+<meta property="og:url" id="ogUrl" content="">
+<meta property="og:image" content="https://yourdomain.com/assets/images/Omnnbc-new.png">
 
 <style>
 :root{
@@ -22,7 +35,7 @@ body{
   min-height:100vh;
 }
 
-/* 🔵 TOP MENU */
+/* 🔵 MENU */
 .blue-nav{
   background:var(--dark-blue);
   padding:6px 0;
@@ -32,27 +45,27 @@ body{
 }
 .blue-nav a{
   color:#fff;
-  font-size:14px;
-  padding:4px 14px;
+  font-size:16px;
+  padding:6px 16px;
   text-decoration:none;
 }
 
-/* 🔴 PINK MENU */
+/* 🔴 MENU */
 .scroll-container{
   background:var(--primary-pink);
   padding:6px 0;
   display:flex;
   overflow-x:auto;
-  white-space:nowrap;
 }
 .scroll-container a{
   background:#fff;
   color:var(--primary-pink);
-  padding:6px 14px;
+  padding:7px 16px;
   margin:0 6px;
   border-radius:6px;
   text-decoration:none;
-  flex-shrink:0;
+  font-size:15px;
+  font-weight:600;
 }
 
 /* HEADER */
@@ -61,35 +74,24 @@ body{
   padding:10px;
   border-bottom:2px solid #FFD700;
 }
-
 .header-box{
   display:flex;
-  align-items:center;
   justify-content:center;
-  gap:5px;
+  align-items:center;
+  gap:6px;
 }
-
-/* LOGO */
 .logo{
-  width:58px;
-  height:58px;
+  width:60px;
+  height:60px;
   border-radius:50%;
 }
-
-/* TITLE */
 .title-box{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
   text-align:center;
-  line-height:1.1;
 }
-
 .line1,.line2{
-  font-size:1.65rem;
-  font-weight:800;
+  font-size:1.9rem;
+  font-weight:900;
   color:var(--primary-pink);
-  white-space:nowrap;
 }
 
 /* CONTENT */
@@ -99,60 +101,22 @@ body{
   padding:15px;
   flex:1;
 }
-
 .post-title-box{
   background:var(--primary-pink);
   color:#fff;
   text-align:center;
   padding:12px;
-  font-size:1.3rem;
-  font-weight:bold;
+  font-size:1.4rem;
   border-radius:8px;
 }
-
 .post-content{
   background:var(--light-yellow);
   padding:20px;
-  border-radius:10px;
   margin-top:15px;
+  border-radius:10px;
 }
 
-/* SHARE */
-.share-row{
-  display:flex;
-  gap:8px;
-  margin-top:20px;
-  flex-wrap:wrap;
-}
-.share-btn{
-  flex:1;
-  padding:10px;
-  border-radius:6px;
-  color:#fff;
-  text-align:center;
-  font-weight:bold;
-  text-decoration:none;
-  font-size:13px;
-}
-.wa{background:#25D366;}
-.fb{background:#1877F2;}
-.tw{background:#1DA1F2;}
-.cp{background:#607D8B;border:none;}
-
-/* BACK */
-.back-home{
-  text-align:center;
-  margin:25px 0;
-}
-.back-home a{
-  color:var(--primary-pink);
-  border:2px solid var(--primary-pink);
-  padding:8px 20px;
-  border-radius:25px;
-  text-decoration:none;
-  font-weight:bold;
-}
-
+/* FOOTER */
 footer{
   background:var(--dark-blue);
   color:#fff;
@@ -164,7 +128,6 @@ footer{
 
 <body>
 
-<!-- 🔵 TOP MENU (FULL FIX) -->
 <nav class="blue-nav">
   <a href="/">Home</a>
   <a href="/about-us">About Us</a>
@@ -173,7 +136,6 @@ footer{
   <a href="/privacy-policy">Privacy Policy</a>
 </nav>
 
-<!-- 🔴 PINK MENU (FULL LINKS) -->
 <div class="scroll-container">
   <a href="/">Home</a>
   <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
@@ -182,34 +144,19 @@ footer{
   <a href="https://csrgnk.github.io/manache-shlok/hindi/">Manache Shlok Hindi</a>
 </div>
 
-<!-- HEADER -->
 <header class="site-header">
   <div class="header-box">
     <img id="logoImg" class="logo">
     <div class="title-box">
-      <span class="line1">Namo Narayanaya</span>
-      <span class="line2">Bhakthi Channel</span>
+      <div class="line1">Namo Narayanaya</div>
+      <div class="line2">Bhakthi Channel</div>
     </div>
   </div>
 </header>
 
-<!-- CONTENT -->
 <div class="container">
-  <div class="post-title-box" id="postTitle">Loading...</div>
+  <div id="postTitle" class="post-title-box">Loading...</div>
   <div id="postContent" class="post-content"></div>
-
-  <!-- SHARE -->
-  <div class="share-row" id="shareRow" style="display:none;">
-    <a id="sWA" class="share-btn wa" target="_blank">WhatsApp</a>
-    <a id="sFB" class="share-btn fb" target="_blank">Facebook</a>
-    <a id="sTW" class="share-btn tw" target="_blank">Twitter</a>
-    <button onclick="copyURL()" class="share-btn cp">Copy Link</button>
-  </div>
-
-  <!-- BACK -->
-  <div class="back-home">
-    <a href="/">← Back to Home</a>
-  </div>
 </div>
 
 <footer>© 2026 Namo Narayanaya Bhakthi Channel</footer>
@@ -222,55 +169,41 @@ const baseUrl=isGitHub?"/"+repoName:"";
 /* LOGO */
 document.getElementById("logoImg").src = baseUrl + "/assets/images/Omnnbc-new.png";
 
-/* SLUG */
-let path=location.pathname.replace(baseUrl,"");
-if(path.startsWith("/")) path=path.slice(1);
-if(path.endsWith(".html")) path=path.replace(".html","");
-let slug=path;
+/* GET SLUG */
+let slug = location.pathname.replace(baseUrl,"").replace(/^\/|\/$/g,"");
 
-/* COPY */
-function copyURL(){
-  navigator.clipboard.writeText(location.href);
-  alert("Link Copied!");
+/* HOME redirect */
+if(slug==="" || slug==="index.html"){
+  location.href = baseUrl + "/";
 }
 
-/* LOAD */
-fetch(baseUrl+"/data/posts.json")
+/* LOAD POSTS */
+fetch(baseUrl+"/data/posts.json?v="+Date.now())
 .then(r=>r.json())
 .then(posts=>{
   const post=posts.find(p=>p.url===slug);
 
   if(post){
+    // 🔥 SEO SET
+    document.title = post.title;
+    document.getElementById("metaDesc").content = post.description || "";
+    document.getElementById("ogTitle").content = post.title;
+    document.getElementById("ogDesc").content = post.description || "";
+    document.getElementById("ogUrl").content = location.href;
+
     document.getElementById("postTitle").innerText=post.title;
 
     fetch(baseUrl+"/posts/"+slug+".html")
     .then(r=>r.text())
     .then(html=>{
       document.getElementById("postContent").innerHTML=html;
-      setupShare(post.title);
     });
 
   } else {
-    show404();
+    document.getElementById("postTitle").innerText="404 - Not Found";
+    document.getElementById("postContent").innerHTML="Page not found";
   }
 });
-
-/* SHARE */
-function setupShare(title){
-  const u=encodeURIComponent(location.href);
-  const t=encodeURIComponent(title+"\n\n");
-
-  document.getElementById("sWA").href=`https://api.whatsapp.com/send?text=${t}${u}`;
-  document.getElementById("sFB").href=`https://www.facebook.com/sharer/sharer.php?u=${u}`;
-  document.getElementById("sTW").href=`https://twitter.com/intent/tweet?text=${t}&url=${u}`;
-
-  document.getElementById("shareRow").style.display="flex";
-}
-
-function show404(){
-  document.getElementById("postTitle").innerText="404 - Not Found";
-  document.getElementById("postContent").innerHTML="Page not found";
-}
 </script>
 
 </body>
