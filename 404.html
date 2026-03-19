@@ -22,38 +22,33 @@ body{
   min-height:100vh;
 }
 
-/* 🔵 TOP MENU */
+/* MENU */
 .blue-nav{
   background:var(--dark-blue);
   padding:6px 0;
   display:flex;
   overflow-x:auto;
-  white-space:nowrap;
 }
 .blue-nav a{
   color:#fff;
-  text-decoration:none;
   font-size:14px;
   padding:4px 14px;
+  text-decoration:none;
 }
 
-/* 🔴 PINK MENU */
 .scroll-container{
   background:var(--primary-pink);
   padding:6px 0;
   display:flex;
   overflow-x:auto;
-  white-space:nowrap;
 }
 .scroll-container a{
   background:#fff;
   color:var(--primary-pink);
-  text-decoration:none;
-  font-size:13px;
   padding:6px 14px;
   margin:0 6px;
   border-radius:6px;
-  flex-shrink:0;
+  text-decoration:none;
 }
 
 /* HEADER */
@@ -70,10 +65,10 @@ body{
   gap:5px;
 }
 
-/* LOGO */
+/* 🔥 LOGO INCREASED */
 .logo{
-  width:52px;
-  height:52px;
+  width:58px;
+  height:58px;
   border-radius:50%;
 }
 
@@ -82,27 +77,13 @@ body{
   display:flex;
   flex-direction:column;
   align-items:center;
-  text-align:center;
-  line-height:1.1;
 }
 
-/* 🔥 FIXED SIZE + 2 LINES ONLY */
-.line1,
-.line2{
+.line1,.line2{
   font-size:1.65rem;
   font-weight:800;
   color:var(--primary-pink);
   white-space:nowrap;
-  margin:0;
-  padding:0;
-}
-
-/* MOBILE */
-@media(max-width:600px){
-  .line1,
-  .line2{
-    font-size:1.2rem;
-  }
 }
 
 /* CONTENT */
@@ -125,12 +106,47 @@ body{
 
 .post-content{
   background:var(--light-yellow);
-  padding:25px;
-  border-radius:12px;
+  padding:20px;
+  border-radius:10px;
   margin-top:15px;
-  line-height:1.8;
-  font-size:18px;
-  border-left:6px solid var(--primary-pink);
+}
+
+/* 🔥 SHARE BUTTONS */
+.share-row{
+  display:flex;
+  gap:8px;
+  margin-top:20px;
+  flex-wrap:wrap;
+}
+
+.share-btn{
+  flex:1;
+  padding:10px;
+  border-radius:6px;
+  color:#fff;
+  text-align:center;
+  font-weight:bold;
+  text-decoration:none;
+  font-size:13px;
+}
+
+.wa{background:#25D366;}
+.fb{background:#1877F2;}
+.tw{background:#1DA1F2;}
+.cp{background:#607D8B; border:none;}
+
+/* BACK BUTTON */
+.back-home{
+  text-align:center;
+  margin:25px 0;
+}
+.back-home a{
+  color:var(--primary-pink);
+  border:2px solid var(--primary-pink);
+  padding:8px 20px;
+  border-radius:25px;
+  text-decoration:none;
+  font-weight:bold;
 }
 
 footer{
@@ -144,24 +160,17 @@ footer{
 
 <body>
 
-<!-- 🔵 MENU -->
 <nav class="blue-nav">
   <a href="/">Home</a>
   <a href="/about-us">About Us</a>
   <a href="/contact-us">Contact Us</a>
-  <a href="/dmca">DMCA</a>
-  <a href="/privacy-policy">Privacy Policy</a>
 </nav>
 
-<!-- 🔴 MENU -->
 <div class="scroll-container">
   <a href="/">Home</a>
   <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
-  <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
-  <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu</a>
 </div>
 
-<!-- HEADER -->
 <header class="site-header">
   <div class="header-box">
     <img id="logoImg" class="logo">
@@ -172,15 +181,25 @@ footer{
   </div>
 </header>
 
-<!-- CONTENT -->
 <div class="container">
   <div class="post-title-box" id="postTitle">Loading...</div>
-  <div class="post-content" id="postContent"></div>
+  <div id="postContent" class="post-content"></div>
+
+  <!-- 🔥 SHARE -->
+  <div class="share-row" id="shareRow" style="display:none;">
+    <a id="sWA" class="share-btn wa" target="_blank">WhatsApp</a>
+    <a id="sFB" class="share-btn fb" target="_blank">Facebook</a>
+    <a id="sTW" class="share-btn tw" target="_blank">Twitter</a>
+    <button onclick="copyURL()" class="share-btn cp">Copy Link</button>
+  </div>
+
+  <!-- BACK -->
+  <div class="back-home">
+    <a href="/">← Back to Home</a>
+  </div>
 </div>
 
-<footer>
-© 2026 Namo Narayanaya Bhakthi Channel
-</footer>
+<footer>© 2026 Namo Narayanaya Bhakthi Channel</footer>
 
 <script>
 const repoName="Omnnbc";
@@ -196,59 +215,45 @@ if(path.startsWith("/")) path = path.slice(1);
 if(path.endsWith(".html")) path = path.replace(".html","");
 let slug = path;
 
-/* LOAD CONTENT */
-fetch(baseUrl+"/data/pages.json")
+/* COPY */
+function copyURL(){
+  navigator.clipboard.writeText(location.href);
+  alert("Link Copied!");
+}
+
+/* LOAD */
+fetch(baseUrl+"/data/posts.json")
 .then(r=>r.json())
-.then(pages=>{
-  const page = pages.find(p=>p.id===slug);
+.then(posts=>{
+  const post=posts.find(p=>p.url===slug);
 
-  if(page){
-    document.getElementById("postTitle").innerText=page.title;
+  if(post){
+    document.getElementById("postTitle").innerText=post.title;
 
-    fetch(baseUrl+"/pages/"+page.file+".html")
+    fetch(baseUrl+"/posts/"+slug+".html")
     .then(r=>r.text())
-    .then(html=>render(html))
-    .catch(()=>show404());
+    .then(html=>{
+      document.getElementById("postContent").innerHTML=html;
+
+      setupShare(post.title);
+    });
 
   } else {
-    fetch(baseUrl+"/data/posts.json")
-    .then(r=>r.json())
-    .then(posts=>{
-      const post=posts.find(p=>p.url===slug);
-
-      if(post){
-        document.getElementById("postTitle").innerText=post.title;
-
-        fetch(baseUrl+"/posts/"+slug+".html")
-        .then(r=>r.text())
-        .then(html=>render(html))
-        .catch(()=>show404());
-
-      } else {
-        show404();
-      }
-    });
+    document.getElementById("postTitle").innerText="Page Not Found";
+    document.getElementById("postContent").innerHTML="Content not available";
   }
 });
 
-function render(html){
-  const temp=document.createElement("div");
-  temp.innerHTML=html;
+/* 🔥 SHARE SETUP */
+function setupShare(title){
+  const u=encodeURIComponent(location.href);
+  const t=encodeURIComponent(title+"\n\n");
 
-  const remove=temp.querySelectorAll("header,footer,nav,script,style");
-  remove.forEach(e=>e.remove());
+  document.getElementById("sWA").href=`https://api.whatsapp.com/send?text=${t}${u}`;
+  document.getElementById("sFB").href=`https://www.facebook.com/sharer/sharer.php?u=${u}`;
+  document.getElementById("sTW").href=`https://twitter.com/intent/tweet?text=${t}&url=${u}`;
 
-  document.getElementById("postContent").innerHTML=temp.innerHTML;
-}
-
-function show404(){
-  document.getElementById("postTitle").innerText="404 - Not Found";
-  document.getElementById("postContent").innerHTML=`
-    <div style="text-align:center;">
-      <h2 style="color:var(--primary-pink)">Page Not Found</h2>
-      <p>క్షమించండి, ఈ పేజీ అందుబాటులో లేదు</p>
-      <a href="${baseUrl}/" style="color:var(--accent-orange);font-weight:bold;">Go Home →</a>
-    </div>`;
+  document.getElementById("shareRow").style.display="flex";
 }
 </script>
 
