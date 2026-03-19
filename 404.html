@@ -22,12 +22,13 @@ body{
   min-height:100vh;
 }
 
-/* MENU */
+/* 🔵 TOP MENU */
 .blue-nav{
   background:var(--dark-blue);
   padding:6px 0;
   display:flex;
   overflow-x:auto;
+  white-space:nowrap;
 }
 .blue-nav a{
   color:#fff;
@@ -36,11 +37,13 @@ body{
   text-decoration:none;
 }
 
+/* 🔴 PINK MENU */
 .scroll-container{
   background:var(--primary-pink);
   padding:6px 0;
   display:flex;
   overflow-x:auto;
+  white-space:nowrap;
 }
 .scroll-container a{
   background:#fff;
@@ -49,6 +52,7 @@ body{
   margin:0 6px;
   border-radius:6px;
   text-decoration:none;
+  flex-shrink:0;
 }
 
 /* HEADER */
@@ -65,7 +69,7 @@ body{
   gap:5px;
 }
 
-/* 🔥 LOGO INCREASED */
+/* LOGO */
 .logo{
   width:58px;
   height:58px;
@@ -77,6 +81,8 @@ body{
   display:flex;
   flex-direction:column;
   align-items:center;
+  text-align:center;
+  line-height:1.1;
 }
 
 .line1,.line2{
@@ -111,14 +117,13 @@ body{
   margin-top:15px;
 }
 
-/* 🔥 SHARE BUTTONS */
+/* SHARE */
 .share-row{
   display:flex;
   gap:8px;
   margin-top:20px;
   flex-wrap:wrap;
 }
-
 .share-btn{
   flex:1;
   padding:10px;
@@ -129,13 +134,12 @@ body{
   text-decoration:none;
   font-size:13px;
 }
-
 .wa{background:#25D366;}
 .fb{background:#1877F2;}
 .tw{background:#1DA1F2;}
-.cp{background:#607D8B; border:none;}
+.cp{background:#607D8B;border:none;}
 
-/* BACK BUTTON */
+/* BACK */
 .back-home{
   text-align:center;
   margin:25px 0;
@@ -160,17 +164,25 @@ footer{
 
 <body>
 
+<!-- 🔵 TOP MENU (FULL FIX) -->
 <nav class="blue-nav">
   <a href="/">Home</a>
   <a href="/about-us">About Us</a>
   <a href="/contact-us">Contact Us</a>
+  <a href="/dmca">DMCA</a>
+  <a href="/privacy-policy">Privacy Policy</a>
 </nav>
 
+<!-- 🔴 PINK MENU (FULL LINKS) -->
 <div class="scroll-container">
   <a href="/">Home</a>
   <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
+  <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
+  <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu</a>
+  <a href="https://csrgnk.github.io/manache-shlok/hindi/">Manache Shlok Hindi</a>
 </div>
 
+<!-- HEADER -->
 <header class="site-header">
   <div class="header-box">
     <img id="logoImg" class="logo">
@@ -181,11 +193,12 @@ footer{
   </div>
 </header>
 
+<!-- CONTENT -->
 <div class="container">
   <div class="post-title-box" id="postTitle">Loading...</div>
   <div id="postContent" class="post-content"></div>
 
-  <!-- 🔥 SHARE -->
+  <!-- SHARE -->
   <div class="share-row" id="shareRow" style="display:none;">
     <a id="sWA" class="share-btn wa" target="_blank">WhatsApp</a>
     <a id="sFB" class="share-btn fb" target="_blank">Facebook</a>
@@ -210,10 +223,10 @@ const baseUrl=isGitHub?"/"+repoName:"";
 document.getElementById("logoImg").src = baseUrl + "/assets/images/Omnnbc-new.png";
 
 /* SLUG */
-let path = location.pathname.replace(baseUrl,"");
-if(path.startsWith("/")) path = path.slice(1);
-if(path.endsWith(".html")) path = path.replace(".html","");
-let slug = path;
+let path=location.pathname.replace(baseUrl,"");
+if(path.startsWith("/")) path=path.slice(1);
+if(path.endsWith(".html")) path=path.replace(".html","");
+let slug=path;
 
 /* COPY */
 function copyURL(){
@@ -234,17 +247,15 @@ fetch(baseUrl+"/data/posts.json")
     .then(r=>r.text())
     .then(html=>{
       document.getElementById("postContent").innerHTML=html;
-
       setupShare(post.title);
     });
 
   } else {
-    document.getElementById("postTitle").innerText="Page Not Found";
-    document.getElementById("postContent").innerHTML="Content not available";
+    show404();
   }
 });
 
-/* 🔥 SHARE SETUP */
+/* SHARE */
 function setupShare(title){
   const u=encodeURIComponent(location.href);
   const t=encodeURIComponent(title+"\n\n");
@@ -254,6 +265,11 @@ function setupShare(title){
   document.getElementById("sTW").href=`https://twitter.com/intent/tweet?text=${t}&url=${u}`;
 
   document.getElementById("shareRow").style.display="flex";
+}
+
+function show404(){
+  document.getElementById("postTitle").innerText="404 - Not Found";
+  document.getElementById("postContent").innerHTML="Page not found";
 }
 </script>
 
