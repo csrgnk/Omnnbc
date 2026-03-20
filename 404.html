@@ -6,12 +6,16 @@
 
 <title>Namo Narayanaya Bhakthi Channel</title>
 
-<!-- ✅ SEO META -->
+<!-- 🔥 SEO META (AUTO FILLED) -->
 <meta name="description" id="metaDesc">
 <meta name="keywords" id="metaKeywords">
+<meta name="author" content="Namo Narayanaya Bhakthi Channel">
+
+<!-- OPEN GRAPH -->
 <meta property="og:title" id="ogTitle">
 <meta property="og:description" id="ogDesc">
 <meta property="og:url" id="ogUrl">
+<meta property="og:type" content="article">
 
 <style>
 :root{
@@ -65,8 +69,6 @@ header{
 }
 .logo{
   width:50px;
-  height:50px;
-  border-radius:50%;
 }
 .line1,.line2{
   font-size:1.6rem;
@@ -76,62 +78,30 @@ header{
 
 /* CONTAINER */
 .container{
-  max-width:1100px;
+  max-width:800px;
   margin:auto;
   padding:15px;
 }
 
 /* BREADCRUMB */
 .breadcrumb{
-  font-size:14px;
+  font-weight:bold;
   margin-bottom:10px;
-}
-.breadcrumb a{
-  color:var(--primary-pink);
 }
 
 /* TITLE */
 .post-title{
-  font-size:1.6rem;
+  text-align:center;
+  font-size:1.7rem;
   font-weight:bold;
+  margin-bottom:15px;
 }
-
-/* LAYOUT */
-.main-layout{
-  display:flex;
-  gap:20px;
-}
-.left-content{flex:2;}
-.right-sidebar{flex:1;}
 
 /* CONTENT */
 .post-content{
   background:#fff9db;
   padding:20px;
   border-radius:10px;
-}
-
-/* RELATED */
-#relatedPosts{
-  background:#fff9db;
-  padding:10px;
-  border-radius:10px;
-}
-.related-card{
-  padding:8px;
-  border-bottom:1px solid #eee;
-}
-.related-card a{
-  color:var(--primary-pink);
-  font-weight:bold;
-  text-decoration:none;
-}
-
-/* NAV */
-.post-nav{
-  display:flex;
-  justify-content:space-between;
-  margin-top:20px;
 }
 
 /* SHARE */
@@ -150,12 +120,43 @@ header{
 .wa{background:#25D366;}
 .fb{background:#1877F2;}
 .tw{background:#1DA1F2;}
-.cp{background:#607D8B;}
 
 /* BACK */
 .back-home{
   text-align:center;
   margin-top:20px;
+}
+
+/* NAV */
+.post-nav{
+  display:flex;
+  justify-content:space-between;
+  margin-top:20px;
+}
+
+/* RELATED */
+#relatedPosts{
+  margin-top:20px;
+  background:#fff9db;
+  padding:10px;
+  border-radius:10px;
+}
+.related-card{
+  padding:8px;
+  border-bottom:1px solid #eee;
+}
+.related-card a{
+  color:var(--primary-pink);
+  text-decoration:none;
+  font-weight:bold;
+}
+
+/* FOOTER */
+footer{
+  background:var(--dark-blue);
+  color:#fff;
+  text-align:center;
+  padding:12px;
 }
 
 /* SCROLL */
@@ -170,18 +171,6 @@ header{
   border-radius:50%;
   display:none;
 }
-
-/* MOBILE */
-@media(max-width:768px){
-  .main-layout{flex-direction:column;}
-}
-
-footer{
-  background:var(--dark-blue);
-  color:#fff;
-  text-align:center;
-  padding:12px;
-}
 </style>
 </head>
 
@@ -192,10 +181,13 @@ footer{
   <a href="/">Home</a>
   <a href="/about-us">About Us</a>
   <a href="/contact-us">Contact Us</a>
+  <a href="/dmca">DMCA</a>
+  <a href="/privacy-policy">Privacy Policy</a>
 </div>
 
 <div class="outer-links">
   <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
+  <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
 </div>
 
 <header>
@@ -211,31 +203,20 @@ footer{
 <div class="container">
 
 <div id="breadcrumb" class="breadcrumb"></div>
+
 <div id="postTitle" class="post-title"></div>
 
-<div class="main-layout">
+<div id="postContent" class="post-content"></div>
 
-  <div class="left-content">
-    <div id="postContent" class="post-content"></div>
-    <div id="postNav" class="post-nav"></div>
-  </div>
-
-  <div class="right-sidebar">
-    <div id="relatedPosts"></div>
-  </div>
-
-</div>
-
-<div class="share-row" id="shareRow" style="display:none;">
-  <a id="sWA" class="share-btn wa">WhatsApp</a>
-  <a id="sFB" class="share-btn fb">Facebook</a>
-  <a id="sTW" class="share-btn tw">Twitter</a>
-  <button onclick="copyURL()" class="share-btn cp">Copy</button>
-</div>
+<div class="share-row" id="shareRow"></div>
 
 <div class="back-home">
   <a href="/">← Back to Home</a>
 </div>
+
+<div id="postNav" class="post-nav"></div>
+
+<div id="relatedPosts"></div>
 
 </div>
 
@@ -245,21 +226,21 @@ footer{
 
 <script>
 const repoName="Omnnbc";
-const isGitHub=location.hostname.includes("github.io");
-const baseUrl=isGitHub?"/"+repoName:"";
-
+const baseUrl=location.hostname.includes("github.io")?"/"+repoName:"";
 let slug=location.pathname.replace(baseUrl,"").replace(/^\/|\/$/g,"");
 
-/* SEO FUNCTION */
+/* 🔥 AUTO SEO FUNCTION */
 function setSEO(post){
   let keyword = post.title.toLowerCase().split(" ").slice(0,4).join(" ");
+  let desc = post.description || post.title;
 
   document.title = post.title;
-  metaDesc.content = post.description || post.title;
+
+  metaDesc.content = desc;
   metaKeywords.content = keyword;
 
   ogTitle.content = post.title;
-  ogDesc.content = post.description || post.title;
+  ogDesc.content = desc;
   ogUrl.content = location.href;
 }
 
@@ -275,17 +256,36 @@ fetch(baseUrl+"/data/posts.json")
     fetch(baseUrl+"/posts/"+slug+".html")
     .then(r=>r.text())
     .then(html=>{
+
       postTitle.innerText=post.title;
 
       /* SEO */
       setSEO(post);
 
-      breadcrumb.innerHTML=`<a href="/">Omnnbc</a> > Posts > ${post.title}`;
+      breadcrumb.innerHTML=`Omnnbc > Posts > ${post.title}`;
 
       let temp=document.createElement("div");
       temp.innerHTML=html;
       temp.querySelectorAll("header,footer,nav").forEach(e=>e.remove());
       postContent.innerHTML=temp.innerHTML;
+
+      /* SHARE */
+      let url=encodeURIComponent(location.href);
+      let text=encodeURIComponent(post.title+"\n\n");
+
+      shareRow.innerHTML=`
+        <a href="https://api.whatsapp.com/send?text=${text}${url}" class="share-btn wa">WhatsApp</a>
+        <a href="https://facebook.com/sharer/sharer.php?u=${url}" class="share-btn fb">Facebook</a>
+        <a href="https://twitter.com/intent/tweet?text=${text}&url=${url}" class="share-btn tw">Twitter</a>
+      `;
+
+      /* PREV NEXT */
+      let prev=posts[index-1];
+      let next=posts[index+1];
+      postNav.innerHTML=`
+        ${prev?`<a href="${baseUrl}/${prev.url}">← ${prev.title}</a>`:""}
+        ${next?`<a href="${baseUrl}/${next.url}">${next.title} →</a>`:""}
+      `;
 
       /* RELATED */
       let related=posts.filter(p=>p.url!==slug).slice(0,5);
@@ -295,36 +295,9 @@ fetch(baseUrl+"/data/posts.json")
       });
       relatedPosts.innerHTML=relHTML;
 
-      /* NAV */
-      let prev=posts[index-1];
-      let next=posts[index+1];
-      postNav.innerHTML=`
-        ${prev?`<a href="${baseUrl}/${prev.url}">← ${prev.title}</a>`:""}
-        ${next?`<a href="${baseUrl}/${next.url}">${next.title} →</a>`:""}
-      `;
-
-      setupShare(post.title);
     });
   }
 });
-
-/* SHARE */
-function setupShare(title){
-  let url=encodeURIComponent(location.href);
-  let text=encodeURIComponent(title+"\n\n");
-
-  sWA.href=`https://api.whatsapp.com/send?text=${text}${url}`;
-  sFB.href=`https://www.facebook.com/sharer/sharer.php?u=${url}`;
-  sTW.href=`https://twitter.com/intent/tweet?text=${text}&url=${url}`;
-
-  shareRow.style.display="flex";
-}
-
-/* COPY */
-function copyURL(){
-  navigator.clipboard.writeText(location.href);
-  alert("Copied");
-}
 
 /* SCROLL */
 window.onscroll=()=>{
