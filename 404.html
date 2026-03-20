@@ -6,16 +6,12 @@
 
 <title>Namo Narayanaya Bhakthi Channel</title>
 
-<!-- 🔥 SEO META (AUTO FILLED) -->
+<!-- SEO META -->
 <meta name="description" id="metaDesc">
 <meta name="keywords" id="metaKeywords">
-<meta name="author" content="Namo Narayanaya Bhakthi Channel">
-
-<!-- OPEN GRAPH -->
 <meta property="og:title" id="ogTitle">
 <meta property="og:description" id="ogDesc">
 <meta property="og:url" id="ogUrl">
-<meta property="og:type" content="article">
 
 <style>
 :root{
@@ -30,23 +26,26 @@ body{
   background:#fffdf0;
 }
 
-/* MENU */
+/* 🔵 MENU */
 .top-links{
   background:var(--dark-blue);
   display:flex;
   overflow-x:auto;
+  white-space:nowrap;
 }
 .top-links a{
   color:#fff;
   padding:8px 16px;
   text-decoration:none;
+  flex-shrink:0;
 }
 
-/* SECOND MENU */
+/* 🔴 MENU */
 .outer-links{
   background:var(--primary-pink);
   display:flex;
   overflow-x:auto;
+  white-space:nowrap;
 }
 .outer-links a{
   background:#fff;
@@ -55,6 +54,7 @@ body{
   padding:6px 14px;
   border-radius:6px;
   text-decoration:none;
+  flex-shrink:0;
 }
 
 /* HEADER */
@@ -67,9 +67,7 @@ header{
   align-items:center;
   gap:10px;
 }
-.logo{
-  width:50px;
-}
+.logo{width:50px;}
 .line1,.line2{
   font-size:1.6rem;
   font-weight:900;
@@ -92,7 +90,7 @@ header{
 /* TITLE */
 .post-title{
   text-align:center;
-  font-size:1.7rem;
+  font-size:1.6rem;
   font-weight:bold;
   margin-bottom:15px;
 }
@@ -116,6 +114,7 @@ header{
   color:#fff;
   text-align:center;
   border-radius:6px;
+  text-decoration:none;
 }
 .wa{background:#25D366;}
 .fb{background:#1877F2;}
@@ -158,19 +157,6 @@ footer{
   text-align:center;
   padding:12px;
 }
-
-/* SCROLL */
-#topBtn{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  background:#C71585;
-  color:#fff;
-  border:none;
-  padding:10px;
-  border-radius:50%;
-  display:none;
-}
 </style>
 </head>
 
@@ -188,6 +174,7 @@ footer{
 <div class="outer-links">
   <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
   <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
+  <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu</a>
 </div>
 
 <header>
@@ -208,19 +195,21 @@ footer{
 
 <div id="postContent" class="post-content"></div>
 
-<div class="share-row" id="shareRow"></div>
+<!-- SHARE -->
+<div id="shareRow" class="share-row"></div>
 
+<!-- BACK -->
 <div class="back-home">
   <a href="/">← Back to Home</a>
 </div>
 
+<!-- PREV NEXT -->
 <div id="postNav" class="post-nav"></div>
 
+<!-- RELATED -->
 <div id="relatedPosts"></div>
 
 </div>
-
-<button id="topBtn">↑</button>
 
 <footer>© 2026 Namo Narayanaya Bhakthi Channel</footer>
 
@@ -229,81 +218,106 @@ const repoName="Omnnbc";
 const baseUrl=location.hostname.includes("github.io")?"/"+repoName:"";
 let slug=location.pathname.replace(baseUrl,"").replace(/^\/|\/$/g,"");
 
-/* 🔥 AUTO SEO FUNCTION */
+/* SEO */
 function setSEO(post){
-  let keyword = post.title.toLowerCase().split(" ").slice(0,4).join(" ");
-  let desc = post.description || post.title;
+  let keyword=post.title.toLowerCase().split(" ").slice(0,4).join(" ");
+  let desc=post.description||post.title;
 
-  document.title = post.title;
+  document.title=post.title;
+  metaDesc.content=desc;
+  metaKeywords.content=keyword;
 
-  metaDesc.content = desc;
-  metaKeywords.content = keyword;
-
-  ogTitle.content = post.title;
-  ogDesc.content = desc;
-  ogUrl.content = location.href;
+  ogTitle.content=post.title;
+  ogDesc.content=desc;
+  ogUrl.content=location.href;
 }
 
-/* LOAD POSTS */
-fetch(baseUrl+"/data/posts.json")
-.then(r=>r.json())
-.then(posts=>{
-  let index=posts.findIndex(p=>p.url===slug);
+/* LOAD PAGE FIRST */
+fetch(baseUrl+"/pages/"+slug+".html")
+.then(r=>{
+  if(r.ok) return r.text();
+  throw "no page";
+})
+.then(html=>{
+  setContent(slug.replace(/-/g," "),html);
+})
+.catch(()=>loadPost());
 
-  if(index!==-1){
-    let post=posts[index];
+/* LOAD POST */
+function loadPost(){
+  fetch(baseUrl+"/data/posts.json")
+  .then(r=>r.json())
+  .then(posts=>{
+    let index=posts.findIndex(p=>p.url===slug);
 
-    fetch(baseUrl+"/posts/"+slug+".html")
-    .then(r=>r.text())
-    .then(html=>{
+    if(index!==-1){
+      let post=posts[index];
 
-      postTitle.innerText=post.title;
+      fetch(baseUrl+"/posts/"+slug+".html")
+      .then(r=>r.text())
+      .then(html=>{
+        postTitle.innerText=post.title;
 
-      /* SEO */
-      setSEO(post);
+        /* SEO */
+        setSEO(post);
 
-      breadcrumb.innerHTML=`Omnnbc > Posts > ${post.title}`;
+        breadcrumb.innerHTML=`Omnnbc > Posts > ${post.title}`;
 
-      let temp=document.createElement("div");
-      temp.innerHTML=html;
-      temp.querySelectorAll("header,footer,nav").forEach(e=>e.remove());
-      postContent.innerHTML=temp.innerHTML;
+        let temp=document.createElement("div");
+        temp.innerHTML=html;
+        temp.querySelectorAll("header,footer,nav").forEach(e=>e.remove());
+        postContent.innerHTML=temp.innerHTML;
 
-      /* SHARE */
-      let url=encodeURIComponent(location.href);
-      let text=encodeURIComponent(post.title+"\n\n");
+        /* SHARE */
+        let url=encodeURIComponent(location.href);
+        let text=encodeURIComponent(post.title+"\n\n");
 
-      shareRow.innerHTML=`
-        <a href="https://api.whatsapp.com/send?text=${text}${url}" class="share-btn wa">WhatsApp</a>
-        <a href="https://facebook.com/sharer/sharer.php?u=${url}" class="share-btn fb">Facebook</a>
-        <a href="https://twitter.com/intent/tweet?text=${text}&url=${url}" class="share-btn tw">Twitter</a>
-      `;
+        shareRow.innerHTML=`
+          <a href="https://api.whatsapp.com/send?text=${text}${url}" class="share-btn wa">WhatsApp</a>
+          <a href="https://facebook.com/sharer/sharer.php?u=${url}" class="share-btn fb">Facebook</a>
+          <a href="https://twitter.com/intent/tweet?text=${text}&url=${url}" class="share-btn tw">Twitter</a>
+        `;
 
-      /* PREV NEXT */
-      let prev=posts[index-1];
-      let next=posts[index+1];
-      postNav.innerHTML=`
-        ${prev?`<a href="${baseUrl}/${prev.url}">← ${prev.title}</a>`:""}
-        ${next?`<a href="${baseUrl}/${next.url}">${next.title} →</a>`:""}
-      `;
+        /* PREV NEXT */
+        let prev=posts[index-1];
+        let next=posts[index+1];
+        postNav.innerHTML=`
+          ${prev?`<a href="${baseUrl}/${prev.url}">← ${prev.title}</a>`:""}
+          ${next?`<a href="${baseUrl}/${next.url}">${next.title} →</a>`:""}
+        `;
 
-      /* RELATED */
-      let related=posts.filter(p=>p.url!==slug).slice(0,5);
-      let relHTML="<h3>Related Posts</h3>";
-      related.forEach(r=>{
-        relHTML+=`<div class="related-card"><a href="${baseUrl}/${r.url}">${r.title}</a></div>`;
+        /* RELATED */
+        let related=posts.filter(p=>p.url!==slug).slice(0,5);
+        let relHTML="<h3>Related Posts</h3>";
+        related.forEach(r=>{
+          relHTML+=`<div class="related-card"><a href="${baseUrl}/${r.url}">${r.title}</a></div>`;
+        });
+        relatedPosts.innerHTML=relHTML;
+
       });
-      relatedPosts.innerHTML=relHTML;
+    }else{
+      show404();
+    }
+  });
+}
 
-    });
-  }
-});
+/* SET PAGE CONTENT */
+function setContent(title,html){
+  postTitle.innerText=title;
+  breadcrumb.innerHTML=`Omnnbc > ${title}`;
 
-/* SCROLL */
-window.onscroll=()=>{
-  topBtn.style.display=document.documentElement.scrollTop>200?"block":"none";
-};
-topBtn.onclick=()=>window.scrollTo({top:0,behavior:"smooth"});
+  let temp=document.createElement("div");
+  temp.innerHTML=html;
+  temp.querySelectorAll("header,footer,nav").forEach(e=>e.remove());
+
+  postContent.innerHTML=temp.innerHTML;
+}
+
+/* 404 */
+function show404(){
+  postTitle.innerText="404 - Not Found";
+  postContent.innerHTML="Page not found";
+}
 </script>
 
 </body>
