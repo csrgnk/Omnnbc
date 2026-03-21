@@ -18,7 +18,7 @@ body{
   color: #333;
 }
 
-/* 🔵 TOP NAVIGATION - Increased Size */
+/* 🔵 TOP NAVIGATION */
 .blue-nav{
   background:var(--dark-blue);
   display:flex;
@@ -27,7 +27,7 @@ body{
 }
 .blue-nav a{
   color:#fff;
-  font-size:16px; /* Increased back to original size */
+  font-size:16px;
   padding:12px 18px;
   text-decoration:none;
   flex-shrink: 0;
@@ -52,10 +52,10 @@ body{
   flex-shrink: 0;
 }
 
-/* HEADER - Increased Site Name Size */
+/* HEADER SETUP */
 .site-header{
   background:#fff9db;
-  padding:20px 15px;
+  padding:15px;
   border-bottom: 2px solid #ddd;
 }
 .header-box{
@@ -66,20 +66,33 @@ body{
   margin: auto;
 }
 .logo{
-  width:65px;
-  height:65px;
+  width:60px;
+  height:60px;
   border-radius:50%;
   object-fit: cover;
   border: 2px solid var(--primary-pink);
 }
-.line1,.line2{
-  font-size:1.8rem; /* Increased size for visibility */
+
+/* SITE NAME LOGIC */
+.site-name-wrapper {
+  display: flex;
+  flex-direction: row; /* Desktop: Single line */
+  gap: 8px;
+  font-size: 1.6rem; /* Good balanced size */
   font-weight: 900;
-  color:var(--primary-pink);
-  line-height: 1.1;
+  color: var(--primary-pink);
 }
 
-/* SEARCH SECTION - Decreased Width */
+/* MOBILE SPECIFIC HEADER */
+@media (max-width: 600px) {
+  .site-name-wrapper {
+    flex-direction: column; /* Mobile: Two lines */
+    gap: 0;
+    font-size: 1.4rem; /* Slightly smaller for mobile fit */
+  }
+}
+
+/* SEARCH SECTION */
 .search-wrapper{
   text-align:center;
   margin:25px 0;
@@ -87,7 +100,7 @@ body{
 }
 #searchInput{
   width: 80%;
-  max-width: 350px; /* Specific width decrease */
+  max-width: 350px;
   padding: 12px 20px;
   border-radius: 30px;
   border: 2px solid var(--primary-pink);
@@ -124,14 +137,14 @@ body{
 }
 .post-card{
   background:#FFFDE7;
-  padding:20px;
+  padding:18px;
   margin-bottom:15px;
   border-radius:12px;
   border-left:6px solid var(--primary-pink);
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 .post-link{ text-decoration:none; color:inherit; display:block; }
-.post-card h3 { margin: 0 0 8px 0; color: var(--dark-blue); font-size: 1.3rem; }
+.post-card h3 { margin: 0 0 8px 0; color: var(--dark-blue); font-size: 1.25rem; }
 .desc{ font-size:14px; color: #444; line-height: 1.5; }
 
 /* PAGINATION */
@@ -184,9 +197,9 @@ footer{
 <header class="site-header">
   <div class="header-box">
     <img src="/assets/images/Omnnbc-new.png" class="logo">
-    <div>
-      <div class="line1">Namo Narayanaya</div>
-      <div class="line2">Bhakthi Channel</div>
+    <div class="site-name-wrapper">
+      <span>Namo Narayanaya</span>
+      <span>Bhakthi Channel</span>
     </div>
   </div>
 </header>
@@ -235,7 +248,6 @@ function render(term = "") {
       const reg = new RegExp(`(${term})`, "gi");
       title = title.replace(reg, `<mark>$1</mark>`);
     }
-    // CLEAN URL LINK
     postsDiv.innerHTML += `
       <div class="post-card">
         <a href="${baseUrl}/${p.url}" class="post-link">
