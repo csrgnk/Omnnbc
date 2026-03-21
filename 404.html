@@ -28,7 +28,7 @@ body{
 .top-links { background:var(--dark-blue); }
 .top-links a { color:#fff; padding:12px 16px; text-decoration:none; }
 .outer-links { background:var(--primary-pink); padding:5px 0; }
-.outer-links a { background:#fff; color:var(--primary-pink); margin:5px; padding:8px 14px; border-radius:6px; text-decoration:none; font-weight:bold; }
+.outer-links a { background:#fff; color:var(--primary-pink); margin:5px; padding:8px 14px; border-radius:6px; text-decoration:none; font-weight:bold; font-size:14px; }
 
 /* HEADER */
 header{ background:#fff9db; padding:15px; border-bottom: 1px solid #ddd; }
@@ -40,30 +40,37 @@ header{ background:#fff9db; padding:15px; border-bottom: 1px solid #ddd; }
 .container{ max-width:800px; margin:auto; padding:15px; min-height: 60vh; }
 .breadcrumb{ font-size: 14px; color: #666; margin-bottom:15px; }
 .post-title{ text-align:center; font-size:1.8rem; font-weight:bold; color: var(--dark-blue); margin-bottom:20px; }
-.post-content{ background:#fff; padding:25px; border-radius:12px; border: 1px solid #eee; line-height: 1.6; }
+.post-content{ background:#fff; padding:25px; border-radius:12px; border: 1px solid #eee; line-height: 1.8; font-size: 18px; }
 
-/* SHARE BUTTONS */
-.share-label { font-weight: bold; margin: 20px 0 10px; color: var(--dark-blue); }
+/* SHARE SECTION */
+.share-label { font-weight: bold; margin: 30px 0 10px; color: var(--dark-blue); border-bottom: 2px solid var(--primary-pink); display: inline-block; }
 .share-row{ display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-bottom: 20px; }
-.share-btn{ padding:12px; color:#fff; text-align:center; border-radius:6px; text-decoration:none; font-weight: bold; font-size: 14px; cursor: pointer; border: none; }
+.share-btn{ padding:12px; color:#fff; text-align:center; border-radius:6px; text-decoration:none; font-weight: bold; font-size: 14px; cursor: pointer; border: none; outline: none; }
 .wa{ background:#25D366; }
 .fb{ background:#1877F2; }
 .tw{ background:#000000; }
 .copy-btn{ background:#607D8B; }
 
-/* PREV NEXT NAVIGATION (Text Setup - Left & Right) */
+/* PREV NEXT NAVIGATION */
 .post-nav{ display:flex; justify-content:space-between; align-items: flex-start; margin: 30px 0; padding: 20px 0; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; gap: 20px; }
-.nav-item { flex: 1; text-decoration: none; color: var(--primary-pink); font-weight: bold; font-size: 15px; }
+.nav-item { flex: 1; }
+.nav-item a { text-decoration: none; color: var(--primary-pink); font-weight: bold; font-size: 15px; display: block; }
 .nav-next { text-align: right; }
 .nav-label { display: block; font-size: 12px; color: #888; margin-bottom: 4px; text-transform: uppercase; }
 
-/* BACK BUTTON */
-.back-home-btn { display: inline-block; background: var(--dark-blue); color: white; padding: 12px 25px; border-radius: 25px; text-decoration: none; font-weight: bold; margin: 20px 0; }
+/* RELATED POSTS SECTION */
+.related-section { margin-top: 40px; background: #fff9db; padding: 20px; border-radius: 12px; }
+.related-section h3 { margin-top: 0; color: var(--dark-blue); border-bottom: 1px solid #ccc; padding-bottom: 10px; }
+.related-list { list-style: none; padding: 0; margin: 0; }
+.related-item { padding: 10px 0; border-bottom: 1px solid #eee; }
+.related-item:last-child { border-bottom: none; }
+.related-item a { color: var(--primary-pink); text-decoration: none; font-weight: bold; }
+
+/* HOME BUTTON */
+.back-home-btn { display: inline-block; background: var(--dark-blue); color: white; padding: 12px 30px; border-radius: 25px; text-decoration: none; font-weight: bold; margin: 30px 0; transition: 0.3s; }
+.back-home-btn:hover { background: var(--primary-pink); }
 
 footer{ background:var(--dark-blue); color:#fff; text-align:center; padding:20px; margin-top: 40px; }
-
-/* 404 SPECIFIC */
-.error-box { text-align: center; padding: 50px 20px; }
 </style>
 </head>
 
@@ -96,15 +103,21 @@ footer{ background:var(--dark-blue); color:#fff; text-align:center; padding:20px
 <div class="container">
   <div id="breadcrumb" class="breadcrumb"></div>
   <h1 id="postTitle" class="post-title"></h1>
-  <div id="postContent" class="post-content">Loading content...</div>
+  
+  <div id="postContent" class="post-content">Loading...</div>
 
   <div class="share-label">Share this Post:</div>
   <div id="shareRow" class="share-row"></div>
 
   <div id="postNav" class="post-nav"></div>
 
+  <div id="relatedSection" class="related-section" style="display:none;">
+    <h3>Related Stotrams</h3>
+    <div id="relatedList" class="related-list"></div>
+  </div>
+
   <div style="text-align:center;">
-    <a href="/" class="back-home-btn">Go to Homepage</a>
+    <a href="/" class="back-home-btn">← Go to Homepage</a>
   </div>
 </div>
 
@@ -117,24 +130,12 @@ const baseUrl = isGitHub ? "/" + repoName : "";
 let slug = location.pathname.replace(baseUrl, "").replace(/^\/|\/$/g, "");
 
 function copyUrl() {
-  const el = document.createElement('textarea');
-  el.value = window.location.href;
-  document.body.appendChild(el);
-  el.select();
-  document.execCommand('copy');
-  document.body.removeChild(el);
-  alert("Link copied to clipboard!");
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    alert("Link copied to clipboard!");
+  });
 }
 
-/* SEO */
-function setSEO(post) {
-  document.title = post.title;
-  metaDesc.content = post.description || post.title;
-  ogTitle.content = post.title;
-  ogUrl.content = location.href;
-}
-
-/* LOAD CONTENT */
+/* LOAD DATA */
 fetch(baseUrl + "/data/posts.json")
   .then(r => r.json())
   .then(posts => {
@@ -142,23 +143,24 @@ fetch(baseUrl + "/data/posts.json")
 
     if (index !== -1) {
       let post = posts[index];
-      setSEO(post);
+      
+      // Update SEO/Title
+      document.title = post.title;
       breadcrumb.innerHTML = `Home > Posts > ${post.title}`;
       postTitle.innerText = post.title;
 
+      // Fetch Content
       fetch(`${baseUrl}/posts/${slug}.html`)
         .then(r => r.text())
         .then(html => {
           let temp = document.createElement("div");
           temp.innerHTML = html;
-          // Clean the HTML to only show the post body
           temp.querySelectorAll("header,footer,nav,script,style").forEach(e => e.remove());
           postContent.innerHTML = temp.innerHTML;
 
-          /* SHARE BUTTONS WITH TITLE & URL */
+          // Share Logic
           let shareUrl = encodeURIComponent(window.location.href);
           let shareTitle = encodeURIComponent(post.title + "\n\n");
-
           shareRow.innerHTML = `
             <a href="https://api.whatsapp.com/send?text=${shareTitle}${shareUrl}" class="share-btn wa" target="_blank">WhatsApp</a>
             <a href="https://facebook.com/sharer/sharer.php?u=${shareUrl}" class="share-btn fb" target="_blank">Facebook</a>
@@ -166,18 +168,28 @@ fetch(baseUrl + "/data/posts.json")
             <button onclick="copyUrl()" class="share-btn copy-btn">Copy Link</button>
           `;
 
-          /* PREV & NEXT TEXT LINKS */
-          let prev = posts[index + 1]; // Older post
-          let next = posts[index - 1]; // Newer post
-
+          // Navigation (Text Based)
+          let prev = posts[index + 1]; 
+          let next = posts[index - 1]; 
           postNav.innerHTML = `
             <div class="nav-item">
-              ${prev ? `<span class="nav-label">← Previous</span><a href="${baseUrl}/${prev.url}" style="color:var(--primary-pink); text-decoration:none;">${prev.title}</a>` : ""}
+              ${prev ? `<span class="nav-label">← Previous</span><a href="${baseUrl}/${prev.url}">${prev.title}</a>` : ""}
             </div>
             <div class="nav-item nav-next">
-              ${next ? `<span class="nav-label">Next →</span><a href="${baseUrl}/${next.url}" style="color:var(--primary-pink); text-decoration:none;">${next.title}</a>` : ""}
+              ${next ? `<span class="nav-label">Next →</span><a href="${baseUrl}/${next.url}">${next.title}</a>` : ""}
             </div>
           `;
+
+          // Related Posts Logic
+          let related = posts.filter(p => p.url !== slug).sort(() => 0.5 - Math.random()).slice(0, 5);
+          if(related.length > 0) {
+              document.getElementById("relatedSection").style.display = "block";
+              let relHtml = "";
+              related.forEach(r => {
+                  relHtml += `<div class="related-item"><a href="${baseUrl}/${r.url}">${r.title}</a></div>`;
+              });
+              document.getElementById("relatedList").innerHTML = relHtml;
+          }
         });
     } else {
       show404();
@@ -185,9 +197,8 @@ fetch(baseUrl + "/data/posts.json")
   }).catch(() => show404());
 
 function show404() {
-  postTitle.innerText = "404 - Page Not Found";
-  postContent.innerHTML = `<div class="error-box">క్షమించండి, మీరు వెతుకుతున్న పేజీ అందుబాటులో లేదు.<br><br>The page you are looking for might have been removed or renamed.</div>`;
-  breadcrumb.innerHTML = "Home > 404 Error";
+  postTitle.innerText = "404 - Not Found";
+  postContent.innerHTML = `<p style="text-align:center;">క్షమించండి, ఈ పేజీ అందుబాటులో లేదు.</p>`;
 }
 </script>
 
