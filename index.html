@@ -13,7 +13,7 @@
 
 body{
   margin:0;
-  font-family:'Segoe UI',Arial;
+  font-family:'Segoe UI',Arial,sans-serif;
   background:#f1f3f5;
 }
 
@@ -22,11 +22,12 @@ body{
   background:var(--dark-blue);
   display:flex;
   overflow-x:auto;
+  white-space: nowrap;
 }
 .blue-nav a{
   color:#fff;
   font-size:16px;
-  padding:8px 16px;
+  padding:12px 16px;
   text-decoration:none;
   flex-shrink:0;
 }
@@ -36,6 +37,7 @@ body{
   background:var(--primary-pink);
   display:flex;
   overflow-x:auto;
+  padding:5px 0;
 }
 .scroll-container a{
   background:#fff;
@@ -46,52 +48,70 @@ body{
   text-decoration:none;
   flex-shrink:0;
   font-weight:600;
+  font-size: 14px;
 }
 
 /* HEADER */
 .site-header{
   background:#fff9db;
-  padding:10px;
+  padding:15px;
+  border-bottom: 2px solid #eee;
 }
 .header-box{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:15px;
+  max-width: 700px;
+  margin: auto;
 }
 .logo{
-  width:50px;
-  height:50px;
+  width:60px;
+  height:60px;
   border-radius:50%;
+  object-fit: cover;
+  border: 2px solid var(--primary-pink);
 }
 .line1,.line2{
-  font-size:1.6rem;
+  font-size:1.5rem;
   font-weight:900;
   color:var(--primary-pink);
+  line-height: 1.2;
 }
 
 /* SEARCH */
 .search-box{
   text-align:center;
-  margin:10px 0;
+  margin:20px 0;
+  position: relative;
 }
 #searchInput{
-  width:80%;
-  max-width:300px;
-  padding:8px;
-  border-radius:20px;
+  width:85%;
+  max-width:400px;
+  padding:12px 20px;
+  border-radius:25px;
   border:2px solid var(--primary-pink);
+  font-size: 16px;
+  outline: none;
 }
 #suggestBox{
-  max-width:300px;
+  max-width:400px;
   margin:5px auto;
   background:#fff;
   border-radius:8px;
-  box-shadow:0 2px 10px rgba(0,0,0,0.2);
+  box-shadow:0 4px 15px rgba(0,0,0,0.1);
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 100;
 }
 #suggestBox div{
-  padding:8px;
+  padding:10px 15px;
   border-bottom:1px solid #eee;
   cursor:pointer;
+  text-align: left;
+}
+#suggestBox div:hover{
+  background: #f8f9fa;
 }
 
 /* POSTS */
@@ -102,35 +122,47 @@ body{
 }
 .post-card{
   background:#FFFDE7;
-  padding:14px;
-  margin-bottom:12px;
-  border-radius:8px;
-  border-left:5px solid var(--primary-pink);
+  padding:16px;
+  margin-bottom:15px;
+  border-radius:10px;
+  border-left:6px solid var(--primary-pink);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  transition: transform 0.2s;
+}
+.post-card:hover {
+  transform: translateY(-2px);
 }
 .post-link{
   text-decoration:none;
   color:inherit;
   display:block;
 }
+.post-card h3 {
+  margin: 0 0 8px 0;
+  color: var(--dark-blue);
+}
 .desc{
   font-size:14px;
+  color: #444;
+  line-height: 1.5;
 }
 
 /* PAGINATION */
 .pagination{
   display:flex;
   overflow-x:auto;
-  gap:10px;
+  gap:8px;
   justify-content:center;
-  padding:20px;
+  padding:30px 10px;
 }
 .page-btn{
-  min-width:40px;
-  height:40px;
-  border-radius:50%;
-  border:2px solid var(--primary-pink);
+  min-width:35px;
+  height:35px;
+  border-radius:5px;
+  border:1px solid var(--primary-pink);
   background:#fff;
   color:var(--primary-pink);
+  cursor: pointer;
 }
 .page-btn.active{
   background:var(--primary-pink);
@@ -141,14 +173,14 @@ footer{
   background:var(--dark-blue);
   color:#fff;
   text-align:center;
-  padding:12px;
+  padding:20px;
+  margin-top: 20px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🔵 MENU -->
 <nav class="blue-nav">
   <a href="/">Home</a>
   <a href="/about-us">About Us</a>
@@ -157,7 +189,6 @@ footer{
   <a href="/privacy-policy">Privacy Policy</a>
 </nav>
 
-<!-- 🔴 MENU -->
 <div class="scroll-container">
   <a href="/">Home</a>
   <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
@@ -166,10 +197,9 @@ footer{
   <a href="https://csrgnk.github.io/manache-shlok/hindi/">Manache Shlok Hindi</a>
 </div>
 
-<!-- HEADER -->
 <header class="site-header">
   <div class="header-box">
-    <img src="assets/images/Omnnbc-new.png" class="logo">
+    <img src="assets/images/Omnnbc-new.png" class="logo" alt="Logo">
     <div>
       <div class="line1">Namo Narayanaya</div>
       <div class="line2">Bhakthi Channel</div>
@@ -177,105 +207,120 @@ footer{
   </div>
 </header>
 
-<!-- SEARCH -->
 <div class="search-box">
   <input type="text" id="searchInput" placeholder="Search stotrams...">
   <div id="suggestBox"></div>
 </div>
 
-<!-- POSTS -->
 <div class="container" id="posts"></div>
 
-<!-- PAGINATION -->
 <div class="pagination" id="pagination"></div>
 
 <footer>© 2026 Namo Narayanaya Bhakthi Channel</footer>
 
 <script>
-const repoName="Omnnbc";
-const isGitHub=location.hostname.includes("github.io");
-const baseUrl=isGitHub?"/"+repoName:"";
+const repoName = "Omnnbc";
+// Logic to detect if we are on the custom domain or the github.io subfolder
+const isGitHubSubfolder = window.location.hostname.includes("github.io") && window.location.pathname.startsWith("/" + repoName);
+const baseUrl = isGitHubSubfolder ? "/" + repoName : "";
 
-let allPosts=[],filteredPosts=[];
-let currentPage=1;
-const perPage=25;
-let contentCache={};
+let allPosts = [], filteredPosts = [];
+let currentPage = 1;
+const perPage = 25;
+let contentCache = {};
 
-/* LOAD POSTS */
-fetch(baseUrl+"/data/posts.json?v="+Date.now())
-.then(r=>r.json())
-.then(async data=>{
-  allPosts=data.sort((a,b)=>new Date(b.publish_date)-new Date(a.publish_date));
+const postsContainer = document.getElementById("posts");
+const paginationContainer = document.getElementById("pagination");
+const suggestBox = document.getElementById("suggestBox");
 
-  await Promise.all(allPosts.map(async p=>{
-    try{
-      let res=await fetch(baseUrl+"/posts/"+p.url+".html");
-      let html=await res.text();
-      contentCache[p.url]=html.toLowerCase();
-    }catch{contentCache[p.url]="";}
-  }));
-
-  filteredPosts=[...allPosts];
-  render();
-});
-
-/* SEARCH */
-const input=document.getElementById("searchInput");
-
-input.addEventListener("input",()=>{
-  let val=input.value.toLowerCase();
-
-  if(!val){
-    filteredPosts=[...allPosts];
+/* LOAD DATA */
+fetch(`${baseUrl}/data/posts.json?v=${Date.now()}`)
+  .then(res => {
+    if(!res.ok) throw new Error("Could not find posts.json");
+    return res.json();
+  })
+  .then(async data => {
+    // Sort by date newest first
+    allPosts = data.sort((a,b) => new Date(b.publish_date) - new Date(a.publish_date));
+    filteredPosts = [...allPosts];
+    
     render();
-    suggestBox.innerHTML="";
+
+    // Cache content for deeper search (background)
+    allPosts.forEach(async p => {
+      try {
+        let r = await fetch(`${baseUrl}/posts/${p.url}.html`);
+        if(r.ok) {
+          let text = await r.text();
+          contentCache[p.url] = text.toLowerCase();
+        }
+      } catch(e) { console.warn("Failed to cache:", p.url); }
+    });
+  })
+  .catch(err => {
+    postsContainer.innerHTML = `<p style="text-align:center; color:red;">Error loading posts. Please check if data/posts.json exists.</p>`;
+    console.error(err);
+  });
+
+/* SEARCH LOGIC */
+document.getElementById("searchInput").addEventListener("input", (e) => {
+  const val = e.target.value.toLowerCase().trim();
+  
+  if(!val) {
+    filteredPosts = [...allPosts];
+    suggestBox.innerHTML = "";
+    render();
     return;
   }
 
-  filteredPosts=allPosts.filter(p=>
-    p.title.toLowerCase().includes(val) ||
-    (p.description||"").toLowerCase().includes(val) ||
-    contentCache[p.url]?.includes(val)
+  filteredPosts = allPosts.filter(p => 
+    p.title.toLowerCase().includes(val) || 
+    (p.description || "").toLowerCase().includes(val) ||
+    (contentCache[p.url] && contentCache[p.url].includes(val))
   );
 
-  currentPage=1;
+  currentPage = 1;
   render(val);
-  showSuggest(filteredPosts.slice(0,5));
+  showSuggestions(filteredPosts.slice(0, 5), val);
 });
 
-/* SUGGESTIONS */
-function showSuggest(list){
-  suggestBox.innerHTML="";
-  list.forEach(p=>{
-    let div=document.createElement("div");
-    div.innerText=p.title;
-    div.onclick=()=>location.href=baseUrl+"/"+p.url;
+function showSuggestions(list, term) {
+  suggestBox.innerHTML = "";
+  list.forEach(p => {
+    const div = document.createElement("div");
+    div.innerHTML = p.title;
+    div.onclick = () => {
+        window.location.href = `${baseUrl}/posts/${p.url}.html`;
+    };
     suggestBox.appendChild(div);
   });
 }
 
-/* RENDER */
-function render(term=""){
-  let start=(currentPage-1)*perPage;
-  let items=filteredPosts.slice(start,start+perPage);
+/* RENDERING */
+function render(highlightTerm = "") {
+  const start = (currentPage - 1) * perPage;
+  const end = start + perPage;
+  const items = filteredPosts.slice(start, end);
 
-  posts.innerHTML="";
+  postsContainer.innerHTML = "";
+  
+  if(items.length === 0) {
+    postsContainer.innerHTML = "<p style='text-align:center;'>No posts found.</p>";
+  }
 
-  items.forEach(p=>{
-    let desc=(p.description||"").substring(0,180);
+  items.forEach(p => {
+    let title = p.title;
+    let desc = (p.description || "").substring(0, 150);
 
-    if(term){
-      desc=highlight(desc,term);
+    if(highlightTerm) {
+      const reg = new RegExp(`(${highlightTerm})`, "gi");
+      title = title.replace(reg, `<mark>$1</mark>`);
+      desc = desc.replace(reg, `<mark>$1</mark>`);
     }
 
-    let title=p.title;
-    if(term){
-      title=highlight(title,term);
-    }
-
-    posts.innerHTML+=`
+    postsContainer.innerHTML += `
       <div class="post-card">
-        <a href="${baseUrl}/${p.url}" class="post-link">
+        <a href="${baseUrl}/posts/${p.url}.html" class="post-link">
           <h3>${title}</h3>
           <div class="desc">${desc}...</div>
         </a>
@@ -283,26 +328,26 @@ function render(term=""){
     `;
   });
 
-  setupPagination();
+  renderPagination();
 }
 
-/* HIGHLIGHT */
-function highlight(text,term){
-  return text.replace(new RegExp(`(${term})`,"gi"),'<span style="background:yellow;">$1</span>');
-}
+function renderPagination() {
+  const totalPages = Math.ceil(filteredPosts.length / perPage);
+  paginationContainer.innerHTML = "";
+  
+  if(totalPages <= 1) return;
 
-/* PAGINATION */
-function setupPagination(){
-  let total=Math.ceil(filteredPosts.length/perPage);
-  pagination.innerHTML="";
-  for(let i=1;i<=total;i++){
-    pagination.innerHTML+=`<button class="page-btn ${i===currentPage?'active':''}" onclick="go(${i})">${i}</button>`;
+  for(let i = 1; i <= totalPages; i++) {
+    const btn = document.createElement("button");
+    btn.innerText = i;
+    btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+    btn.onclick = () => {
+      currentPage = i;
+      render();
+      window.scrollTo(0, 0);
+    };
+    paginationContainer.appendChild(btn);
   }
-}
-
-function go(p){
-  currentPage=p;
-  render();
 }
 </script>
 
