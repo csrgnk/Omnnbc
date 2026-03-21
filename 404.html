@@ -5,32 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Namo Narayanaya Bhakthi Channel</title>
 
-<meta name="description" id="metaDesc">
-<meta property="og:title" id="ogTitle">
-<meta property="og:url" id="ogUrl">
-
 <style>
 :root{
   --primary-pink:#C71585;
   --dark-blue:#001a4d;
+  --bg-yellow: #fff9db;
 }
 
-body{
-  margin:0;
-  font-family:'Segoe UI',Arial,sans-serif;
-  background:#fffdf0;
-  color: #333;
-}
+body{ margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#fffdf0; color: #333; }
 
 /* NAVIGATION */
-.top-links, .outer-links { display:flex; overflow-x:auto; white-space:nowrap; -webkit-overflow-scrolling: touch; }
+.top-links, .outer-links { display:flex; overflow-x:auto; white-space:nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.top-links::-webkit-scrollbar, .outer-links::-webkit-scrollbar { display: none; }
 .top-links { background:var(--dark-blue); }
 .top-links a { color:#fff; padding:12px 16px; text-decoration:none; font-size: 15px; }
 .outer-links { background:var(--primary-pink); padding:5px 0; }
 .outer-links a { background:#fff; color:var(--primary-pink); margin:5px; padding:8px 14px; border-radius:6px; text-decoration:none; font-weight:bold; font-size:13px; }
 
 /* HEADER */
-header{ background:#fff9db; padding:15px; border-bottom: 1px solid #ddd; }
+header{ background:var(--bg-yellow); padding:15px; border-bottom: 1px solid #ddd; }
 .header-box{ display:flex; align-items:center; gap:12px; max-width:800px; margin:auto; }
 .logo { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-pink); }
 .line1,.line2{ font-size:1.5rem; font-weight:900; color:var(--primary-pink); line-height: 1.2; }
@@ -41,32 +34,23 @@ header{ background:#fff9db; padding:15px; border-bottom: 1px solid #ddd; }
 .post-title{ text-align:center; font-size:1.8rem; font-weight:bold; color: var(--dark-blue); margin-bottom:20px; line-height: 1.3; }
 .post-content{ background:#fff; padding:25px; border-radius:12px; border: 1px solid #eee; line-height: 1.8; font-size: 19px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
 
-/* SHARE SECTION */
-.share-label { font-weight: bold; margin: 30px 0 10px; color: var(--dark-blue); border-bottom: 2px solid var(--primary-pink); display: inline-block; }
-.share-row{ display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-bottom: 20px; }
-.share-btn{ padding:12px; color:#fff; text-align:center; border-radius:6px; text-decoration:none; font-weight: bold; font-size: 14px; cursor: pointer; border: none; }
-.wa{ background:#25D366; }
-.fb{ background:#1877F2; }
-.tw{ background:#000000; }
-.copy-btn{ background:#607D8B; }
-
-/* PREV NEXT NAVIGATION */
+/* DATE-BASED NAVIGATION: Left (Old) / Right (New) */
 .post-nav{ display:flex; justify-content:space-between; align-items: flex-start; margin: 30px 0; padding: 20px 0; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; gap: 20px; }
 .nav-item { flex: 1; }
 .nav-item a { text-decoration: none; color: var(--primary-pink); font-weight: bold; font-size: 16px; display: block; }
 .nav-next { text-align: right; }
 .nav-label { display: block; font-size: 11px; color: #888; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
 
-/* RELATED POSTS */
-.related-section { margin-top: 40px; background: #fff9db; padding: 20px; border-radius: 12px; border: 1px solid #ffe58f; }
-.related-section h3 { margin-top: 0; color: var(--dark-blue); font-size: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
-.related-item { padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
-.related-item:last-child { border-bottom: none; }
-.related-item a { color: var(--primary-pink); text-decoration: none; font-weight: bold; font-size: 16px; }
+/* RELATED & BUTTONS */
+.related-section { margin-top: 40px; background: var(--bg-yellow); padding: 20px; border-radius: 12px; border: 1px solid #ffe58f; }
+.related-item { padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
+.related-item a { color: var(--primary-pink); text-decoration: none; font-weight: bold; }
+.back-home-btn { display: inline-block; background: var(--dark-blue); color: white; padding: 14px 35px; border-radius: 30px; text-decoration: none; font-weight: bold; margin: 30px 0; transition: 0.3s; }
+.back-home-btn:hover { background: var(--primary-pink); }
 
-/* HOME BUTTON */
-.back-home-btn { display: inline-block; background: var(--dark-blue); color: white; padding: 14px 35px; border-radius: 30px; text-decoration: none; font-weight: bold; margin: 30px 0; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-.back-home-btn:hover { background: var(--primary-pink); transform: translateY(-2px); }
+/* 404 STYLING */
+.error-container { text-align: center; padding: 50px 20px; }
+.error-code { font-size: 80px; font-weight: 900; color: var(--primary-pink); margin: 0; }
 
 footer{ background:var(--dark-blue); color:#fff; text-align:center; padding:25px; margin-top: 50px; }
 </style>
@@ -78,7 +62,6 @@ footer{ background:var(--dark-blue); color:#fff; text-align:center; padding:25px
   <a href="/">Home</a>
   <a href="/about-us">About Us</a>
   <a href="/contact-us">Contact Us</a>
-  <a href="/dmca">DMCA</a>
   <a href="/privacy-policy">Privacy Policy</a>
 </nav>
 
@@ -101,22 +84,17 @@ footer{ background:var(--dark-blue); color:#fff; text-align:center; padding:25px
 <div class="container">
   <div id="breadcrumb" class="breadcrumb"></div>
   <h1 id="postTitle" class="post-title"></h1>
-  
-  <div id="postContent" class="post-content">Loading content...</div>
+  <div id="postContent" class="post-content">Loading...</div>
 
-  <div id="shareSection" style="display:none;">
-    <div class="share-label">Share this Post:</div>
-    <div id="shareRow" class="share-row"></div>
+  <div id="postExtras" style="display:none;">
+    <div id="postNav" class="post-nav"></div>
+    <div id="relatedSection" class="related-section">
+      <h3>Related Content</h3>
+      <div id="relatedList"></div>
+    </div>
   </div>
 
-  <div id="postNav" class="post-nav" style="display:none;"></div>
-
-  <div id="relatedSection" class="related-section" style="display:none;">
-    <h3>Related Stotrams</h3>
-    <div id="relatedList"></div>
-  </div>
-
-  <div style="text-align:center;">
+  <div id="homeBtnWrapper" style="text-align:center;">
     <a href="/" class="back-home-btn">← Back to Homepage</a>
   </div>
 </div>
@@ -127,102 +105,91 @@ footer{ background:var(--dark-blue); color:#fff; text-align:center; padding:25px
 const repoName = "Omnnbc";
 const isGitHub = location.hostname.includes("github.io");
 const baseUrl = isGitHub ? "/" + repoName : "";
-
-// Detect current slug
 let path = location.pathname.replace(baseUrl, "").replace(/^\/|\/$/g, "");
 let slug = path || "home";
 
-// List of static pages (add your menu slugs here)
-const staticPages = ["about-us", "contact-us", "dmca", "privacy-policy"];
+// Slugs for static pages
+const staticPages = ["about-us", "contact-us", "privacy-policy", "dmca"];
 
-function copyUrl() {
-  navigator.clipboard.writeText(window.location.href).then(() => {
-    alert("లింక్ కాపీ చేయబడింది! (Link copied!)");
-  });
-}
-
-// 1. Check if it's a static page first
 if (staticPages.includes(slug)) {
     loadContent(slug, "pages", slug.replace("-", " ").toUpperCase());
 } else {
-    // 2. Otherwise, load from posts.json
     fetch(baseUrl + "/data/posts.json?v=" + Date.now())
-      .then(r => r.json())
+      .then(r => {
+          if(!r.ok) throw new Error();
+          return r.json();
+      })
       .then(posts => {
+        // Sort: Newest Date First
+        posts.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+
         let index = posts.findIndex(p => p.url === slug || p.url === slug.replace(".html", ""));
         if (index !== -1) {
-          let post = posts[index];
-          loadContent(post.url, "posts", post.title, index, posts);
+          loadContent(posts[index].url, "posts", posts[index].title, index, posts);
         } else {
           show404();
         }
       }).catch(() => show404());
 }
 
-function loadContent(fileSlug, folder, title, index = -1, allPosts = []) {
+function loadContent(fileSlug, folder, title, index = -1, sortedPosts = []) {
     document.title = title;
     document.getElementById("breadcrumb").innerHTML = `Home > ${folder === 'pages' ? 'Page' : 'Posts'} > ${title}`;
     document.getElementById("postTitle").innerText = title;
 
     fetch(`${baseUrl}/${folder}/${fileSlug}.html`)
-    .then(res => {
-        if(!res.ok) throw new Error("File not found");
-        return res.text();
-    })
+    .then(res => { if(!res.ok) throw new Error(); return res.text(); })
     .then(html => {
         let temp = document.createElement("div");
         temp.innerHTML = html;
+        // Clean inner layout tags if they exist
         temp.querySelectorAll("header,footer,nav,script,style").forEach(e => e.remove());
         document.getElementById("postContent").innerHTML = temp.innerHTML;
 
-        // If it's a POST, show extra features
         if (folder === "posts") {
-            showPostFeatures(title, index, allPosts);
+            document.getElementById("postExtras").style.display = "block";
+            renderNavigation(index, sortedPosts);
         }
     })
     .catch(() => show404());
 }
 
-function showPostFeatures(title, index, posts) {
-    // Show Share
-    document.getElementById("shareSection").style.display = "block";
-    let sUrl = encodeURIComponent(window.location.href);
-    let sTitle = encodeURIComponent(title + "\n\n");
-    document.getElementById("shareRow").innerHTML = `
-        <a href="https://api.whatsapp.com/send?text=${sTitle}${sUrl}" class="share-btn wa" target="_blank">WhatsApp</a>
-        <a href="https://facebook.com/sharer/sharer.php?u=${sUrl}" class="share-btn fb" target="_blank">Facebook</a>
-        <a href="https://twitter.com/intent/tweet?text=${sTitle}&url=${sUrl}" class="share-btn tw" target="_blank">Twitter</a>
-        <button onclick="copyUrl()" class="share-btn copy-btn">Copy Link</button>
-    `;
+function renderNavigation(index, posts) {
+    // Left = Older (index + 1)
+    // Right = Newer (index - 1)
+    let older = posts[index + 1]; 
+    let newer = posts[index - 1]; 
 
-    // Show Nav (Prev/Next)
-    document.getElementById("postNav").style.display = "flex";
-    let prev = posts[index + 1]; 
-    let next = posts[index - 1]; 
     document.getElementById("postNav").innerHTML = `
         <div class="nav-item">
-            ${prev ? `<span class="nav-label">← Previous</span><a href="${baseUrl}/${prev.url}">${prev.title}</a>` : ""}
+            ${older ? `<span class="nav-label">← Previous Post (Older)</span><a href="${baseUrl}/${older.url}">${older.title}</a>` : ""}
         </div>
         <div class="nav-item nav-next">
-            ${next ? `<span class="nav-label">Next →</span><a href="${baseUrl}/${next.url}">${next.title}</a>` : ""}
+            ${newer ? `<span class="nav-label">Next Post (Newer) →</span><a href="${baseUrl}/${newer.url}">${newer.title}</a>` : ""}
         </div>
     `;
 
-    // Show Related
-    let related = posts.filter(p => p.url !== posts[index].url).sort(() => 0.5 - Math.random()).slice(0, 5);
-    if(related.length > 0) {
-        document.getElementById("relatedSection").style.display = "block";
-        let relHtml = "";
-        related.forEach(r => {
-            relHtml += `<div class="related-item"><a href="${baseUrl}/${r.url}">${r.title}</a></div>`;
-        });
-        document.getElementById("relatedList").innerHTML = relHtml;
-    }
+    // Related Posts
+    let related = posts.filter((_, i) => i !== index).sort(() => 0.5 - Math.random()).slice(0, 5);
+    let relHtml = "";
+    related.forEach(r => relHtml += `<div class="related-item"><a href="${baseUrl}/${r.url}">${r.title}</a></div>`);
+    document.getElementById("relatedList").innerHTML = relHtml;
 }
 
 function show404() {
-  document.getElementById("postTitle").innerText = "404 - Not Found";
-  document.getElementById("postContent").innerHTML = `<div style="text-align:center; padding:20px;">క్షమించండి, మీరు వెతుకుతున్న పేజీ అందుబాటులో లేదు.<br><br>The page you are looking for was not found.</div>`;
+  document.title = "404 - Not Found";
+  document.getElementById("breadcrumb").innerHTML = "Home > 404 Error";
+  document.getElementById("postTitle").style.display = "none";
+  document.getElementById("postExtras").style.display = "none";
+  
+  document.getElementById("postContent").innerHTML = `
+    <div class="error-container">
+      <h2 class="error-code">404</h2>
+      <h3 style="color:var(--dark-blue)">క్షమించండి! పేజీ కనుగొనబడలేదు.</h3>
+      <p>మీరు వెతుకుతున్న పేజీ తొలగించబడి ఉండవచ్చు లేదా అందుబాటులో లేదు.</p>
+      <p>(The page you are looking for might have been removed or is temporarily unavailable.)</p>
+    </div>
+  `;
 }
 </script>
 
