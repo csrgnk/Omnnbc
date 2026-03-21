@@ -1,6 +1,32 @@
 <!DOCTYPE html>
 <html lang="te">
 <head>
+  <script type="text/javascript">
+    // Disable right-click context menu
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    }, false);
+
+    // Disable keyboard shortcuts (Ctrl+C, Ctrl+U, Ctrl+S, etc.)
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && (e.key === 'c' || e.key === 'u' || e.key === 's' || e.key === 'a' || e.key === 'p')) {
+            e.preventDefault();
+        }
+    }, false);
+
+    // Disable text selection via CSS and JS
+    document.onselectstart = function() { return false; };
+</script>
+
+<style>
+    /* CSS to disable text selection */
+    body {
+        -webkit-user-select: none; /* Safari */
+        -ms-user-select: none;     /* IE 10 and IE 11 */
+        user-select: none;         /* Standard syntax */
+    }
+</style>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Namo Narayanaya Bhakthi Channel</title>
