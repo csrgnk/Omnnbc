@@ -50,7 +50,7 @@ header{ background:#fff9db; padding:15px; border-bottom: 1px solid #ddd; }
 .tw{ background:#000000; }
 .copy-btn{ background:#607D8B; }
 
-/* PREV NEXT NAVIGATION (Text Left & Right) */
+/* PREV NEXT NAVIGATION */
 .post-nav{ display:flex; justify-content:space-between; align-items: flex-start; margin: 30px 0; padding: 20px 0; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; gap: 20px; }
 .nav-item { flex: 1; }
 .nav-item a { text-decoration: none; color: var(--primary-pink); font-weight: bold; font-size: 16px; display: block; }
@@ -104,10 +104,12 @@ footer{ background:var(--dark-blue); color:#fff; text-align:center; padding:25px
   
   <div id="postContent" class="post-content">Loading content...</div>
 
-  <div class="share-label">Share this Post:</div>
-  <div id="shareRow" class="share-row"></div>
+  <div id="shareSection" style="display:none;">
+    <div class="share-label">Share this Post:</div>
+    <div id="shareRow" class="share-row"></div>
+  </div>
 
-  <div id="postNav" class="post-nav"></div>
+  <div id="postNav" class="post-nav" style="display:none;"></div>
 
   <div id="relatedSection" class="related-section" style="display:none;">
     <h3>Related Stotrams</h3>
@@ -126,8 +128,12 @@ const repoName = "Omnnbc";
 const isGitHub = location.hostname.includes("github.io");
 const baseUrl = isGitHub ? "/" + repoName : "";
 
-// Detect the current post slug from the URL
-let slug = location.pathname.replace(baseUrl, "").replace(/^\/|\/$/g, "");
+// Detect current slug
+let path = location.pathname.replace(baseUrl, "").replace(/^\/|\/$/g, "");
+let slug = path || "home";
+
+// List of static pages (add your menu slugs here)
+const staticPages = ["about-us", "contact-us", "dmca", "privacy-policy"];
 
 function copyUrl() {
   navigator.clipboard.writeText(window.location.href).then(() => {
@@ -135,72 +141,84 @@ function copyUrl() {
   });
 }
 
-/* FETCH POST DATA */
-fetch(baseUrl + "/data/posts.json?v=" + Date.now())
-  .then(r => r.json())
-  .then(posts => {
-    // Find the current post
-    let index = posts.findIndex(p => p.url === slug || p.url === slug.replace(".html", ""));
+// 1. Check if it's a static page first
+if (staticPages.includes(slug)) {
+    loadContent(slug, "pages", slug.replace("-", " ").toUpperCase());
+} else {
+    // 2. Otherwise, load from posts.json
+    fetch(baseUrl + "/data/posts.json?v=" + Date.now())
+      .then(r => r.json())
+      .then(posts => {
+        let index = posts.findIndex(p => p.url === slug || p.url === slug.replace(".html", ""));
+        if (index !== -1) {
+          let post = posts[index];
+          loadContent(post.url, "posts", post.title, index, posts);
+        } else {
+          show404();
+        }
+      }).catch(() => show404());
+}
 
-    if (index !== -1) {
-      let post = posts[index];
-      
-      // Update SEO and Breadcrumb
-      document.title = post.title;
-      document.getElementById("breadcrumb").innerHTML = `Home > Posts > ${post.title}`;
-      document.getElementById("postTitle").innerText = post.title;
+function loadContent(fileSlug, folder, title, index = -1, allPosts = []) {
+    document.title = title;
+    document.getElementById("breadcrumb").innerHTML = `Home > ${folder === 'pages' ? 'Page' : 'Posts'} > ${title}`;
+    document.getElementById("postTitle").innerText = title;
 
-      // FETCH THE HTML CONTENT FROM /posts/ FOLDER
-      fetch(`${baseUrl}/posts/${post.url}.html`)
-        .then(res => {
-          if(!res.ok) throw new Error("File not found");
-          return res.text();
-        })
-        .then(html => {
-          let temp = document.createElement("div");
-          temp.innerHTML = html;
-          // Clean up unwanted tags from the inner post file
-          temp.querySelectorAll("header,footer,nav,script,style").forEach(e => e.remove());
-          document.getElementById("postContent").innerHTML = temp.innerHTML;
+    fetch(`${baseUrl}/${folder}/${fileSlug}.html`)
+    .then(res => {
+        if(!res.ok) throw new Error("File not found");
+        return res.text();
+    })
+    .then(html => {
+        let temp = document.createElement("div");
+        temp.innerHTML = html;
+        temp.querySelectorAll("header,footer,nav,script,style").forEach(e => e.remove());
+        document.getElementById("postContent").innerHTML = temp.innerHTML;
 
-          // SHARE SETUP
-          let sUrl = encodeURIComponent(window.location.href);
-          let sTitle = encodeURIComponent(post.title + "\n\n");
-          document.getElementById("shareRow").innerHTML = `
-            <a href="https://api.whatsapp.com/send?text=${sTitle}${sUrl}" class="share-btn wa" target="_blank">WhatsApp</a>
-            <a href="https://facebook.com/sharer/sharer.php?u=${sUrl}" class="share-btn fb" target="_blank">Facebook</a>
-            <a href="https://twitter.com/intent/tweet?text=${sTitle}&url=${sUrl}" class="share-btn tw" target="_blank">Twitter</a>
-            <button onclick="copyUrl()" class="share-btn copy-btn">Copy Link</button>
-          `;
+        // If it's a POST, show extra features
+        if (folder === "posts") {
+            showPostFeatures(title, index, allPosts);
+        }
+    })
+    .catch(() => show404());
+}
 
-          // PREV/NEXT NAVIGATION
-          let prev = posts[index + 1]; 
-          let next = posts[index - 1]; 
-          document.getElementById("postNav").innerHTML = `
-            <div class="nav-item">
-              ${prev ? `<span class="nav-label">← Previous</span><a href="${baseUrl}/${prev.url}">${prev.title}</a>` : ""}
-            </div>
-            <div class="nav-item nav-next">
-              ${next ? `<span class="nav-label">Next →</span><a href="${baseUrl}/${next.url}">${next.title}</a>` : ""}
-            </div>
-          `;
+function showPostFeatures(title, index, posts) {
+    // Show Share
+    document.getElementById("shareSection").style.display = "block";
+    let sUrl = encodeURIComponent(window.location.href);
+    let sTitle = encodeURIComponent(title + "\n\n");
+    document.getElementById("shareRow").innerHTML = `
+        <a href="https://api.whatsapp.com/send?text=${sTitle}${sUrl}" class="share-btn wa" target="_blank">WhatsApp</a>
+        <a href="https://facebook.com/sharer/sharer.php?u=${sUrl}" class="share-btn fb" target="_blank">Facebook</a>
+        <a href="https://twitter.com/intent/tweet?text=${sTitle}&url=${sUrl}" class="share-btn tw" target="_blank">Twitter</a>
+        <button onclick="copyUrl()" class="share-btn copy-btn">Copy Link</button>
+    `;
 
-          // RELATED POSTS (5 Random)
-          let related = posts.filter(p => p.url !== post.url).sort(() => 0.5 - Math.random()).slice(0, 5);
-          if(related.length > 0) {
-              document.getElementById("relatedSection").style.display = "block";
-              let relHtml = "";
-              related.forEach(r => {
-                  relHtml += `<div class="related-item"><a href="${baseUrl}/${r.url}">${r.title}</a></div>`;
-              });
-              document.getElementById("relatedList").innerHTML = relHtml;
-          }
-        })
-        .catch(() => show404());
-    } else {
-      show404();
+    // Show Nav (Prev/Next)
+    document.getElementById("postNav").style.display = "flex";
+    let prev = posts[index + 1]; 
+    let next = posts[index - 1]; 
+    document.getElementById("postNav").innerHTML = `
+        <div class="nav-item">
+            ${prev ? `<span class="nav-label">← Previous</span><a href="${baseUrl}/${prev.url}">${prev.title}</a>` : ""}
+        </div>
+        <div class="nav-item nav-next">
+            ${next ? `<span class="nav-label">Next →</span><a href="${baseUrl}/${next.url}">${next.title}</a>` : ""}
+        </div>
+    `;
+
+    // Show Related
+    let related = posts.filter(p => p.url !== posts[index].url).sort(() => 0.5 - Math.random()).slice(0, 5);
+    if(related.length > 0) {
+        document.getElementById("relatedSection").style.display = "block";
+        let relHtml = "";
+        related.forEach(r => {
+            relHtml += `<div class="related-item"><a href="${baseUrl}/${r.url}">${r.title}</a></div>`;
+        });
+        document.getElementById("relatedList").innerHTML = relHtml;
     }
-  }).catch(() => show404());
+}
 
 function show404() {
   document.getElementById("postTitle").innerText = "404 - Not Found";
