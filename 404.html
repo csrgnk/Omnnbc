@@ -1,158 +1,148 @@
-```html
 <!DOCTYPE html>
 <html lang="te">
 <head>
 <script type="text/javascript">
-document.addEventListener('contextmenu', e => e.preventDefault());
-document.addEventListener('keydown', function(e){
- if(e.ctrlKey && ['c','u','s','a','p'].includes(e.key)) e.preventDefault();
-});
-document.onselectstart = () => false;
+  /* Content Protection */
+  document.addEventListener('contextmenu', e => e.preventDefault());
+  document.addEventListener('keydown', e => {
+    if(e.ctrlKey && ['c','u','s','a','p'].includes(e.key)) e.preventDefault();
+  });
+  document.onselectstart = () => false;
 </script>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Namo Narayanaya Bhakthi Channel</title>
-
-<!-- SEO META -->
-<meta name="description" content="">
-<meta property="og:title" content="">
-<meta property="og:url" content="">
-<meta property="og:type" content="article">
-<meta property="og:image" content="/assets/images/Omnnbc-new.png">
 
 <style>
 :root{
  --primary-pink:#C71585;
  --dark-blue:#001a4d;
  --bg-yellow:#fff9db;
+ --soft-gray: #f4f4f4;
 }
 
-body{margin:0;font-family:'Segoe UI',Arial;background:#fffdf0;color:#333}
+body{margin:0;font-family:'Segoe UI',Roboto,Arial;background:#fffdf0;color:#333;line-height:1.6;}
 
-/* NAV */
-.top-links,.outer-links{display:flex;overflow-x:auto;white-space:nowrap}
-.top-links{background:var(--dark-blue)}
-.top-links a{color:#fff;padding:12px;text-decoration:none}
-.outer-links{background:var(--primary-pink)}
-.outer-links a{background:#fff;color:var(--primary-pink);margin:5px;padding:8px;border-radius:6px;text-decoration:none;font-weight:bold}
+/* NAVIGATION */
+.top-links, .outer-links { display:flex; overflow-x:auto; white-space:nowrap; scrollbar-width: none; }
+.top-links::-webkit-scrollbar, .outer-links::-webkit-scrollbar { display: none; }
+.top-links { background:var(--dark-blue); }
+.top-links a { color:#fff; padding:12px 16px; text-decoration:none; font-size: 14px; transition: 0.3s; }
+.top-links a:hover { background: rgba(255,255,255,0.1); }
+
+.outer-links { background:var(--primary-pink); padding:5px 0; }
+.outer-links a { background:#fff; color:var(--primary-pink); margin:5px; padding:8px 15px; border-radius:20px; text-decoration:none; font-weight:bold; font-size:12px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
 /* HEADER */
-header{background:var(--bg-yellow);padding:15px}
-.header-box{display:flex;align-items:center;gap:10px}
-.logo{width:60px;height:60px;border-radius:50%}
-.line1,.line2{color:var(--primary-pink);font-weight:900}
+header{background:var(--bg-yellow); padding:20px; border-bottom: 2px solid var(--primary-pink); }
+.header-box{display:flex; align-items:center; gap:15px; max-width:900px; margin:auto;}
+.logo{width:65px; height:65px; border-radius:50%; border: 2px solid var(--primary-pink); background:#fff;}
+.line1{color:var(--primary-pink); font-size: 1.6rem; font-weight:900; line-height:1;}
+.line2{color:var(--dark-blue); font-size: 1.1rem; font-weight:700;}
 
-/* CONTENT */
-.container{max-width:800px;margin:auto;padding:15px}
-.post-title{text-align:center;font-size:1.8rem;color:var(--dark-blue)}
-.post-content{background:#fff;padding:20px;border-radius:10px}
+/* CONTENT AREA */
+.container{max-width:850px; margin:auto; padding:20px; min-height: 70vh;}
+#breadcrumb{ font-size: 12px; color: #777; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+.post-title{text-align:center; font-size:2rem; color:var(--dark-blue); margin-bottom:25px; font-weight: 800;}
+.post-content{background:#fff; padding:30px; border-radius:15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); font-size: 1.2rem; border: 1px solid #eee;}
 
-/* SHARE */
-.share-buttons{
- display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:10px
+/* SHARE BUTTONS */
+.share-section { background: #fff; padding: 20px; border-radius: 15px; margin-top: 30px; border: 1px solid #eee; text-align: center; }
+.share-buttons{ display:flex; justify-content:center; flex-wrap:wrap; gap:10px; margin-top:15px; }
+.share-buttons a, .share-buttons button {
+ padding:12px 18px; border-radius:25px; color:#fff; border:none; text-decoration:none; cursor:pointer; font-weight:bold; font-size: 13px; transition: 0.3s;
 }
-.share-buttons a,.share-buttons button{
- padding:10px 14px;border-radius:20px;color:#fff;border:none;text-decoration:none;cursor:pointer;font-weight:bold
-}
-#waShare{background:#25D366}
-#fbShare{background:#1877F2}
-#twShare{background:#000}
-#tgShare{background:#0088cc}
-#igShare{background:#E1306C}
-.copyBtn{background:var(--primary-pink)}
+.share-buttons a:hover, .share-buttons button:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 
-/* NAV POSTS */
-.post-nav{display:flex;justify-content:space-between;margin:25px 0}
+#waShare{background:#25D366} #fbShare{background:#1877F2} #twShare{background:#000} #tgShare{background:#0088cc} #igShare{background:#E1306C} .copyBtn{background:#607d8b}
+
+/* POST NAVIGATION */
+.post-nav{display:flex; justify-content:space-between; margin:30px 0; gap: 15px;}
+.post-nav a { flex: 1; background: #fff; padding: 15px; border-radius: 10px; text-decoration: none; color: var(--primary-pink); font-weight: bold; font-size: 14px; border: 1px solid #ddd; transition: 0.3s; text-align: center; }
+.post-nav a:hover { background: var(--primary-pink); color: #fff; }
 
 /* RELATED */
-.related-section{margin-top:30px}
+.related-section{ margin-top:40px; border-top: 1px solid #ddd; padding-top: 20px; }
+.related-list div { padding: 10px 0; border-bottom: 1px solid #eee; }
+.related-list a { color: var(--dark-blue); text-decoration: none; font-weight: 600; font-size: 15px; }
+.related-list a:hover { color: var(--primary-pink); }
 
-/* 404 */
-.error-container{text-align:center;padding:40px}
-.error-code{font-size:70px;color:var(--primary-pink)}
-
-footer{background:var(--dark-blue);color:#fff;text-align:center;padding:20px;margin-top:40px}
+footer{background:var(--dark-blue); color:#fff; text-align:center; padding:30px; margin-top:50px; font-size: 14px;}
 </style>
 </head>
 
 <body>
 
 <nav class="top-links">
-<a href="/">Home</a>
-<a href="/about-us">About Us</a>
-<a href="/contact-us">Contact Us</a>
-<a href="/privacy-policy">Privacy Policy</a>
+  <a href="/">Home</a>
+  <a href="/about-us">About Us</a>
+  <a href="/contact-us">Contact Us</a>
+  <a href="/privacy-policy">Privacy Policy</a>
 </nav>
 
 <div class="outer-links">
-<a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
-<a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
-<a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu</a>
+  <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
+  <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
+  <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu</a>
 </div>
 
 <header>
-<div class="header-box">
-<img src="/assets/images/Omnnbc-new.png" class="logo">
-<div>
-<div class="line1">Namo Narayanaya</div>
-<div class="line2">Bhakthi Channel</div>
-</div>
-</div>
+  <div class="header-box">
+    <img src="/assets/images/Omnnbc-new.png" class="logo" alt="Namo Narayanaya Logo">
+    <div>
+      <div class="line1">Namo Narayanaya</div>
+      <div class="line2">Bhakthi Channel</div>
+    </div>
+  </div>
 </header>
 
 <div class="container">
+  <div id="breadcrumb"></div>
+  <h1 id="postTitle" class="post-title"></h1>
+  
+  <div id="postContent" class="post-content">Loading...</div>
 
-<div id="breadcrumb"></div>
+  <div id="shareSection" class="share-section" style="display:none;">
+    <h3 style="color:var(--dark-blue); margin:0;">Share this Post</h3>
+    <div class="share-buttons">
+      <a id="waShare" target="_blank">WhatsApp</a>
+      <a id="fbShare" target="_blank">Facebook</a>
+      <a id="twShare" target="_blank">Twitter</a>
+      <a id="tgShare" target="_blank">Telegram</a>
+      <button id="igShare">Instagram</button>
+      <button class="copyBtn" onclick="copyLink()" id="mainCopyBtn">Copy Link</button>
+    </div>
+  </div>
 
-<h1 id="postTitle" class="post-title"></h1>
-<div id="postContent" class="post-content">Loading...</div>
-
-<!-- SHARE -->
-<div id="shareSection" style="display:none;text-align:center;margin-top:25px">
-<h3 style="color:var(--dark-blue)">Share this Post</h3>
-<div class="share-buttons">
-<a id="waShare" target="_blank">WhatsApp</a>
-<a id="fbShare" target="_blank">Facebook</a>
-<a id="twShare" target="_blank">Twitter</a>
-<a id="tgShare" target="_blank">Telegram</a>
-<button id="igShare">Instagram</button>
-<button class="copyBtn" onclick="copyLink()">Copy Link</button>
-</div>
-</div>
-
-<div id="postExtras" style="display:none">
-<div id="postNav" class="post-nav"></div>
-
-<div class="related-section">
-<h3>Related Content</h3>
-<div id="relatedList"></div>
-</div>
+  <div id="postExtras" style="display:none">
+    <div id="postNav" class="post-nav"></div>
+    <div class="related-section">
+      <h3 style="color:var(--dark-blue);">Related Content</h3>
+      <div id="relatedList" class="related-list"></div>
+    </div>
+  </div>
 </div>
 
-</div>
-
-<footer>© 2026 Namo Narayanaya Bhakthi Channel</footer>
+<footer>© 2026 Namo Narayanaya Bhakthi Channel - All Rights Reserved</footer>
 
 <script>
 const repoName="Omnnbc";
 const isGitHub=location.hostname.includes("github.io");
 const baseUrl=isGitHub?"/"+repoName:"";
-
 let path=location.pathname.replace(baseUrl,"").replace(/^\/|\/$/g,"");
 let slug=path||"home";
 
 const staticPages=["about-us","contact-us","privacy-policy","dmca"];
 
 if(staticPages.includes(slug)){
- loadContent(slug,"pages",slug);
+ loadContent(slug,"pages",slug.replace("-"," ").toUpperCase());
 }else{
  fetch(baseUrl+"/data/posts.json?v="+Date.now())
  .then(r=>r.json())
  .then(posts=>{
   posts.sort((a,b)=>new Date(b.date)-new Date(a.date));
-  let index=posts.findIndex(p=>p.url===slug);
+  let index=posts.findIndex(p=>p.url===slug || p.url===slug.replace(".html",""));
   if(index!==-1){
    loadContent(posts[index].url,"posts",posts[index].title,index,posts);
   }else show404();
@@ -161,25 +151,13 @@ if(staticPages.includes(slug)){
 
 function loadContent(fileSlug,folder,title,index=-1,posts=[]){
  document.title=title;
-
- document.getElementById("breadcrumb").innerHTML="Home > "+title;
+ document.getElementById("breadcrumb").innerHTML="Home &raquo; " + (folder==='posts'?'Post':'Page') + " &raquo; " + title;
  document.getElementById("postTitle").innerText=title;
-
- // SEO
- document.querySelector('meta[name="description"]').setAttribute("content",title);
- document.querySelector('meta[property="og:title"]').setAttribute("content",title);
- document.querySelector('meta[property="og:url"]').setAttribute("content",location.href);
 
  fetch(`${baseUrl}/${folder}/${fileSlug}.html`)
  .then(r=>r.text())
  .then(html=>{
-  let temp=document.createElement("div");
-  temp.innerHTML=html;
-
-  // LAZY LOAD
-  temp.querySelectorAll("img").forEach(img=>img.loading="lazy");
-
-  document.getElementById("postContent").innerHTML=temp.innerHTML;
+  document.getElementById("postContent").innerHTML=html;
 
   if(folder==="posts"){
    document.getElementById("postExtras").style.display="block";
@@ -196,49 +174,50 @@ function renderNavigation(index,posts){
  let newer=posts[index-1];
 
  document.getElementById("postNav").innerHTML=`
- <div>${older?`<a href="${baseUrl}/${older.url}">← ${older.title}</a>`:""}</div>
- <div style="text-align:right">${newer?`<a href="${baseUrl}/${newer.url}">${newer.title} →</a>`:""}</div>
+ ${older?`<a href="${baseUrl}/${older.url}"> &larr; Older: ${older.title}</a>`:""}
+ ${newer?`<a href="${baseUrl}/${newer.url}">Newer: ${newer.title} &rarr;</a>`:""}
  `;
 
- let related=posts.filter((_,i)=>i!==index).slice(0,5);
+ let related=posts.filter((_,i)=>i!==index).sort(() => 0.5 - Math.random()).slice(0,5);
  let html="";
  related.forEach(r=>html+=`<div><a href="${baseUrl}/${r.url}">${r.title}</a></div>`);
  document.getElementById("relatedList").innerHTML=html;
 }
 
-/* SHARE */
 function setupShareButtons(title){
  let url=location.href;
- let text=encodeURIComponent(title+" - "+url);
+ let text=encodeURIComponent(title + " - Read more at: " + url);
 
  waShare.href="https://wa.me/?text="+text;
- fbShare.href="https://www.facebook.com/sharer/sharer.php?u="+url;
+ fbShare.href="https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(url);
  twShare.href="https://twitter.com/intent/tweet?text="+text;
- tgShare.href="https://t.me/share/url?url="+url+"&text="+encodeURIComponent(title);
+ tgShare.href="https://t.me/share/url?url="+encodeURIComponent(url)+"&text="+encodeURIComponent(title);
 
  igShare.onclick=function(){
   navigator.clipboard.writeText(url);
-  alert("Link copied! Open Instagram and paste.");
+  alert("Link copied! Paste it in your Instagram Story or DM.");
   window.open("https://www.instagram.com/");
  };
 }
 
 function copyLink(){
  navigator.clipboard.writeText(location.href);
- alert("Link copied!");
+ let btn = document.getElementById("mainCopyBtn");
+ btn.innerText = "Copied!";
+ setTimeout(() => btn.innerText = "Copy Link", 2000);
 }
 
-/* 404 */
 function show404(){
- document.title="404";
+ document.title="404 - Not Found";
  document.getElementById("postContent").innerHTML=`
- <div class="error-container">
- <h2 class="error-code">404</h2>
- <p>క్షమించండి! పేజీ కనుగొనబడలేదు.</p>
+ <div style="text-align:center; padding:50px;">
+ <h2 style="font-size:80px; color:var(--primary-pink); margin:0;">404</h2>
+ <h3 style="color:var(--dark-blue);">క్షమించండి! ఈ పేజీ అందుబాటులో లేదు.</h3>
+ <p>The page you are looking for does not exist.</p>
+ <a href="/" style="display:inline-block; margin-top:20px; background:var(--dark-blue); color:#fff; padding:10px 25px; text-decoration:none; border-radius:25px;">Go To Home</a>
  </div>`;
 }
 </script>
 
 </body>
 </html>
-```
