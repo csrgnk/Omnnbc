@@ -47,12 +47,14 @@ header { background: var(--bg-yellow); padding: 15px 5px; border-bottom: 2px sol
 /* SHARE SECTION */
 .share-section { background: #fff; padding: 15px; border-radius: 12px; margin-top: 25px; border: 1px solid #eee; text-align: center; }
 .share-buttons { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
-.share-buttons a, .share-buttons button { padding: 10px 16px; border-radius: 25px; color: #fff; border: none; text-decoration: none; cursor: pointer; font-weight: bold; font-size: 12px; }
-#waShare{background:#25D366} #fbShare{background:#1877F2} #twShare{background:#000} #tgShare{background:#0088cc} #igShare{background:#E1306C} .copyBtn{background:#607d8b}
+.share-btn { padding: 10px 16px; border-radius: 25px; color: #fff; border: none; text-decoration: none; cursor: pointer; font-weight: bold; font-size: 12px; }
 
-/* POST NAVIGATION */
+/* RELATED & NAV */
 .post-nav { display: flex; justify-content: space-between; margin: 30px 0; gap: 10px; }
 .post-nav a { flex: 1; background: #fff; padding: 12px; border-radius: 8px; text-decoration: none; color: var(--primary-pink); font-weight: bold; font-size: 13px; border: 1px solid #ddd; text-align: center; }
+.related-section { margin-top: 40px; border-top: 1px solid #ddd; padding-top: 20px; }
+.related-item { padding: 8px 0; border-bottom: 1px solid #eee; }
+.related-item a { color: var(--primary-pink); text-decoration: none; font-weight: bold; font-size: 14px; }
 
 footer { background: var(--dark-blue); color: #fff; text-align: center; padding: 25px; margin-top: 50px; }
 </style>
@@ -95,6 +97,10 @@ footer { background: var(--dark-blue); color: #fff; text-align: center; padding:
 
   <div id="postExtras" style="display:none">
     <div id="postNav" class="post-nav"></div>
+    <div class="related-section">
+      <h3 style="color:var(--dark-blue); font-size: 18px;">Related Content</h3>
+      <div id="relatedList"></div>
+    </div>
   </div>
 </div>
 
@@ -107,14 +113,11 @@ const baseUrl=isGitHub?"/"+repoName:"";
 let path=location.pathname.replace(baseUrl,"").replace(/^\/|\/$/g,"");
 let slug=path||"home";
 
-// List of Static Pages
 const staticPages = ["about-us", "contact-us", "privacy-policy", "dmca"];
 
 if (staticPages.includes(slug)) {
-    // If it's a PAGE
     loadContent(slug, "pages", slug.replace("-", " ").toUpperCase());
 } else {
-    // If it's a POST
     fetch(baseUrl + "/data/posts.json?v=" + Date.now())
       .then(r => r.json())
       .then(posts => {
@@ -136,41 +139,52 @@ function loadContent(fileSlug, folder, title, index = -1, posts = []) {
         document.getElementById("postContent").innerHTML = html;
         
         if (folder === "posts") {
-            // Show Share and Navigation only for Posts
             document.getElementById("postExtras").style.display = "block";
             document.getElementById("shareSection").style.display = "block";
-            setupShareButtons(title);
-            renderNavigation(index, posts);
+            
+            // Trigger Share Buttons
+            setupShare(title);
+            
+            // Trigger Navigation and Related Posts
+            renderNavAndRelated(index, posts);
         } else {
-            // Hide Share and Navigation for Pages
             document.getElementById("postExtras").style.display = "none";
             document.getElementById("shareSection").style.display = "none";
         }
     }).catch(() => show404());
 }
 
-function renderNavigation(index, posts) {
+function setupShare(title) {
+    let url = encodeURIComponent(location.href);
+    let text = encodeURIComponent(title + " - " + location.href);
+    document.getElementById("shareButtons").innerHTML = `
+        <a href="https://wa.me/?text=${text}" target="_blank" class="share-btn" style="background:#25D366">WhatsApp</a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" class="share-btn" style="background:#1877F2">Facebook</a>
+        <a href="https://twitter.com/intent/tweet?text=${text}" target="_blank" class="share-btn" style="background:#000">Twitter</a>
+        <button onclick="copyLink()" id="cpBtn" class="share-btn" style="background:#607d8b; border:none; color:white; cursor:pointer;">Copy Link</button>
+    `;
+}
+
+function renderNavAndRelated(index, posts) {
+    // Navigation
     let older = posts[index + 1], newer = posts[index - 1];
     document.getElementById("postNav").innerHTML = `
         ${older ? `<a href="${baseUrl}/${older.url}">&larr; Older Post</a>` : ""}
         ${newer ? `<a href="${baseUrl}/${newer.url}">Newer Post &rarr;</a>` : ""}
     `;
-}
 
-function setupShareButtons(title) {
-    let url = encodeURIComponent(location.href);
-    let text = encodeURIComponent(title + " - " + location.href);
-    document.getElementById("shareButtons").innerHTML = `
-        <a href="https://wa.me/?text=${text}" target="_blank" class="share-btn wa">WhatsApp</a>
-        <a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" class="share-btn fb">Facebook</a>
-        <a href="https://twitter.com/intent/tweet?text=${text}" target="_blank" class="share-btn tw">Twitter</a>
-        <button class="copyBtn" onclick="copyLink()" id="mainCopyBtn" style="background:#607d8b; padding:10px 16px; border-radius:25px; color:#fff; border:none; cursor:pointer; font-weight:bold; font-size:12px;">Copy Link</button>
-    `;
+    // Related Posts (Random 5)
+    let related = posts.filter((_, i) => i !== index).sort(() => 0.5 - Math.random()).slice(0, 5);
+    let relHtml = "";
+    related.forEach(r => {
+        relHtml += `<div class="related-item"><a href="${baseUrl}/${r.url}">${r.title}</a></div>`;
+    });
+    document.getElementById("relatedList").innerHTML = relHtml;
 }
 
 function copyLink() {
     navigator.clipboard.writeText(location.href);
-    let btn = document.getElementById("mainCopyBtn");
+    let btn = document.getElementById("cpBtn");
     btn.innerText = "Copied!";
     setTimeout(() => btn.innerText = "Copy Link", 2000);
 }
