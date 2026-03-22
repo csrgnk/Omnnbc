@@ -15,27 +15,20 @@
 <title>Namo Narayanaya Bhakthi Channel</title>
 
 <style>
-:root{
- --primary-pink:#C71585;
- --dark-blue:#001a4d;
- --bg-yellow:#fff9db;
-}
-
+:root{ --primary-pink:#C71585; --dark-blue:#001a4d; --bg-yellow:#fff9db; }
 body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#fffdf0; color:#333; line-height:1.6; }
 
 /* NAVIGATION */
 .top-links, .outer-links { display:flex; overflow-x:auto; white-space:nowrap; scrollbar-width: none; }
-.top-links::-webkit-scrollbar, .outer-links::-webkit-scrollbar { display: none; }
 .top-links { background:var(--dark-blue); }
 .top-links a { color:#fff; padding:12px 16px; text-decoration:none; font-size: 14px; }
 .outer-links { background:var(--primary-pink); padding:5px 0; }
 .outer-links a { background:#fff; color:var(--primary-pink); margin:5px; padding:8px 15px; border-radius:20px; text-decoration:none; font-weight:bold; font-size:12px; }
 
-/* RESPONSIVE HEADER - UPDATED SIZE */
+/* RESPONSIVE HEADER */
 header { background: var(--bg-yellow); padding: 15px 5px; border-bottom: 2px solid var(--primary-pink); }
 .header-box { display: flex; align-items: center; justify-content: center; gap: 10px; max-width: 100%; margin: auto; text-align: center; }
 .logo { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--primary-pink); background: #fff; flex-shrink: 0; }
-
 .site-name-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .line1, .line2 { color: var(--primary-pink); font-size: 1.6rem; font-weight: 900; line-height: 1.2; margin: 0; white-space: nowrap; }
 
@@ -47,28 +40,21 @@ header { background: var(--bg-yellow); padding: 15px 5px; border-bottom: 2px sol
 
 /* CONTENT AREA */
 .container { max-width: 850px; margin: auto; padding: 15px; min-height: 70vh; }
-#breadcrumb { font-size: 11px; color: #777; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+#breadcrumb { font-size: 11px; color: #777; margin-bottom: 15px; text-transform: uppercase; }
 .post-title { text-align: center; font-size: 1.7rem; color: var(--dark-blue); margin-bottom: 20px; font-weight: 800; }
 .post-content { background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.1rem; text-align: center; }
 
 /* SHARE SECTION */
 .share-section { background: #fff; padding: 15px; border-radius: 12px; margin-top: 25px; border: 1px solid #eee; text-align: center; }
 .share-buttons { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
-.share-buttons a, .share-buttons button { padding: 10px 16px; border-radius: 25px; color: #fff; border: none; text-decoration: none; cursor: pointer; font-weight: bold; font-size: 12px; transition: 0.3s; }
-.share-buttons a:hover { opacity: 0.8; transform: translateY(-2px); }
-
+.share-buttons a, .share-buttons button { padding: 10px 16px; border-radius: 25px; color: #fff; border: none; text-decoration: none; cursor: pointer; font-weight: bold; font-size: 12px; }
 #waShare{background:#25D366} #fbShare{background:#1877F2} #twShare{background:#000} #tgShare{background:#0088cc} #igShare{background:#E1306C} .copyBtn{background:#607d8b}
 
 /* POST NAVIGATION */
 .post-nav { display: flex; justify-content: space-between; margin: 30px 0; gap: 10px; }
 .post-nav a { flex: 1; background: #fff; padding: 12px; border-radius: 8px; text-decoration: none; color: var(--primary-pink); font-weight: bold; font-size: 13px; border: 1px solid #ddd; text-align: center; }
 
-/* RELATED CONTENT */
-.related-section { margin-top: 40px; border-top: 1px solid #ddd; padding-top: 20px; }
-.related-list div { padding: 8px 0; border-bottom: 1px solid #eee; }
-.related-list a { color: var(--dark-blue); text-decoration: none; font-weight: 600; font-size: 14px; }
-
-footer { background: var(--dark-blue); color: #fff; text-align: center; padding: 25px; margin-top: 50px; font-size: 13px; }
+footer { background: var(--dark-blue); color: #fff; text-align: center; padding: 25px; margin-top: 50px; }
 </style>
 </head>
 
@@ -104,22 +90,11 @@ footer { background: var(--dark-blue); color: #fff; text-align: center; padding:
 
   <div id="shareSection" class="share-section" style="display:none;">
     <h3 style="color:var(--dark-blue); margin:0; font-size: 16px;">Share this Post</h3>
-    <div class="share-buttons">
-      <a id="waShare" target="_blank">WhatsApp</a>
-      <a id="fbShare" target="_blank">Facebook</a>
-      <a id="twShare" target="_blank">Twitter</a>
-      <a id="tgShare" target="_blank">Telegram</a>
-      <button id="igShare">Instagram</button>
-      <button class="copyBtn" onclick="copyLink()" id="mainCopyBtn">Copy Link</button>
-    </div>
+    <div id="shareButtons" class="share-buttons"></div>
   </div>
 
   <div id="postExtras" style="display:none">
     <div id="postNav" class="post-nav"></div>
-    <div class="related-section">
-      <h3 style="color:var(--dark-blue); font-size: 18px;">Related Content</h3>
-      <div id="relatedList" class="related-list"></div>
-    </div>
   </div>
 </div>
 
@@ -132,66 +107,76 @@ const baseUrl=isGitHub?"/"+repoName:"";
 let path=location.pathname.replace(baseUrl,"").replace(/^\/|\/$/g,"");
 let slug=path||"home";
 
-fetch(baseUrl+"/data/posts.json?v="+Date.now())
- .then(r=>r.json())
- .then(posts=>{
-  posts.sort((a,b)=>new Date(b.date)-new Date(a.date));
-  let index=posts.findIndex(p=>p.url===slug || p.url===slug.replace(".html",""));
-  if(index!==-1) loadContent(posts[index].url,"posts",posts[index].title,index,posts);
-  else show404();
- }).catch(()=>show404());
+// List of Static Pages
+const staticPages = ["about-us", "contact-us", "privacy-policy", "dmca"];
 
-function loadContent(fileSlug,folder,title,index,posts){
- document.title=title;
- document.getElementById("breadcrumb").innerHTML="Home &raquo; " + title;
- document.getElementById("postTitle").innerText=title;
-
- fetch(`${baseUrl}/${folder}/${fileSlug}.html`)
- .then(r=>r.text())
- .then(html=>{
-  document.getElementById("postContent").innerHTML=html;
-  document.getElementById("postExtras").style.display="block";
-  document.getElementById("shareSection").style.display="block";
-  setupShareButtons(title);
-  renderNavigation(index,posts);
- }).catch(()=>show404());
+if (staticPages.includes(slug)) {
+    // If it's a PAGE
+    loadContent(slug, "pages", slug.replace("-", " ").toUpperCase());
+} else {
+    // If it's a POST
+    fetch(baseUrl + "/data/posts.json?v=" + Date.now())
+      .then(r => r.json())
+      .then(posts => {
+        posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+        let index = posts.findIndex(p => p.url === slug || p.url === slug.replace(".html", ""));
+        if (index !== -1) loadContent(posts[index].url, "posts", posts[index].title, index, posts);
+        else show404();
+      }).catch(() => show404());
 }
 
-function renderNavigation(index,posts){
- let older=posts[index+1], newer=posts[index-1];
- document.getElementById("postNav").innerHTML=`
- ${older?`<a href="${baseUrl}/${older.url}">&larr; Older Post</a>`:""}
- ${newer?`<a href="${baseUrl}/${newer.url}">Newer Post &rarr;</a>`:""}
- `;
- let related=posts.filter((_,i)=>i!==index).sort(() => 0.5 - Math.random()).slice(0,5);
- let html="";
- related.forEach(r=>html+=`<div><a href="${baseUrl}/${r.url}">${r.title}</a></div>`);
- document.getElementById("relatedList").innerHTML=html;
+function loadContent(fileSlug, folder, title, index = -1, posts = []) {
+    document.title = title;
+    document.getElementById("breadcrumb").innerHTML = "Home &raquo; " + title;
+    document.getElementById("postTitle").innerText = title;
+
+    fetch(`${baseUrl}/${folder}/${fileSlug}.html`)
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById("postContent").innerHTML = html;
+        
+        if (folder === "posts") {
+            // Show Share and Navigation only for Posts
+            document.getElementById("postExtras").style.display = "block";
+            document.getElementById("shareSection").style.display = "block";
+            setupShareButtons(title);
+            renderNavigation(index, posts);
+        } else {
+            // Hide Share and Navigation for Pages
+            document.getElementById("postExtras").style.display = "none";
+            document.getElementById("shareSection").style.display = "none";
+        }
+    }).catch(() => show404());
 }
 
-function setupShareButtons(title){
- let url=encodeURIComponent(location.href);
- let text=encodeURIComponent(title + " - " + location.href);
- waShare.href="https://wa.me/?text="+text;
- fbShare.href="https://www.facebook.com/sharer/sharer.php?u="+url;
- twShare.href="https://twitter.com/intent/tweet?text="+text;
- tgShare.href="https://t.me/share/url?url="+url+"&text="+encodeURIComponent(title);
- igShare.onclick=function(){
-  navigator.clipboard.writeText(location.href);
-  alert("Link copied! Open Instagram and paste it.");
-  window.open("https://www.instagram.com/");
- };
+function renderNavigation(index, posts) {
+    let older = posts[index + 1], newer = posts[index - 1];
+    document.getElementById("postNav").innerHTML = `
+        ${older ? `<a href="${baseUrl}/${older.url}">&larr; Older Post</a>` : ""}
+        ${newer ? `<a href="${baseUrl}/${newer.url}">Newer Post &rarr;</a>` : ""}
+    `;
 }
 
-function copyLink(){
- navigator.clipboard.writeText(location.href);
- let btn = document.getElementById("mainCopyBtn");
- btn.innerText = "Copied!";
- setTimeout(() => btn.innerText = "Copy Link", 2000);
+function setupShareButtons(title) {
+    let url = encodeURIComponent(location.href);
+    let text = encodeURIComponent(title + " - " + location.href);
+    document.getElementById("shareButtons").innerHTML = `
+        <a href="https://wa.me/?text=${text}" target="_blank" class="share-btn wa">WhatsApp</a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" class="share-btn fb">Facebook</a>
+        <a href="https://twitter.com/intent/tweet?text=${text}" target="_blank" class="share-btn tw">Twitter</a>
+        <button class="copyBtn" onclick="copyLink()" id="mainCopyBtn" style="background:#607d8b; padding:10px 16px; border-radius:25px; color:#fff; border:none; cursor:pointer; font-weight:bold; font-size:12px;">Copy Link</button>
+    `;
 }
 
-function show404(){
- document.getElementById("postContent").innerHTML=`<div style="text-align:center;padding:50px;"><h2>404</h2><p>Page Not Found</p><a href="/">Home</a></div>`;
+function copyLink() {
+    navigator.clipboard.writeText(location.href);
+    let btn = document.getElementById("mainCopyBtn");
+    btn.innerText = "Copied!";
+    setTimeout(() => btn.innerText = "Copy Link", 2000);
+}
+
+function show404() {
+    document.getElementById("postContent").innerHTML = `<div style="text-align:center;padding:50px;"><h2>404</h2><p>Page Not Found</p><a href="/">Home</a></div>`;
 }
 </script>
 
