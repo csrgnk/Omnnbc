@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Block Category and Tag archives from being indexed
+Disallow: /category/
+Disallow: /categories/
+Disallow: /tag/
+Disallow: /tags/
+
+# Block internal GitHub/Jekyll system folders
+Disallow: /_data/
+Disallow: /_includes/
+Disallow: /_layouts/
+Disallow: /_posts/
+
+# Direct links to your Post and Page Sitemaps
+Sitemap: https://omnnbc.in/sitemap-posts.xml
+Sitemap: https://omnnbc.in/sitemap-pages.xml
