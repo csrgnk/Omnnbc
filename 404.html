@@ -2,27 +2,25 @@
 <!DOCTYPE html>
 <html lang="te">
 <head>
+<script type="text/javascript">
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', function(e){
+ if(e.ctrlKey && ['c','u','s','a','p'].includes(e.key)) e.preventDefault();
+});
+document.onselectstart = () => false;
+</script>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Namo Narayanaya Bhakthi Channel</title>
 
-<!-- SEO AUTO META -->
-<meta name="description" content="Bhakthi content, spiritual posts, Telugu devotional knowledge.">
+<!-- SEO META -->
+<meta name="description" content="">
 <meta property="og:title" content="">
-<meta property="og:description" content="">
-<meta property="og:type" content="article">
 <meta property="og:url" content="">
+<meta property="og:type" content="article">
 <meta property="og:image" content="/assets/images/Omnnbc-new.png">
-
-<script>
-document.addEventListener('contextmenu', e => e.preventDefault());
-document.addEventListener('keydown', function(e){
- if(e.ctrlKey && ['c','u','s','a','p'].includes(e.key)) e.preventDefault();
-});
-document.onselectstart=()=>false;
-</script>
 
 <style>
 :root{
@@ -31,41 +29,89 @@ document.onselectstart=()=>false;
  --bg-yellow:#fff9db;
 }
 
-body{margin:0;font-family:'Segoe UI',Arial;background:#fffdf0;}
+body{margin:0;font-family:'Segoe UI',Arial;background:#fffdf0;color:#333}
 
-.container{max-width:800px;margin:auto;padding:15px;}
-.post-content{background:#fff;padding:20px;border-radius:10px;}
+/* NAV */
+.top-links,.outer-links{display:flex;overflow-x:auto;white-space:nowrap}
+.top-links{background:var(--dark-blue)}
+.top-links a{color:#fff;padding:12px;text-decoration:none}
+.outer-links{background:var(--primary-pink)}
+.outer-links a{background:#fff;color:var(--primary-pink);margin:5px;padding:8px;border-radius:6px;text-decoration:none;font-weight:bold}
 
+/* HEADER */
+header{background:var(--bg-yellow);padding:15px}
+.header-box{display:flex;align-items:center;gap:10px}
+.logo{width:60px;height:60px;border-radius:50%}
+.line1,.line2{color:var(--primary-pink);font-weight:900}
+
+/* CONTENT */
+.container{max-width:800px;margin:auto;padding:15px}
+.post-title{text-align:center;font-size:1.8rem;color:var(--dark-blue)}
+.post-content{background:#fff;padding:20px;border-radius:10px}
+
+/* SHARE */
 .share-buttons{
- display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:20px;
+ display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:10px
 }
 .share-buttons a,.share-buttons button{
- padding:10px 14px;border-radius:20px;color:#fff;text-decoration:none;border:none;
+ padding:10px 14px;border-radius:20px;color:#fff;border:none;text-decoration:none;cursor:pointer;font-weight:bold
 }
-#waShare{background:#25D366;}
-#fbShare{background:#1877F2;}
-#twShare{background:#000;}
-#tgShare{background:#0088cc;}
-#igShare{background:#E1306C;}
-.copyBtn{background:var(--primary-pink);}
+#waShare{background:#25D366}
+#fbShare{background:#1877F2}
+#twShare{background:#000}
+#tgShare{background:#0088cc}
+#igShare{background:#E1306C}
+.copyBtn{background:var(--primary-pink)}
 
-img{max-width:100%;height:auto;border-radius:8px;}
+/* NAV POSTS */
+.post-nav{display:flex;justify-content:space-between;margin:25px 0}
 
-footer{background:var(--dark-blue);color:#fff;text-align:center;padding:20px;}
+/* RELATED */
+.related-section{margin-top:30px}
+
+/* 404 */
+.error-container{text-align:center;padding:40px}
+.error-code{font-size:70px;color:var(--primary-pink)}
+
+footer{background:var(--dark-blue);color:#fff;text-align:center;padding:20px;margin-top:40px}
 </style>
-
 </head>
 
 <body>
 
+<nav class="top-links">
+<a href="/">Home</a>
+<a href="/about-us">About Us</a>
+<a href="/contact-us">Contact Us</a>
+<a href="/privacy-policy">Privacy Policy</a>
+</nav>
+
+<div class="outer-links">
+<a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
+<a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
+<a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu</a>
+</div>
+
+<header>
+<div class="header-box">
+<img src="/assets/images/Omnnbc-new.png" class="logo">
+<div>
+<div class="line1">Namo Narayanaya</div>
+<div class="line2">Bhakthi Channel</div>
+</div>
+</div>
+</header>
+
 <div class="container">
 
-<h1 id="postTitle"></h1>
-<div id="postContent">Loading...</div>
+<div id="breadcrumb"></div>
+
+<h1 id="postTitle" class="post-title"></h1>
+<div id="postContent" class="post-content">Loading...</div>
 
 <!-- SHARE -->
-<div id="shareSection" style="display:none;">
-<h3 style="text-align:center;color:var(--dark-blue)">Share this Post</h3>
+<div id="shareSection" style="display:none;text-align:center;margin-top:25px">
+<h3 style="color:var(--dark-blue)">Share this Post</h3>
 <div class="share-buttons">
 <a id="waShare" target="_blank">WhatsApp</a>
 <a id="fbShare" target="_blank">Facebook</a>
@@ -76,7 +122,14 @@ footer{background:var(--dark-blue);color:#fff;text-align:center;padding:20px;}
 </div>
 </div>
 
-<div id="postNav"></div>
+<div id="postExtras" style="display:none">
+<div id="postNav" class="post-nav"></div>
+
+<div class="related-section">
+<h3>Related Content</h3>
+<div id="relatedList"></div>
+</div>
+</div>
 
 </div>
 
@@ -87,56 +140,74 @@ const repoName="Omnnbc";
 const isGitHub=location.hostname.includes("github.io");
 const baseUrl=isGitHub?"/"+repoName:"";
 
-let slug=location.pathname.replace(baseUrl,"").replace(/^\/|\/$/g,"")||"home";
+let path=location.pathname.replace(baseUrl,"").replace(/^\/|\/$/g,"");
+let slug=path||"home";
 
-fetch(baseUrl+"/data/posts.json?v="+Date.now())
-.then(r=>r.json())
-.then(posts=>{
- posts.sort((a,b)=>new Date(b.date)-new Date(a.date));
+const staticPages=["about-us","contact-us","privacy-policy","dmca"];
 
- let i=posts.findIndex(p=>p.url===slug);
- if(i!==-1){
-  loadPost(posts[i],i,posts);
- }else show404();
-});
+if(staticPages.includes(slug)){
+ loadContent(slug,"pages",slug);
+}else{
+ fetch(baseUrl+"/data/posts.json?v="+Date.now())
+ .then(r=>r.json())
+ .then(posts=>{
+  posts.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  let index=posts.findIndex(p=>p.url===slug);
+  if(index!==-1){
+   loadContent(posts[index].url,"posts",posts[index].title,index,posts);
+  }else show404();
+ }).catch(()=>show404());
+}
 
-function loadPost(post,index,posts){
- document.title=post.title;
- document.getElementById("postTitle").innerText=post.title;
+function loadContent(fileSlug,folder,title,index=-1,posts=[]){
+ document.title=title;
 
- // SEO AUTO
- document.querySelector('meta[name="description"]').setAttribute("content", post.title);
- document.querySelector('meta[property="og:title"]').setAttribute("content", post.title);
- document.querySelector('meta[property="og:description"]').setAttribute("content", post.title);
- document.querySelector('meta[property="og:url"]').setAttribute("content", location.href);
+ document.getElementById("breadcrumb").innerHTML="Home > "+title;
+ document.getElementById("postTitle").innerText=title;
 
- fetch(`${baseUrl}/posts/${post.url}.html`)
+ // SEO
+ document.querySelector('meta[name="description"]').setAttribute("content",title);
+ document.querySelector('meta[property="og:title"]').setAttribute("content",title);
+ document.querySelector('meta[property="og:url"]').setAttribute("content",location.href);
+
+ fetch(`${baseUrl}/${folder}/${fileSlug}.html`)
  .then(r=>r.text())
  .then(html=>{
   let temp=document.createElement("div");
   temp.innerHTML=html;
 
-  // LAZY LOAD IMAGES
-  temp.querySelectorAll("img").forEach(img=>{
-   img.loading="lazy";
-  });
+  // LAZY LOAD
+  temp.querySelectorAll("img").forEach(img=>img.loading="lazy");
 
   document.getElementById("postContent").innerHTML=temp.innerHTML;
 
-  document.getElementById("shareSection").style.display="block";
-  setupShare(post.title);
+  if(folder==="posts"){
+   document.getElementById("postExtras").style.display="block";
+   document.getElementById("shareSection").style.display="block";
+   setupShareButtons(title);
+   renderNavigation(index,posts);
+  }
+ })
+ .catch(()=>show404());
+}
 
-  let older=posts[index+1];
-  let newer=posts[index-1];
+function renderNavigation(index,posts){
+ let older=posts[index+1];
+ let newer=posts[index-1];
 
-  document.getElementById("postNav").innerHTML=`
-   <div>${older?`<a href="${baseUrl}/${older.url}">← ${older.title}</a>`:""}</div>
-   <div style="text-align:right">${newer?`<a href="${baseUrl}/${newer.url}">${newer.title} →</a>`:""}</div>`;
- });
+ document.getElementById("postNav").innerHTML=`
+ <div>${older?`<a href="${baseUrl}/${older.url}">← ${older.title}</a>`:""}</div>
+ <div style="text-align:right">${newer?`<a href="${baseUrl}/${newer.url}">${newer.title} →</a>`:""}</div>
+ `;
+
+ let related=posts.filter((_,i)=>i!==index).slice(0,5);
+ let html="";
+ related.forEach(r=>html+=`<div><a href="${baseUrl}/${r.url}">${r.title}</a></div>`);
+ document.getElementById("relatedList").innerHTML=html;
 }
 
 /* SHARE */
-function setupShare(title){
+function setupShareButtons(title){
  let url=location.href;
  let text=encodeURIComponent(title+" - "+url);
 
@@ -145,11 +216,10 @@ function setupShare(title){
  twShare.href="https://twitter.com/intent/tweet?text="+text;
  tgShare.href="https://t.me/share/url?url="+url+"&text="+encodeURIComponent(title);
 
- // Instagram workaround
- document.getElementById("igShare").onclick=function(){
-   navigator.clipboard.writeText(url);
-   alert("Link copied! Open Instagram and paste.");
-   window.open("https://www.instagram.com/");
+ igShare.onclick=function(){
+  navigator.clipboard.writeText(url);
+  alert("Link copied! Open Instagram and paste.");
+  window.open("https://www.instagram.com/");
  };
 }
 
@@ -162,8 +232,8 @@ function copyLink(){
 function show404(){
  document.title="404";
  document.getElementById("postContent").innerHTML=`
- <div style="text-align:center;padding:40px">
- <h2 style="font-size:60px;color:#C71585">404</h2>
+ <div class="error-container">
+ <h2 class="error-code">404</h2>
  <p>క్షమించండి! పేజీ కనుగొనబడలేదు.</p>
  </div>`;
 }
