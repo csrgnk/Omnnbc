@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html>
+<head>
+<meta charset="UTF-8">
+<title>Generate Sitemap</title>
+</head>
 <body>
+
+<button onclick="generateXML()">Download Sitemap</button>
 
 <script>
 async function generateXML() {
@@ -28,15 +34,12 @@ async function generateXML() {
 
   xml += `\n</urlset>`;
 
-  // Download XML file
   const blob = new Blob([xml], { type: "application/xml" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
   link.download = "sitemap-posts.xml";
   link.click();
 }
-
-generateXML();
 </script>
 
 </body>
