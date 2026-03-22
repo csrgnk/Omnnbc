@@ -1,21 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Sitemap Posts</title>
+</head>
+<body>
+
 <script>
-async function generatePostsSitemap() {
+async function generateSitemap() {
 
   const domain = "https://omnnbc.com";
 
-  // 👉 Your JSON URL
+  // 👉 REPLACE with your GitHub JSON URL
   const response = await fetch("https://raw.githubusercontent.com/USERNAME/REPO/main/posts.json");
   const posts = await response.json();
 
-  let xml = `<?xml version="1.0" encoding="UTF-8"?> 
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+  xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
   posts.forEach(post => {
-
-    // ✅ Convert slug → full URL
     const fullUrl = domain + "/" + post.url;
-
-    // ✅ Format date (remove time)
     const date = post.publish_date.split("T")[0];
 
     xml += `
@@ -27,11 +31,16 @@ async function generatePostsSitemap() {
   </url>`;
   });
 
-  xml += `
-</urlset>`;
+  xml += `\n</urlset>`;
 
+  // ✅ Clear page and print pure XML
+  document.open();
   document.write(xml);
+  document.close();
 }
 
-generatePostsSitemap();
+generateSitemap();
 </script>
+
+</body>
+</html>
