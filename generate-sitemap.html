@@ -6,7 +6,9 @@
 </head>
 <body>
 
-<button onclick="generateXML()">Download Sitemap</button>
+<button onclick="generateXML()">Generate Sitemap</button>
+
+<pre id="output" style="white-space: pre-wrap;"></pre>
 
 <script>
 async function generateXML() {
@@ -34,11 +36,8 @@ async function generateXML() {
 
   xml += `\n</urlset>`;
 
-  const blob = new Blob([xml], { type: "application/xml" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "sitemap-posts.xml";
-  link.click();
+  // 👉 Show XML on screen
+  document.getElementById("output").textContent = xml;
 }
 </script>
 
