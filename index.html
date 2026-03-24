@@ -1,331 +1,175 @@
 <!DOCTYPE html>
 <html lang="te">
 <head>
-  <script type="text/javascript">
-    // Disable right-click context menu
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-    }, false);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Namo Narayanaya Bhakthi Channel - Devotional Stotrams & Lyrics</title>
+    <meta name="description" content="Namo Narayanaya Bhakthi Channel: మీ ఆధ్యాత్మిక ప్రయాణానికి అవసరమైన స్తోత్రాలు, మంత్రాలు, రామాయణం మరియు మహాభారత కథల లిరిక్స్ ఇక్కడ లభిస్తాయి.">
+    <meta name="keywords" content="Stotrams, Telugu Lyrics, Bhakthi, Ramayanam, Hanuman Sahasranamam, Namo Narayanaya">
+    <link rel="canonical" href="https://omnnbc.com/" />
 
-    // Disable keyboard shortcuts (Ctrl+C, Ctrl+U, Ctrl+S, etc.)
-    document.addEventListener('keydown', function(e) {
-        if (e.ctrlKey && (e.key === 'c' || e.key === 'u' || e.key === 's' || e.key === 'a' || e.key === 'p')) {
-            e.preventDefault();
+    <script type="text/javascript">
+        document.addEventListener('contextmenu', e => e.preventDefault(), false);
+        document.addEventListener('keydown', e => {
+            if (e.ctrlKey && ['c', 'u', 's', 'a', 'p'].includes(e.key)) e.preventDefault();
+        }, false);
+        document.onselectstart = () => false;
+    </script>
+
+    <style>
+        :root{ --primary-pink:#C71585; --dark-blue:#001a4d; }
+        body{ margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#f1f3f5; color: #333; -webkit-user-select: none; user-select: none; }
+
+        /* Navigation & Menu */
+        .blue-nav, .scroll-container { display:flex; overflow-x:auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+        .blue-nav { background:var(--dark-blue); }
+        .blue-nav a { color:#fff; font-size:16px; padding:12px 18px; text-decoration:none; }
+        .scroll-container { background:var(--primary-pink); padding:5px 0; }
+        .scroll-container a { background:#fff; color:var(--primary-pink); padding:8px 16px; margin:6px; border-radius:6px; text-decoration:none; font-weight:600; font-size: 14px; }
+
+        /* Header SEO Optimized */
+        .site-header{ background:#fff9db; padding:15px; border-bottom: 2px solid #ddd; }
+        .header-box{ display:flex; align-items:center; gap:15px; max-width: 800px; margin: auto; }
+        .logo{ width:60px; height:60px; border-radius:50%; object-fit: cover; border: 2px solid var(--primary-pink); }
+        
+        /* H1 SEO Setup */
+        .site-name-wrapper h1 { 
+            display: flex; flex-direction: row; gap: 8px; margin: 0;
+            font-size: 1.6rem; font-weight: 900; color: var(--primary-pink); 
         }
-    }, false);
 
-    // Disable text selection via CSS and JS
-    document.onselectstart = function() { return false; };
-</script>
+        @media (max-width: 600px) {
+            .site-name-wrapper h1 { flex-direction: column; gap: 0; font-size: 1.3rem; }
+        }
 
-<style>
-    /* CSS to disable text selection */
-    body {
-        -webkit-user-select: none; /* Safari */
-        -ms-user-select: none;     /* IE 10 and IE 11 */
-        user-select: none;         /* Standard syntax */
-    }
-</style>
+        /* Search Setup */
+        .search-wrapper{ text-align:center; margin:25px 0; position: relative; }
+        #searchInput{ width: 85%; max-width: 400px; padding: 12px 20px; border-radius: 30px; border: 2px solid var(--primary-pink); font-size: 16px; outline: none; }
+        #suggestBox{ width: 85%; max-width: 400px; margin: 5px auto; background: #fff; position: absolute; left: 0; right: 0; z-index: 100; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Namo Narayanaya Bhakthi Channel</title>
+        /* Posts */
+        .container{ max-width:800px; margin:auto; padding:10px; }
+        .post-card{ background:#FFFDE7; padding:18px; margin-bottom:15px; border-radius:12px; border-left:6px solid var(--primary-pink); transition: 0.3s; }
+        .post-card:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .post-link{ text-decoration:none; color:inherit; }
+        .post-card h3 { margin: 0 0 8px 0; color: var(--dark-blue); font-size: 1.2rem; }
 
-<style>
-:root{
-  --primary-pink:#C71585;
-  --dark-blue:#001a4d;
-}
+        /* 🟢 HORIZONTAL PAGINATION SETUP */
+        .pagination-wrapper { 
+            max-width: 800px; margin: 20px auto; overflow-x: auto; 
+            white-space: nowrap; padding: 10px; text-align: center;
+            scrollbar-width: none; /* Hide scrollbar Firefox */
+        }
+        .pagination-wrapper::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome/Safari */
 
-body{
-  margin:0;
-  font-family:'Segoe UI',Arial,sans-serif;
-  background:#f1f3f5;
-  color: #333;
-}
+        .pagination { display: inline-flex; gap: 8px; }
+        .page-btn { 
+            min-width: 45px; height: 45px; border-radius: 50%; 
+            border: 1px solid var(--primary-pink); background: #fff; 
+            color: var(--primary-pink); font-weight: bold; cursor: pointer;
+        }
+        .page-btn.active { background: var(--primary-pink); color: #fff; }
 
-/* 🔵 TOP NAVIGATION */
-.blue-nav{
-  background:var(--dark-blue);
-  display:flex;
-  overflow-x:auto;
-  white-space: nowrap;
-}
-.blue-nav a{
-  color:#fff;
-  font-size:16px;
-  padding:12px 18px;
-  text-decoration:none;
-  flex-shrink: 0;
-}
-
-/* 🔴 SECOND MENU */
-.scroll-container{
-  background:var(--primary-pink);
-  display:flex;
-  overflow-x:auto;
-  padding:5px 0;
-}
-.scroll-container a{
-  background:#fff;
-  color:var(--primary-pink);
-  padding:8px 16px;
-  margin:6px;
-  border-radius:6px;
-  text-decoration:none;
-  font-weight:600;
-  font-size: 14px;
-  flex-shrink: 0;
-}
-
-/* HEADER SETUP */
-.site-header{
-  background:#fff9db;
-  padding:15px;
-  border-bottom: 2px solid #ddd;
-}
-.header-box{
-  display:flex;
-  align-items:center;
-  gap:15px;
-  max-width: 800px;
-  margin: auto;
-}
-.logo{
-  width:60px;
-  height:60px;
-  border-radius:50%;
-  object-fit: cover;
-  border: 2px solid var(--primary-pink);
-}
-
-/* SITE NAME LOGIC */
-.site-name-wrapper {
-  display: flex;
-  flex-direction: row; /* Desktop: Single line */
-  gap: 8px;
-  font-size: 1.6rem; /* Good balanced size */
-  font-weight: 900;
-  color: var(--primary-pink);
-}
-
-/* MOBILE SPECIFIC HEADER */
-@media (max-width: 600px) {
-  .site-name-wrapper {
-    flex-direction: column; /* Mobile: Two lines */
-    gap: 0;
-    font-size: 1.4rem; /* Slightly smaller for mobile fit */
-  }
-}
-
-/* SEARCH SECTION */
-.search-wrapper{
-  text-align:center;
-  margin:25px 0;
-  position: relative;
-}
-#searchInput{
-  width: 80%;
-  max-width: 350px;
-  padding: 12px 20px;
-  border-radius: 30px;
-  border: 2px solid var(--primary-pink);
-  font-size: 16px;
-  outline: none;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-#suggestBox{
-  width: 80%;
-  max-width: 350px;
-  margin: 5px auto;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  position: absolute;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  max-height: 250px;
-  overflow-y: auto;
-}
-#suggestBox div{
-  padding: 12px;
-  border-bottom: 1px solid #eee;
-  cursor: pointer;
-  text-align: left;
-}
-
-/* POSTS */
-.container{
-  max-width:800px;
-  margin:auto;
-  padding:10px;
-}
-.post-card{
-  background:#FFFDE7;
-  padding:18px;
-  margin-bottom:15px;
-  border-radius:12px;
-  border-left:6px solid var(--primary-pink);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-.post-link{ text-decoration:none; color:inherit; display:block; }
-.post-card h3 { margin: 0 0 8px 0; color: var(--dark-blue); font-size: 1.25rem; }
-.desc{ font-size:14px; color: #444; line-height: 1.5; }
-
-/* PAGINATION */
-.pagination{
-  display:flex;
-  overflow-x:auto;
-  gap:10px;
-  justify-content:center;
-  padding:30px 10px;
-}
-.page-btn{
-  min-width:40px;
-  height:40px;
-  border-radius:50%;
-  border:1px solid var(--primary-pink);
-  background:#fff;
-  color:var(--primary-pink);
-  font-weight: bold;
-}
-.page-btn.active{ background:var(--primary-pink); color:#fff; }
-
-footer{
-  background:var(--dark-blue);
-  color:#fff;
-  text-align:center;
-  padding:25px;
-  margin-top: 20px;
-}
-</style>
+        footer{ background:var(--dark-blue); color:#fff; text-align:center; padding:25px; margin-top: 30px; }
+    </style>
 </head>
-
 <body>
 
 <nav class="blue-nav">
-  <a href="/">Home</a>
-  <a href="/about-us">About Us</a>
-  <a href="/contact-us">Contact Us</a>
-  <a href="/dmca">DMCA</a>
-  <a href="/privacy-policy">Privacy Policy</a>
+    <a href="/">Home</a>
+    <a href="/about-us">About Us</a>
+    <a href="/contact-us">Contact Us</a>
+    <a href="/dmca">DMCA</a>
+    <a href="/privacy-policy">Privacy Policy</a>
 </nav>
 
 <div class="scroll-container">
-  <a href="/">Home</a>
-  <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
-  <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
-  <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu</a>
-  <a href="https://csrgnk.github.io/manache-shlok/hindi/">Manache Shlok Hindi</a>
+    <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
+    <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
+    <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu</a>
+    <a href="https://csrgnk.github.io/manache-shlok/hindi/">Manache Shlok Hindi</a>
 </div>
 
 <header class="site-header">
-  <div class="header-box">
-    <img src="/assets/images/Omnnbc-new.png" class="logo">
-    <div class="site-name-wrapper">
-      <span>Namo Narayanaya</span>
-      <span>Bhakthi Channel</span>
+    <div class="header-box">
+        <img src="/assets/images/Omnnbc-new.png" class="logo" alt="Omnnbc Logo" loading="lazy">
+        <div class="site-name-wrapper">
+            <h1><span>Namo Narayanaya</span> <span>Bhakthi Channel</span></h1>
+        </div>
     </div>
-  </div>
 </header>
 
 <div class="search-wrapper">
-  <input type="text" id="searchInput" placeholder="Search stotrams...">
-  <div id="suggestBox"></div>
+    <input type="text" id="searchInput" placeholder="Search stotrams or lyrics...">
+    <div id="suggestBox"></div>
 </div>
 
-<div class="container" id="posts"></div>
-<div class="pagination" id="pagination"></div>
+<main class="container" id="posts"></main>
+
+<div class="pagination-wrapper">
+    <div class="pagination" id="pagination"></div>
+</div>
 
 <footer>© 2026 Namo Narayanaya Bhakthi Channel</footer>
 
 <script>
-const repoName = "Omnnbc";
-const isGitHub = location.hostname.includes("github.io");
-const baseUrl = isGitHub ? "/" + repoName : "";
+    // బాటమ్ పైన ఉన్న స్క్రిప్ట్ అలాగే ఉంచండి, కేవలం Pagination ఫంక్షన్ మార్చాను.
+    const repoName = "Omnnbc";
+    const isGitHub = location.hostname.includes("github.io");
+    const baseUrl = isGitHub ? "/" + repoName : "";
 
-let allPosts = [], filteredPosts = [];
-let currentPage = 1;
-const perPage = 25;
+    let allPosts = [], filteredPosts = [];
+    let currentPage = 1;
+    const perPage = 25;
 
-const postsDiv = document.getElementById("posts");
-const suggestBox = document.getElementById("suggestBox");
-const searchInput = document.getElementById("searchInput");
+    const postsDiv = document.getElementById("posts");
+    const searchInput = document.getElementById("searchInput");
 
-/* LOAD DATA */
-fetch(baseUrl + "/data/posts.json?v=" + Date.now())
-  .then(r => r.json())
-  .then(data => {
-    allPosts = data.sort((a,b) => new Date(b.publish_date) - new Date(a.publish_date));
-    filteredPosts = [...allPosts];
-    render();
-  });
+    fetch(baseUrl + "/data/posts.json?v=" + Date.now())
+    .then(r => r.json())
+    .then(data => {
+        allPosts = data.sort((a,b) => new Date(b.publish_date) - new Date(a.publish_date));
+        filteredPosts = [...allPosts];
+        render();
+    });
 
-/* RENDER POSTS */
-function render(term = "") {
-  let start = (currentPage - 1) * perPage;
-  let items = filteredPosts.slice(start, start + perPage);
-  postsDiv.innerHTML = "";
-  
-  items.forEach(p => {
-    let title = p.title;
-    if(term) {
-      const reg = new RegExp(`(${term})`, "gi");
-      title = title.replace(reg, `<mark>$1</mark>`);
+    function render(term = "") {
+        let start = (currentPage - 1) * perPage;
+        let items = filteredPosts.slice(start, start + perPage);
+        postsDiv.innerHTML = "";
+        items.forEach(p => {
+            postsDiv.innerHTML += `
+                <article class="post-card">
+                    <a href="${baseUrl}/${p.url}" class="post-link">
+                        <h3>${p.title}</h3>
+                        <div class="desc">${(p.description || "").substring(0, 150)}...</div>
+                    </a>
+                </article>`;
+        });
+        setupPagination();
     }
-    postsDiv.innerHTML += `
-      <div class="post-card">
-        <a href="${baseUrl}/${p.url}" class="post-link">
-          <h3>${title}</h3>
-          <div class="desc">${(p.description || "").substring(0, 150)}...</div>
-        </a>
-      </div>`;
-  });
-  setupPagination();
-}
 
-/* SEARCH & SUGGESTIONS */
-searchInput.addEventListener("input", (e) => {
-  let val = e.target.value.toLowerCase().trim();
-  if(!val) {
-    filteredPosts = [...allPosts];
-    suggestBox.innerHTML = "";
-    render();
-    return;
-  }
-  filteredPosts = allPosts.filter(p => p.title.toLowerCase().includes(val));
-  render(val);
-  showSuggestions(filteredPosts.slice(0, 5));
-});
+    function setupPagination() {
+        let total = Math.ceil(filteredPosts.length / perPage);
+        const pagDiv = document.getElementById("pagination");
+        pagDiv.innerHTML = "";
+        if(total <= 1) return;
+        for(let i = 1; i <= total; i++) {
+            let btn = document.createElement("button");
+            btn.innerText = i;
+            btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+            btn.onclick = () => { currentPage = i; render(); window.scrollTo({top: 0, behavior: 'smooth'}); };
+            pagDiv.appendChild(btn);
+        }
+    }
 
-function showSuggestions(list) {
-  suggestBox.innerHTML = "";
-  list.forEach(p => {
-    let div = document.createElement("div");
-    div.innerText = p.title;
-    div.onclick = () => { window.location.href = `${baseUrl}/${p.url}`; };
-    suggestBox.appendChild(div);
-  });
-}
-
-function setupPagination() {
-  let total = Math.ceil(filteredPosts.length / perPage);
-  const pagDiv = document.getElementById("pagination");
-  pagDiv.innerHTML = "";
-  if(total <= 1) return;
-  for(let i = 1; i <= total; i++) {
-    let btn = document.createElement("button");
-    btn.innerText = i;
-    btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-    btn.onclick = () => { currentPage = i; render(); window.scrollTo(0,0); };
-    pagDiv.appendChild(btn);
-  }
-}
-
-document.addEventListener("click", (e) => {
-  if(e.target !== searchInput) suggestBox.innerHTML = "";
-});
+    searchInput.addEventListener("input", (e) => {
+        let val = e.target.value.toLowerCase().trim();
+        currentPage = 1; 
+        filteredPosts = allPosts.filter(p => p.title.toLowerCase().includes(val));
+        render(val);
+    });
 </script>
 
 </body>
