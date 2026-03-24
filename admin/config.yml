@@ -1,0 +1,18 @@
+backend:
+  name: git-gateway
+  branch: main # మీ GitHub బ్రాంచ్ పేరు (main లేదా master)
+
+media_folder: "images/uploads" # ఫోటోలు సేవ్ అయ్యే చోటు
+public_folder: "/images/uploads"
+
+collections:
+  - name: "blog"
+    label: "Devotional Posts"
+    folder: "_posts" # మీ పోస్ట్‌లు సేవ్ అయ్యే ఫోల్డర్
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Publish Date", name: "date", widget: "datetime" }
+      - { label: "Body", name: "body", widget: "markdown" }
+      
