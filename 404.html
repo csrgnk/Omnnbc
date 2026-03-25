@@ -208,6 +208,20 @@ function copyLink() {
 function show404() {
     document.getElementById("postContent").innerHTML = `<div style="text-align:center;padding:50px;"><h2>404</h2><p>Page Not Found</p><a href="/">Home</a></div>`;
 }
+/* --- EXTRA SCRIPT START --- */
+
+// 1. Automatic Redirect Fix (If needed)
+// ఒకవేళ URL లో పొరపాటున .html ఉంటే దాన్ని తీసేసి క్లీన్ గా చూపించడానికి
+if (window.location.pathname.endsWith('.html')) {
+    let cleanUrl = window.location.pathname.replace('.html', '');
+    window.history.replaceState(null, '', cleanUrl);
+}
+
+// 2. Google Analytics లేదా ఇతర ట్రాకింగ్ కోడ్ ఇక్కడ వేయవచ్చు
+console.log("Namo Narayanaya: Page Loaded Successfully via 404 Routing");
+
+/* --- EXTRA SCRIPT END --- */
+  
 </script>
 </body>
 </html>
