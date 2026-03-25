@@ -2,5 +2,19 @@
   command = "node generate-sitemap.js"
   publish = "."
 
-# No redirect rules here! 
-# Let Netlify naturally fail and trigger your 404.html
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Type = "text/html; charset=UTF-8"
+
+# This tells Google: "The page exists (200 OK)"
+# It maps the clean URL directly to the HTML file in the background.
+[[redirects]]
+  from = "/:slug"
+  to = "/posts/:slug.html"
+  status = 200
+
+[[redirects]]
+  from = "/:slug"
+  to = "/pages/:slug.html"
+  status = 200
