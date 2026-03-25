@@ -2,7 +2,6 @@
   command = "node generate-sitemap.js"
   publish = "."
 
-# 1. Redirect old folder links to clean links (SEO friendly)
 [[redirects]]
   from = "/posts/*"
   to = "/:splat"
@@ -15,13 +14,8 @@
   status = 301
   force = true
 
-# 2. Map clean URLs back to the folders internally (Fixes 404)
+# This is the MAGIC line that fixes 404
 [[redirects]]
   from = "/*"
-  to = "/posts/:splat"
-  status = 200
-
-[[redirects]]
-  from = "/*"
-  to = "/pages/:splat"
+  to = "/index.html"
   status = 200
