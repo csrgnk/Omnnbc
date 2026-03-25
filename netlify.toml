@@ -2,27 +2,5 @@
   command = "node generate-sitemap.js"
   publish = "."
 
-# 1. Force Netlify to treat every page as HTML (Fixes Raw Text & Language)
-[[headers]]
-  for = "/*"
-  [headers.values]
-    Content-Type = "text/html; charset=UTF-8"
-    X-Content-Type-Options = "nosniff"
-
-# 2. Redirect old links to clean links
-[[redirects]]
-  from = "/posts/*"
-  to = "/:splat"
-  status = 301
-  force = true
-
-# 3. Map Clean URLs to HTML Files (Fixes 404 & Viewport)
-[[redirects]]
-  from = "/:slug"
-  to = "/posts/:slug.html"
-  status = 200
-
-[[redirects]]
-  from = "/:slug"
-  to = "/pages/:slug.html"
-  status = 200
+# No redirect rules here! 
+# Let Netlify naturally fail and trigger your 404.html
