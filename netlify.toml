@@ -2,18 +2,5 @@
   command = "node generate-sitemap.js"
   publish = "."
 
-[[headers]]
-  for = "/*"
-  [headers.values]
-    Content-Type = "text/html; charset=UTF-8"
-
-# Fix for Google Search Console (Status 200 = Success)
-[[redirects]]
-  from = "/:slug"
-  to = "/posts/:slug.html"
-  status = 200
-
-[[redirects]]
-  from = "/:slug"
-  to = "/pages/:slug.html"
-  status = 200
+# No other redirect rules here!
+# This allows Netlify to naturally trigger your 404.html
