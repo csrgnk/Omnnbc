@@ -2,5 +2,7 @@
   command = "node generate-sitemap.js"
   publish = "."
 
-# No other redirect rules here!
-# This allows Netlify to naturally trigger your 404.html
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 200
