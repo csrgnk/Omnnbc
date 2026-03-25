@@ -1,3 +1,6 @@
 [build]
   command = "node generate-sitemap.js"
   publish = "."
+
+# ఇక్కడ ఎటువంటి [[plugins]] ఉండకూడదు. ఒకవేళ ఉంటే డిలీట్ చేయండి.
+
