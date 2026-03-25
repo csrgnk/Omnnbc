@@ -2,21 +2,13 @@
   command = "node generate-sitemap.js"
   publish = "."
 
-# 1. Clean URLs for Posts
-# This tells Netlify: If someone asks for /my-post, show them /posts/my-post.html
-[[redirects]]
-  from = "/:slug"
-  to = "/posts/:slug.html"
-  status = 200
+# Ensure all files are served as HTML
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Type = "text/html"
 
-# 2. Clean URLs for Pages
-# This tells Netlify: If someone asks for /about, show them /pages/about.html
-[[redirects]]
-  from = "/:slug"
-  to = "/pages/:slug.html"
-  status = 200
-
-# 3. Old Link Redirects (Optional but good for SEO)
+# Redirects for Posts - Mapping to internal folders
 [[redirects]]
   from = "/posts/*"
   to = "/:splat"
@@ -28,3 +20,14 @@
   to = "/:splat"
   status = 301
   force = true
+
+# This handles the Clean URLs properly without showing Raw Text
+[[redirects]]
+  from = "/:slug"
+  to = "/posts/:slug.html"
+  status = 200
+
+[[redirects]]
+  from = "/:slug"
+  to = "/pages/:slug.html"
+  status = 200
