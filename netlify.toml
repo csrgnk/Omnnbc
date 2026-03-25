@@ -1,9 +1,6 @@
+[build]
+  command = "node generate-sitemap.js"
+  publish = "."
+
 [[plugins]]
   package = "@netlify/plugin-sitemap"
-
-  [plugins.inputs]
-    baseUrl = "https://omnnbc.com"
-    # Use "." if your HTML files are in the main folder
-    buildDir = "." 
-    changeFreq = "daily"
-    priority = 0.9
