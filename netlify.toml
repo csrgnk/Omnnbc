@@ -2,5 +2,26 @@
   command = "node generate-sitemap.js"
   publish = "."
 
-# ఇక్కడ ఎటువంటి [[plugins]] ఉండకూడదు. ఒకవేళ ఉంటే డిలీట్ చేయండి.
+# 1. Redirect old folder links to clean links (SEO friendly)
+[[redirects]]
+  from = "/posts/*"
+  to = "/:splat"
+  status = 301
+  force = true
 
+[[redirects]]
+  from = "/pages/*"
+  to = "/:splat"
+  status = 301
+  force = true
+
+# 2. Map clean URLs back to the folders internally (Fixes 404)
+[[redirects]]
+  from = "/*"
+  to = "/posts/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/pages/:splat"
+  status = 200
