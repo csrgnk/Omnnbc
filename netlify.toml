@@ -2,6 +2,21 @@
   command = "node generate-sitemap.js"
   publish = "."
 
+# 1. Clean URLs for Posts
+# This tells Netlify: If someone asks for /my-post, show them /posts/my-post.html
+[[redirects]]
+  from = "/:slug"
+  to = "/posts/:slug.html"
+  status = 200
+
+# 2. Clean URLs for Pages
+# This tells Netlify: If someone asks for /about, show them /pages/about.html
+[[redirects]]
+  from = "/:slug"
+  to = "/pages/:slug.html"
+  status = 200
+
+# 3. Old Link Redirects (Optional but good for SEO)
 [[redirects]]
   from = "/posts/*"
   to = "/:splat"
@@ -13,9 +28,3 @@
   to = "/:splat"
   status = 301
   force = true
-
-# This is the MAGIC line that fixes 404
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
