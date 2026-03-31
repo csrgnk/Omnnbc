@@ -1,63 +1,38 @@
 <!DOCTYPE html>
-<html lang="te">
+<html lang="en">
 <head>
-   <!DOCTYPE html>
-<html lang="te">
-<head>
-   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7573720131021971"
-     crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namo Narayanaya Bhakthi Channel</title>
-
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-    <script>
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.on("init", user => {
-          if (!user) {
-            window.netlifyIdentity.on("login", () => {
-              document.location.href = "/admin/";
-            });
-          }
-        });
-      }
-    </script>
-</head>
-<body>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>Namo Narayanaya Bhakthi Channel - Devotional Stotrams & Lyrics</title>
-    <meta name="description" content="Namo Narayanaya Bhakthi Channel: మీ ఆధ్యాత్మిక ప్రయాణానికి అవసరమైన స్తోత్రాలు, మంత్రాలు, రామాయణం మరియు మహాభారత కథల లిరిక్స్ ఇక్కడ లభిస్తాయి.">
+    
+    <link rel="icon" type="image/png" href="/assets/images/Omnnbc-new.png">
+    <link rel="apple-touch-icon" href="/assets/images/Omnnbc-new.png">
+
+    <meta name="description" content="Namo Narayanaya Bhakthi Channel: Access devotional stotrams, mantras, and lyrics from Ramayana and Mahabharata.">
     <meta name="keywords" content="Stotrams, Telugu Lyrics, Bhakthi, Ramayanam, Hanuman Sahasranamam, Namo Narayanaya">
     <link rel="canonical" href="https://omnnbc.com/" />
 
-    <script type="text/javascript">
-        document.addEventListener('contextmenu', e => e.preventDefault(), false);
-        document.addEventListener('keydown', e => {
-            if (e.ctrlKey && ['c', 'u', 's', 'a', 'p'].includes(e.key)) e.preventDefault();
-        }, false);
-        document.onselectstart = () => false;
-    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7573720131021971" crossorigin="anonymous"></script>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
     <style>
         :root{ --primary-pink:#C71585; --dark-blue:#001a4d; }
         body{ margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#f1f3f5; color: #333; -webkit-user-select: none; user-select: none; }
 
-        /* Navigation & Menu */
-        .blue-nav, .scroll-container { display:flex; overflow-x:auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+        /* Navigation */
+        .blue-nav, .scroll-container { display:flex; overflow-x:auto; white-space: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+        .blue-nav::-webkit-scrollbar, .scroll-container::-webkit-scrollbar { display: none; }
+        
         .blue-nav { background:var(--dark-blue); }
         .blue-nav a { color:#fff; font-size:16px; padding:12px 18px; text-decoration:none; }
         .scroll-container { background:var(--primary-pink); padding:5px 0; }
         .scroll-container a { background:#fff; color:var(--primary-pink); padding:8px 16px; margin:6px; border-radius:6px; text-decoration:none; font-weight:600; font-size: 14px; }
 
-        /* Header SEO Optimized */
+        /* Header */
         .site-header{ background:#fff9db; padding:15px; border-bottom: 2px solid #ddd; }
         .header-box{ display:flex; align-items:center; gap:15px; max-width: 800px; margin: auto; }
         .logo{ width:60px; height:60px; border-radius:50%; object-fit: cover; border: 2px solid var(--primary-pink); }
         
-        /* H1 SEO Setup */
         .site-name-wrapper h1 { 
             display: flex; flex-direction: row; gap: 8px; margin: 0;
             font-size: 1.6rem; font-weight: 900; color: var(--primary-pink); 
@@ -67,31 +42,43 @@
             .site-name-wrapper h1 { flex-direction: column; gap: 0; font-size: 1.3rem; }
         }
 
-        /* Search Setup */
+        /* Search */
         .search-wrapper{ text-align:center; margin:25px 0; position: relative; }
         #searchInput{ width: 85%; max-width: 400px; padding: 12px 20px; border-radius: 30px; border: 2px solid var(--primary-pink); font-size: 16px; outline: none; }
-        #suggestBox{ width: 85%; max-width: 400px; margin: 5px auto; background: #fff; position: absolute; left: 0; right: 0; z-index: 100; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
 
         /* Posts */
         .container{ max-width:800px; margin:auto; padding:10px; }
         .post-card{ background:#FFFDE7; padding:18px; margin-bottom:15px; border-radius:12px; border-left:6px solid var(--primary-pink); transition: 0.3s; }
-        .post-card:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .post-link{ text-decoration:none; color:inherit; }
         .post-card h3 { margin: 0 0 8px 0; color: var(--dark-blue); font-size: 1.2rem; }
+        .post-link{ text-decoration:none; color:inherit; }
 
-        /* 🟢 HORIZONTAL PAGINATION SETUP */
+        /* Horizontal Scrollable Pagination */
         .pagination-wrapper { 
-            max-width: 800px; margin: 20px auto; overflow-x: auto; 
-            white-space: nowrap; padding: 10px; text-align: center;
-            scrollbar-width: none; /* Hide scrollbar Firefox */
+            max-width: 800px; 
+            margin: 25px auto; 
+            overflow-x: auto; 
+            padding: 10px 5px;
+            display: flex;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
         }
-        .pagination-wrapper::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome/Safari */
+        .pagination-wrapper::-webkit-scrollbar { display: none; }
 
-        .pagination { display: inline-flex; gap: 8px; }
+        .pagination { 
+            display: flex; 
+            gap: 10px; 
+            margin: 0 auto; /* Center if few pages, scroll if many */
+        }
         .page-btn { 
-            min-width: 45px; height: 45px; border-radius: 50%; 
-            border: 1px solid var(--primary-pink); background: #fff; 
-            color: var(--primary-pink); font-weight: bold; cursor: pointer;
+            min-width: 45px; 
+            height: 45px; 
+            border-radius: 8px;
+            border: 2px solid var(--primary-pink); 
+            background: #fff; 
+            color: var(--primary-pink); 
+            font-weight: bold; 
+            cursor: pointer;
+            flex-shrink: 0;
         }
         .page-btn.active { background: var(--primary-pink); color: #fff; }
 
@@ -117,7 +104,7 @@
 
 <header class="site-header">
     <div class="header-box">
-        <img src="/assets/images/Omnnbc-new.png" class="logo" alt="Omnnbc Logo" loading="lazy">
+        <img src="/assets/images/Omnnbc-new.png" class="logo" alt="Logo">
         <div class="site-name-wrapper">
             <h1><span>Namo Narayanaya</span> <span>Bhakthi Channel</span></h1>
         </div>
@@ -126,7 +113,6 @@
 
 <div class="search-wrapper">
     <input type="text" id="searchInput" placeholder="Search stotrams or lyrics...">
-    <div id="suggestBox"></div>
 </div>
 
 <main class="container" id="posts"></main>
@@ -138,7 +124,6 @@
 <footer>© 2026 Namo Narayanaya Bhakthi Channel</footer>
 
 <script>
-    // బాటమ్ పైన ఉన్న స్క్రిప్ట్ అలాగే ఉంచండి, కేవలం Pagination ఫంక్షన్ మార్చాను.
     const repoName = "Omnnbc";
     const isGitHub = location.hostname.includes("github.io");
     const baseUrl = isGitHub ? "/" + repoName : "";
@@ -147,18 +132,16 @@
     let currentPage = 1;
     const perPage = 25;
 
-    const postsDiv = document.getElementById("posts");
-    const searchInput = document.getElementById("searchInput");
-
     fetch(baseUrl + "/data/posts.json?v=" + Date.now())
-    .then(r => r.json())
+    .then(res => res.json())
     .then(data => {
         allPosts = data.sort((a,b) => new Date(b.publish_date) - new Date(a.publish_date));
         filteredPosts = [...allPosts];
         render();
     });
 
-    function render(term = "") {
+    function render() {
+        const postsDiv = document.getElementById("posts");
         let start = (currentPage - 1) * perPage;
         let items = filteredPosts.slice(start, start + perPage);
         postsDiv.innerHTML = "";
@@ -183,16 +166,20 @@
             let btn = document.createElement("button");
             btn.innerText = i;
             btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-            btn.onclick = () => { currentPage = i; render(); window.scrollTo({top: 0, behavior: 'smooth'}); };
+            btn.onclick = () => { 
+                currentPage = i; 
+                render(); 
+                window.scrollTo({top: 0, behavior: 'smooth'}); 
+            };
             pagDiv.appendChild(btn);
         }
     }
 
-    searchInput.addEventListener("input", (e) => {
+    document.getElementById("searchInput").addEventListener("input", (e) => {
         let val = e.target.value.toLowerCase().trim();
         currentPage = 1; 
         filteredPosts = allPosts.filter(p => p.title.toLowerCase().includes(val));
-        render(val);
+        render();
     });
 </script>
 
