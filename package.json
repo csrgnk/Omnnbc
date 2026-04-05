@@ -5,9 +5,5 @@
   "main": "generate-sitemap.js",
   "scripts": {
     "build": "node generate-sitemap.js"
-  },
-  "dependencies": {
-    "fs": "0.0.1-security",
-    "path": "^0.12.7"
   }
 }
