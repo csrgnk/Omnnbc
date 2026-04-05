@@ -4,25 +4,34 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
+  <title>Redirecting...</title>
   <script>
     (function() {
       var path = window.location.pathname;
 
-      // Fix old /posts/file.html URLs
-      if (path.includes('/posts/')) {
-        var newPath = path.replace('/posts/', '/').replace('.html', '');
-        window.location.replace(newPath);
-        return;
-      }
+      // ONLY run on wrong URLs
+      if (path.includes('/posts/') || path.endsWith('.html')) {
+        
+        var newPath = path
+          .replace('/posts/', '/')
+          .replace('.html', '');
 
-      // Fix direct .html access
-      if (path.endsWith('.html')) {
-        var clean = path.replace('.html', '');
-        window.location.replace(clean);
-        return;
+        // Prevent infinite loop
+        if (newPath !== path) {
+          window.location.replace(newPath);
+        }
       }
     })();
   </script>
+</head>
+
+<body>
+  <h2 style="text-align:center;margin-top:50px;">
+    Redirecting...
+  </h2>
+</body>
+</html>
 </head>
 </body>
 </html>
