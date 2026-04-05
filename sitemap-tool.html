@@ -13,8 +13,9 @@
         .btn:hover { background-color: #d35400; box-shadow: 0 5px 15px rgba(211, 84, 0, 0.3); }
         #output-section { margin-top: 35px; display: none; text-align: left; }
         #status-msg { font-weight: bold; margin-bottom: 10px; color: #2980b9; }
-        #sitemap-output { width: 100%; height: 400px; padding: 15px; border: 1px solid #dcdde1; border-radius: 6px; font-family: 'Consolas', monospace; font-size: 13px; background-color: #2f3640; color: #f5f6fa; overflow: auto; resize: none; }
-        .copy-btn { background-color: #27ae60; color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 15px; }
+        #sitemap-output { width: 100%; height: 450px; padding: 15px; border: 1px solid #dcdde1; border-radius: 6px; font-family: 'Consolas', monospace; font-size: 13px; background-color: #2f3640; color: #f5f6fa; overflow: auto; resize: none; white-space: pre; }
+        .copy-btn { background-color: #27ae60; color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 15px; font-size: 16px; }
+        .copy-btn:hover { background-color: #219150; }
         #success-toast { display: none; color: #27ae60; font-weight: bold; margin-left: 15px; }
     </style>
 </head>
@@ -22,9 +23,9 @@
 
 <div class="container">
     <h1>Omnnbc Sitemap Tool</h1>
-    <p>Generating sitemap from <b>data/pages.json</b> and <b>data/posts.json</b>.</p>
+    <p>Automatically generating sitemap from <b>data/pages.json</b> and <b>data/posts.json</b>.</p>
 
-    <button class="btn" onclick="generateSitemap()">Generate Sitemap</button>
+    <button class="btn" onclick="generateSitemap()">Generate Complete Sitemap</button>
 
     <div id="output-section">
         <div id="status-msg"></div>
@@ -44,51 +45,60 @@
         const domain = "https://omnnbc.com";
         
         outputSection.style.display = 'block';
-        status.innerText = "Processing JSON files...";
+        status.innerText = "Building XML structure... Please wait.";
 
         try {
-            let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-            xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+            // Initialize XML lines array to ensure clean structure
+            let xmlLines = [
+                '<?xml version="1.0" encoding="UTF-8"?>',
+                '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+                '  <url>',
+                `    <loc>${domain}/</loc>`,
+                `    <lastmod>${new Date().toISOString()}</lastmod>`,
+                '    <priority>1.0</priority>',
+                '  </url>'
+            ];
 
-            // 1. Home Page
-            xml += `  <url>\n    <loc>${domain}/</loc>\n    <lastmod>${new Date().toISOString()}</lastmod>\n    <priority>1.0</priority>\n  </url>\n`;
-
-            // 2. Fetch Pages (Reading from "file" key as per your JSON)
+            // 1. Process Pages from data/pages.json
             let pageCount = 0;
-            try {
-                const pRes = await fetch('data/pages.json');
+            const pRes = await fetch('data/pages.json');
+            if (pRes.ok) {
                 const pData = await pRes.json();
                 pData.forEach(p => {
-                    // It now specifically looks for the "file" key you provided
-                    let slug = p.file || p.url || p.id;
-                    if (slug) {
-                        slug = slug.replace('.html', '');
-                        xml += `  <url>\n    <loc>${domain}/${slug}</loc>\n    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n    <priority>0.8</priority>\n  </url>\n`;
-                        pageCount++;
-                    }
+                    let slug = (p.file || p.url || p.id).replace('.html', '');
+                    xmlLines.push('  <url>');
+                    xmlLines.push(`    <loc>${domain}/${slug}</loc>`);
+                    xmlLines.push(`    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>`);
+                    xmlLines.push('    <priority>0.8</priority>');
+                    xmlLines.push('  </url>');
+                    pageCount++;
                 });
-            } catch (e) { console.warn("Pages JSON error:", e); }
+            }
 
-            // 3. Fetch Posts
+            // 2. Process Posts from data/posts.json
             let postCount = 0;
-            try {
-                const poRes = await fetch('data/posts.json');
+            const poRes = await fetch('data/posts.json');
+            if (poRes.ok) {
                 const poData = await poRes.json();
                 poData.forEach(post => {
-                    let slug = post.file || post.url || post.slug;
-                    if (slug) {
-                        // Cleans folder names and extensions
-                        slug = slug.split('/').pop().replace('.html', '');
-                        const date = post.publish_date ? post.publish_date.split('T')[0] : new Date().toISOString().split('T')[0];
-                        xml += `  <url>\n    <loc>${domain}/${slug}</loc>\n    <lastmod>${date}</lastmod>\n    <priority>0.7</priority>\n  </url>\n`;
-                        postCount++;
-                    }
+                    let slug = (post.file || post.url || post.slug).split('/').pop().replace('.html', '');
+                    let date = post.publish_date ? post.publish_date.split('T')[0] : new Date().toISOString().split('T')[0];
+                    xmlLines.push('  <url>');
+                    xmlLines.push(`    <loc>${domain}/${slug}</loc>`);
+                    xmlLines.push(`    <lastmod>${date}</lastmod>`);
+                    xmlLines.push('    <priority>0.7</priority>');
+                    xmlLines.push('  </url>');
+                    postCount++;
                 });
-            } catch (e) { console.warn("Posts JSON error:", e); }
+            }
 
-            xml += `</urlset>`;
-            outputArea.value = xml;
+            // Close the XML tag
+            xmlLines.push('</urlset>');
+
+            // Final output
+            outputArea.value = xmlLines.join('\n');
             status.innerText = `Success: Found ${pageCount} Pages and ${postCount} Posts.`;
+            status.style.color = "#2980b9";
 
         } catch (error) {
             status.style.color = "#c0392b";
