@@ -2,7 +2,7 @@ name: Auto Update Sitemap
 
 on:
   push:
-    branches: [ main ] # If your branch is 'main'
+    branches: [ main ] # మీ బ్రాంచ్ పేరు main కాకపోతే అది మార్చండి
   workflow_dispatch:
 
 jobs:
