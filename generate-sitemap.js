@@ -4,72 +4,92 @@ const path = require('path');
 const domain = "https://omnnbc.com";
 const rootDir = __dirname;
 
-// The folders containing your physical .html files
+// Folders where your HTML files exist
 const foldersToScan = ['posts', 'pages'];
 
-function getAllHtmlFiles(dir, folderName) {
+// Convert filename → clean SEO URL
+function getCleanUrl(file) {
+    let name = file.replace('.html', '');
+
+    // remove index (optional)
+    if (name.toLowerCase() === 'index') return '';
+
+    return name;
+}
+
+function getAllHtmlFiles(dir) {
     let results = [];
     if (!fs.existsSync(dir)) return results;
 
     const list = fs.readdirSync(dir);
+
     list.forEach(file => {
         const filePath = path.join(dir, file);
         const stat = fs.statSync(filePath);
 
         if (stat && stat.isDirectory()) {
-            results = results.concat(getAllHtmlFiles(filePath, folderName));
+            results = results.concat(getAllHtmlFiles(filePath));
         } else if (file.endsWith('.html')) {
-            // This logic creates the WORKING URL:
-            // Example: https://omnnbc.com/posts/hanuman-chalisa.html
-            if (file.toLowerCase() !== 'index.html') {
-                results.push(`${domain}/${folderName}/${file}`);
-            }
+            results.push(file);
         }
     });
+
     return results;
 }
 
 try {
-    console.log('--- Generating Working Sitemap for Search Console ---');
-    
-    let xmlLines = [
-        '<?xml version="1.0" encoding="UTF-8"?>',
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-        '  <url>',
-        `    <loc>${domain}/</loc>`,
-        `    <lastmod>${new Date().toISOString()}</lastmod>`,
-        '    <priority>1.0</priority>',
-        '  </url>'
-    ];
+    console.log('--- Generating CLEAN Sitemap for Google ---');
+
+    let xml = [];
+    const today = new Date().toISOString().split('T')[0];
+
+    xml.push('<?xml version="1.0" encoding="UTF-8"?>');
+    xml.push('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
+
+    // Homepage
+    xml.push(`
+  <url>
+    <loc>${domain}/</loc>
+    <lastmod>${today}</lastmod>
+    <priority>1.0</priority>
+  </url>`);
 
     let allLinks = [];
 
-    // Scan each folder and keep the folder name and .html extension
     foldersToScan.forEach(folder => {
         const folderPath = path.join(rootDir, folder);
+
         if (fs.existsSync(folderPath)) {
-            const links = getAllHtmlFiles(folderPath, folder);
-            allLinks = allLinks.concat(links);
+            const files = getAllHtmlFiles(folderPath);
+
+            files.forEach(file => {
+                const slug = getCleanUrl(file);
+
+                if (slug !== '') {
+                    allLinks.push(`${domain}/${slug}`);
+                }
+            });
         }
     });
 
-    // Add unique working URLs to XML
-    [...new Set(allLinks)].forEach(link => {
-        xmlLines.push('  <url>');
-        xmlLines.push(`    <loc>${link}</loc>`);
-        xmlLines.push(`    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>`);
-        xmlLines.push('    <priority>0.8</priority>');
-        xmlLines.push('  </url>');
+    // Remove duplicates
+    allLinks = [...new Set(allLinks)];
+
+    allLinks.forEach(link => {
+        xml.push(`
+  <url>
+    <loc>${link}</loc>
+    <lastmod>${today}</lastmod>
+    <priority>0.8</priority>
+  </url>`);
     });
 
-    xmlLines.push('</urlset>');
+    xml.push('</urlset>');
 
-    // Write to the root sitemap.xml
-    fs.writeFileSync(path.join(rootDir, 'sitemap.xml'), xmlLines.join('\n'));
-    
-    console.log(`SUCCESS: Found ${allLinks.length} working files.`);
+    fs.writeFileSync(path.join(rootDir, 'sitemap.xml'), xml.join('\n'));
+
+    console.log(`✅ SUCCESS: ${allLinks.length} URLs added (CLEAN URLs)`);
 
 } catch (err) {
-    console.error('Error:', err.message);
-    process.exit(1);
+    console.error('❌ Error:', err.message);
 }
