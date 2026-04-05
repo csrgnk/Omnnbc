@@ -13,6 +13,5 @@ Disallow: /_includes/
 Disallow: /_layouts/
 Disallow: /_posts/
 
-# Direct links to your Post and Page Sitemaps
-Sitemap: https://omnnbc.in/sitemap-posts.xml
-Sitemap: https://omnnbc.in/sitemap-pages.xml
+# Direct link to your Posts and Pages Sitemap
+Sitemap: https://omnnbc.com/sitemap.xml
