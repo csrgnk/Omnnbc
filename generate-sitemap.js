@@ -4,25 +4,23 @@ const path = require('path');
 const domain = "https://omnnbc.com";
 const rootDir = __dirname;
 
-// Folders to scan
-const folders = ['posts', 'pages'];
+// Folders to scan for your .html files
+const targetFolders = ['posts', 'pages'];
 
-function scanFolders(dir, folderName) {
+function getCleanUrls(dir) {
     let results = [];
     if (!fs.existsSync(dir)) return results;
-
-    const list = fs.readdirSync(dir);
-    list.forEach(file => {
+    
+    const files = fs.readdirSync(dir);
+    files.forEach(file => {
         const filePath = path.join(dir, file);
-        const stat = fs.statSync(filePath);
-        
-        if (stat && stat.isDirectory()) {
-            results = results.concat(scanFolders(filePath, folderName));
+        if (fs.statSync(filePath).isDirectory()) {
+            results = results.concat(getCleanUrls(filePath));
         } else if (file.endsWith('.html')) {
-            // REMOVE .html and REMOVE folder name for Clean URL
-            const slug = file.replace('.html', '');
-            if (slug !== 'index') {
-                results.push(`${domain}/${slug}`);
+            // MAGIC STEP: Remove .html and remove the folder name for Search Console
+            const cleanSlug = file.replace('.html', '');
+            if (cleanSlug !== 'index') {
+                results.push(`${domain}/${cleanSlug}`);
             }
         }
     });
@@ -30,39 +28,30 @@ function scanFolders(dir, folderName) {
 }
 
 try {
-    console.log('Starting Clean URL Scan...');
-    let xmlLines = [
-        '<?xml version="1.0" encoding="UTF-8"?>',
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-        '  <url>',
-        `    <loc>${domain}/</loc>`,
-        `    <lastmod>${new Date().toISOString()}</lastmod>`,
-        '    <priority>1.0</priority>',
-        '  </url>'
-    ];
+    console.log('Generating Clean Sitemap for Search Console...');
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+    xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
-    let allUrls = [];
+    // 1. Add Home Page
+    xml += `  <url>\n    <loc>${domain}/</loc>\n    <lastmod>${new Date().toISOString()}</lastmod>\n    <priority>1.0</priority>\n  </url>\n`;
 
-    // Scan each folder but generate clean top-level URLs
-    folders.forEach(f => {
-        const folderPath = path.join(rootDir, f);
-        const discovered = scanFolders(folderPath, f);
-        allUrls = allUrls.concat(discovered);
+    // 2. Scan all folders and add clean URLs
+    let allLinks = [];
+    targetFolders.forEach(folder => {
+        const folderPath = path.join(rootDir, folder);
+        allLinks = allLinks.concat(getCleanUrls(folderPath));
     });
 
-    // Add unique clean URLs to XML
-    [...new Set(allUrls)].forEach(url => {
-        xmlLines.push('  <url>');
-        xmlLines.push(`    <loc>${url}</loc>`);
-        xmlLines.push(`    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>`);
-        xmlLines.push('    <priority>0.8</priority>');
-        xmlLines.push('  </url>');
+    // Remove any duplicates and write to XML
+    [...new Set(allLinks)].forEach(link => {
+        xml += `  <url>\n    <loc>${link}</loc>\n    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n    <priority>0.8</priority>\n  </url>\n`;
     });
 
-    xmlLines.push('</urlset>');
+    xml += `</urlset>`;
 
-    fs.writeFileSync('./sitemap.xml', xmlLines.join('\n'));
-    console.log(`SUCCESS: Generated sitemap with ${allUrls.length} clean URLs.`);
+    // Save as sitemap.xml in the main folder
+    fs.writeFileSync('./sitemap.xml', xml);
+    console.log(`SUCCESS: Created sitemap.xml with ${allLinks.length} clean links.`);
 } catch (err) {
     console.error('Error:', err.message);
 }
