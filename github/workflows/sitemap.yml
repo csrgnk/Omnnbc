@@ -1,9 +1,8 @@
-name: Auto Update Sitemap
+name: Auto Sitemap Update
 
 on:
   push:
-    branches: [ main ] # మీ బ్రాంచ్ పేరు main కాకపోతే అది మార్చండి
-  workflow_dispatch:
+    branches: [ main ] # Change to 'master' if that is your branch name
 
 jobs:
   build:
@@ -11,21 +10,21 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout Repository
+      - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      - name: Generate Sitemap
+      - name: Run Auto-Scanner
         run: node generate-sitemap.js
 
-      - name: Commit and Push Sitemap
+      - name: Save and Push Sitemap
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           git add sitemap.xml
-          git commit -m "Automated Sitemap Update" || echo "No changes to commit"
+          git commit -m "Automated sitemap update from folder scan" || echo "No changes"
           git push
