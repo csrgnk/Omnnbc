@@ -1,0 +1,13 @@
+{
+  "name": "omnnbc-sitemap-generator",
+  "version": "1.0.0",
+  "description": "Sitemap generator for omnnbc.com",
+  "main": "generate-sitemap.js",
+  "scripts": {
+    "build": "node generate-sitemap.js"
+  },
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "path": "^0.12.7"
+  }
+}
