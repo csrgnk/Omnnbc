@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 
 const domain = "https://omnnbc.com";
-// Ensure these paths match your repo structure
 const postsPath = path.join(__dirname, 'data', 'posts.json');
 const pagesDir = path.join(__dirname, 'pages');
 
@@ -25,7 +24,7 @@ try {
         });
     }
 
-    // 3. Posts from posts.json
+    // 3. 360+ Posts from posts.json
     if (fs.existsSync(postsPath)) {
         const data = fs.readFileSync(postsPath, 'utf8');
         const posts = JSON.parse(data);
@@ -43,9 +42,8 @@ try {
     }
 
     xml += `</urlset>`;
-    // Writing to root directory for GitHub Pages
     fs.writeFileSync('./sitemap.xml', xml);
-    console.log('SUCCESS: sitemap.xml updated!');
+    console.log('SUCCESS: sitemap.xml updated for GitHub Pages!');
 } catch (err) {
     console.error('ERROR:', err.message);
 }
