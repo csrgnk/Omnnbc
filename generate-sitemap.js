@@ -2,11 +2,12 @@ const fs = require('fs');
 const path = require('path');
 
 const domain = "https://omnnbc.com";
+// Ensure these paths match your repo structure
 const postsPath = path.join(__dirname, 'data', 'posts.json');
 const pagesDir = path.join(__dirname, 'pages');
 
 try {
-    console.log('Generating Sitemap for omnnbc.com...');
+    console.log('Generating Sitemap for Omnnbc...');
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
     xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
@@ -24,7 +25,7 @@ try {
         });
     }
 
-    // 3. 360+ Posts from posts.json
+    // 3. Posts from posts.json
     if (fs.existsSync(postsPath)) {
         const data = fs.readFileSync(postsPath, 'utf8');
         const posts = JSON.parse(data);
@@ -42,9 +43,9 @@ try {
     }
 
     xml += `</urlset>`;
-    // GitHub Pages కోసం నేరుగా మెయిన్ ఫోల్డర్ లో సేవ్ చేయాలి
+    // Writing to root directory for GitHub Pages
     fs.writeFileSync('./sitemap.xml', xml);
-    console.log('SUCCESS: sitemap.xml created successfully!');
+    console.log('SUCCESS: sitemap.xml updated!');
 } catch (err) {
     console.error('ERROR:', err.message);
 }
