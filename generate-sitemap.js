@@ -4,71 +4,65 @@ const path = require('path');
 const domain = "https://omnnbc.com";
 const rootDir = __dirname;
 
-// Folders to scan automatically
-const foldersToScan = ['posts', 'pages']; 
+// Folders to scan
+const folders = ['posts', 'pages'];
 
-function getAllFiles(dirPath, arrayOfFiles) {
-    const files = fs.readdirSync(dirPath);
-    arrayOfFiles = arrayOfFiles || [];
+function scanFolders(dir, folderName) {
+    let results = [];
+    if (!fs.existsSync(dir)) return results;
 
-    files.forEach(function(file) {
-        if (fs.statSync(dirPath + "/" + file).isDirectory()) {
-            arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles);
-        } else {
-            if (file.endsWith('.html')) {
-                // Create the clean URL path
-                let relativePath = path.join(dirPath, file).replace(rootDir, '').replace(/\\/g, '/');
-                if (relativePath.startsWith('/')) relativePath = relativePath.substring(1);
-                
-                // Remove .html for clean URLs
-                let urlPath = relativePath.replace('.html', '');
-                // If it's index, it's just the folder path
-                if (urlPath.endsWith('index')) urlPath = urlPath.replace('index', '');
-
-                arrayOfFiles.push(`${domain}/${urlPath}`);
+    const list = fs.readdirSync(dir);
+    list.forEach(file => {
+        const filePath = path.join(dir, file);
+        const stat = fs.statSync(filePath);
+        
+        if (stat && stat.isDirectory()) {
+            results = results.concat(scanFolders(filePath, folderName));
+        } else if (file.endsWith('.html')) {
+            // REMOVE .html and REMOVE folder name for Clean URL
+            const slug = file.replace('.html', '');
+            if (slug !== 'index') {
+                results.push(`${domain}/${slug}`);
             }
         }
     });
-
-    return arrayOfFiles;
+    return results;
 }
 
 try {
-    console.log('Starting automatic folder scan...');
-    let allUrls = [`${domain}/`]; // Start with Home Page
+    console.log('Starting Clean URL Scan...');
+    let xmlLines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+        '  <url>',
+        `    <loc>${domain}/</loc>`,
+        `    <lastmod>${new Date().toISOString()}</lastmod>`,
+        '    <priority>1.0</priority>',
+        '  </url>'
+    ];
 
-    // 1. Scan specific folders automatically
-    foldersToScan.forEach(folder => {
-        const folderPath = path.join(rootDir, folder);
-        if (fs.existsSync(folderPath)) {
-            console.log(`Scanning folder: ${folder}`);
-            const folderFiles = getAllFiles(folderPath);
-            allUrls = allUrls.concat(folderFiles);
-        }
+    let allUrls = [];
+
+    // Scan each folder but generate clean top-level URLs
+    folders.forEach(f => {
+        const folderPath = path.join(rootDir, f);
+        const discovered = scanFolders(folderPath, f);
+        allUrls = allUrls.concat(discovered);
     });
 
-    // 2. Scan root directory for any top-level HTML files (like about.html)
-    const rootFiles = fs.readdirSync(rootDir);
-    rootFiles.forEach(file => {
-        if (file.endsWith('.html') && !['index.html', 'sitemap-tool.html'].includes(file)) {
-            allUrls.push(`${domain}/${file.replace('.html', '')}`);
-        }
+    // Add unique clean URLs to XML
+    [...new Set(allUrls)].forEach(url => {
+        xmlLines.push('  <url>');
+        xmlLines.push(`    <loc>${url}</loc>`);
+        xmlLines.push(`    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>`);
+        xmlLines.push('    <priority>0.8</priority>');
+        xmlLines.push('  </url>');
     });
 
-    // 3. Build XML
-    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
-    
-    // Remove duplicates and generate XML tags
-    const uniqueUrls = [...new Set(allUrls)];
-    uniqueUrls.forEach(url => {
-        xml += `  <url>\n    <loc>${url}</loc>\n    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n    <changefreq>weekly</changefreq>\n  </url>\n`;
-    });
+    xmlLines.push('</urlset>');
 
-    xml += `</urlset>`;
-
-    fs.writeFileSync('./sitemap.xml', xml);
-    console.log(`SUCCESS: Found ${uniqueUrls.length} links automatically. sitemap.xml updated.`);
-
+    fs.writeFileSync('./sitemap.xml', xmlLines.join('\n'));
+    console.log(`SUCCESS: Generated sitemap with ${allUrls.length} clean URLs.`);
 } catch (err) {
-    console.error('Scan Error:', err.message);
+    console.error('Error:', err.message);
 }
