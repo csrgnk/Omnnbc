@@ -3,99 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sitemap Generator Tool - Omnnbc</title>
+    <title>Sitemap Generator - Omnnbc</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; color: #333; line-height: 1.6; padding: 40px; text-align: center; }
-        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        h1 { color: #ff9800; margin-bottom: 10px; }
-        p { color: #666; margin-bottom: 30px; }
-        .btn { background-color: #ff9800; color: white; border: none; padding: 15px 35px; font-size: 18px; font-weight: bold; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3); }
-        .btn:hover { background-color: #fb8c00; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4); }
-        #output-container { margin-top: 30px; display: none; text-align: left; }
-        #sitemap-output { width: 100%; height: 450px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; font-family: 'Courier New', Courier, monospace; font-size: 14px; background-color: #1e1e1e; color: #d4d4d4; overflow: auto; margin-bottom: 15px; }
-        .copy-btn { background-color: #28a745; color: white; border: none; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 16px; }
-        .copy-btn:hover { background-color: #218838; }
-        #status { font-weight: bold; color: #007bff; margin-bottom: 10px; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f7f6; color: #2c3e50; line-height: 1.6; padding: 40px; text-align: center; }
+        .container { max-width: 850px; margin: auto; background: #ffffff; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h1 { color: #e67e22; margin-bottom: 15px; font-size: 28px; }
+        p { color: #7f8c8d; margin-bottom: 30px; font-size: 16px; }
+        .btn { background-color: #e67e22; color: white; border: none; padding: 16px 40px; font-size: 18px; font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; }
+        .btn:hover { background-color: #d35400; box-shadow: 0 5px 15px rgba(211, 84, 0, 0.3); }
+        #output-section { margin-top: 35px; display: none; text-align: left; }
+        #status-msg { font-weight: bold; margin-bottom: 10px; color: #2980b9; }
+        #sitemap-output { width: 100%; height: 400px; padding: 15px; border: 1px solid #dcdde1; border-radius: 6px; font-family: 'Consolas', 'Monaco', monospace; font-size: 14px; background-color: #2f3640; color: #f5f6fa; overflow: auto; resize: none; }
+        .copy-btn { background-color: #27ae60; color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 15px; font-size: 15px; }
+        .copy-btn:hover { background-color: #219150; }
+        #success-toast { display: none; color: #27ae60; font-weight: bold; margin-top: 10px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>Omnnbc Sitemap Generator</h1>
-    <p>Generate a complete sitemap including your static pages and 360+ posts for Google indexing.</p>
+    <p>Use this tool to generate a fresh XML sitemap for all your pages and posts.</p>
 
-    <button class="btn" onclick="generateFullSitemap()">Generate Sitemap Script</button>
+    <button class="btn" onclick="runGenerator()">Generate Complete Sitemap</button>
 
-    <div id="output-container">
-        <div id="status"></div>
+    <div id="output-section">
+        <div id="status-msg"></div>
         <textarea id="sitemap-output" readonly></textarea>
-        <button class="copy-btn" onclick="copyToClipboard()">Copy XML to Clipboard</button>
-        <p id="copy-msg" style="color: #28a745; display: none; margin-top: 10px; font-weight: bold;">Copied Successfully!</p>
+        <button class="copy-btn" onclick="copyText()">Copy XML Script</button>
+        <span id="success-toast">Copied to clipboard!</span>
     </div>
 </div>
 
 <script>
-    async function generateFullSitemap() {
-        const outputContainer = document.getElementById('output-container');
+    async function runGenerator() {
+        const outputSection = document.getElementById('output-section');
         const outputArea = document.getElementById('sitemap-output');
-        const statusDiv = document.getElementById('status');
+        const status = document.getElementById('status-msg');
         const domain = "https://omnnbc.com";
         
-        outputContainer.style.display = 'block';
-        statusDiv.innerText = "Processing static pages and fetching posts...";
+        outputSection.style.display = 'block';
+        status.innerText = "Processing your files...";
 
         try {
-            // 1. Define Static Pages (Since browser can't scan folders, we list them here)
-            const staticPages = [
-                'about', 'contact', 'privacy-policy', 'terms'
-            ];
+            // List your static pages here manually (excluding home page)
+            const pages = ['about', 'contact', 'privacy-policy', 'terms'];
 
             let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
             xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
-            // Add Home Page
+            // Home Page Entry
             xml += `  <url>\n    <loc>${domain}/</loc>\n    <lastmod>${new Date().toISOString()}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n  </url>\n`;
 
-            // Add Static Pages
-            staticPages.forEach(page => {
-                xml += `  <url>\n    <loc>${domain}/${page}</loc>\n    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>\n`;
+            // Static Pages Loop
+            pages.forEach(p => {
+                xml += `  <url>\n    <loc>${domain}/${p}</loc>\n    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>\n`;
             });
 
-            // 2. Fetch Posts from posts.json
-            const response = await fetch('data/posts.json');
-            if (!response.ok) throw new Error('data/posts.json not found');
-            const posts = await response.json();
+            // Fetching posts from data/posts.json
+            const res = await fetch('data/posts.json');
+            if (!res.ok) throw new Error('Data file not found (data/posts.json)');
+            const postsData = await res.json();
 
-            posts.forEach(post => {
-                if (post.url) {
-                    let cleanPath = post.url.replace(/^posts\//, '').replace(/^pages\//, '').replace('.html', '');
-                    if (cleanPath.includes('/')) { cleanPath = cleanPath.split('/').pop(); }
+            postsData.forEach(item => {
+                if (item.url) {
+                    let path = item.url.replace(/^posts\//, '').replace(/^pages\//, '').replace('.html', '');
+                    if (path.includes('/')) { path = path.split('/').pop(); }
 
-                    const fullUrl = `${domain}/${cleanPath}`;
-                    const date = post.publish_date ? post.publish_date.split('T')[0] : new Date().toISOString().split('T')[0];
+                    const url = `${domain}/${path}`;
+                    const date = item.publish_date ? item.publish_date.split('T')[0] : new Date().toISOString().split('T')[0];
 
-                    xml += `  <url>\n    <loc>${fullUrl}</loc>\n    <lastmod>${date}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+                    xml += `  <url>\n    <loc>${url}</loc>\n    <lastmod>${date}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
                 }
             });
 
             xml += `</urlset>`;
             outputArea.value = xml;
-            statusDiv.innerText = "Generation Complete! Found " + posts.length + " posts.";
+            status.innerText = "Success! Generated entries for " + postsData.length + " posts.";
 
-        } catch (error) {
-            statusDiv.style.color = "red";
-            statusDiv.innerText = "Error: " + error.message;
+        } catch (e) {
+            status.style.color = "#c0392b";
+            status.innerText = "Error: " + e.message;
         }
     }
 
-    function copyToClipboard() {
-        const copyText = document.getElementById("sitemap-output");
-        copyText.select();
+    function copyText() {
+        const area = document.getElementById("sitemap-output");
+        area.select();
         document.execCommand("copy");
         
-        const msg = document.getElementById("copy-msg");
-        msg.style.display = "block";
-        setTimeout(() => { msg.style.display = "none"; }, 3000);
+        const toast = document.getElementById("success-toast");
+        toast.style.display = "inline-block";
+        setTimeout(() => { toast.style.display = "none"; }, 3000);
     }
 </script>
 
