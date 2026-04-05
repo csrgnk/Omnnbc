@@ -22,7 +22,7 @@
 
 <div class="container">
     <h1>Omnnbc Sitemap Tool</h1>
-    <p>Automatically generating URLs from <b>data/pages.json</b> and <b>data/posts.json</b>.</p>
+    <p>Generating sitemap from <b>data/pages.json</b> and <b>data/posts.json</b>.</p>
 
     <button class="btn" onclick="generateSitemap()">Generate Sitemap</button>
 
@@ -44,7 +44,7 @@
         const domain = "https://omnnbc.com";
         
         outputSection.style.display = 'block';
-        status.innerText = "Loading data files...";
+        status.innerText = "Processing JSON files...";
 
         try {
             let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
@@ -53,48 +53,42 @@
             // 1. Home Page
             xml += `  <url>\n    <loc>${domain}/</loc>\n    <lastmod>${new Date().toISOString()}</lastmod>\n    <priority>1.0</priority>\n  </url>\n`;
 
-            // Function to clean URLs from JSON paths
-            const cleanUrl = (rawPath) => {
-                if (!rawPath) return null;
-                // Removes folders like 'pages/' or 'posts/' and the '.html' extension
-                let path = rawPath.replace(/^pages\//, '').replace(/^posts\//, '').replace('.html', '');
-                // Handle cases where it might be just 'index'
-                if (path === 'index') return null;
-                return `${domain}/${path}`;
-            };
-
-            // 2. Fetch Pages (about-us, contact-us, etc.)
+            // 2. Fetch Pages (Reading from "file" key as per your JSON)
             let pageCount = 0;
             try {
-                const pagesRes = await fetch('data/pages.json');
-                const pagesData = await pagesRes.json();
-                pagesData.forEach(p => {
-                    const url = cleanUrl(p.url);
-                    if (url) {
-                        xml += `  <url>\n    <loc>${url}</loc>\n    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n    <priority>0.8</priority>\n  </url>\n`;
+                const pRes = await fetch('data/pages.json');
+                const pData = await pRes.json();
+                pData.forEach(p => {
+                    // It now specifically looks for the "file" key you provided
+                    let slug = p.file || p.url || p.id;
+                    if (slug) {
+                        slug = slug.replace('.html', '');
+                        xml += `  <url>\n    <loc>${domain}/${slug}</loc>\n    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n    <priority>0.8</priority>\n  </url>\n`;
                         pageCount++;
                     }
                 });
-            } catch (e) { console.warn("Pages JSON not found or empty."); }
+            } catch (e) { console.warn("Pages JSON error:", e); }
 
-            // 3. Fetch Posts (360+ devotional items)
+            // 3. Fetch Posts
             let postCount = 0;
             try {
-                const postsRes = await fetch('data/posts.json');
-                const postsData = await postsRes.json();
-                postsData.forEach(post => {
-                    const url = cleanUrl(post.url);
-                    if (url) {
+                const poRes = await fetch('data/posts.json');
+                const poData = await poRes.json();
+                poData.forEach(post => {
+                    let slug = post.file || post.url || post.slug;
+                    if (slug) {
+                        // Cleans folder names and extensions
+                        slug = slug.split('/').pop().replace('.html', '');
                         const date = post.publish_date ? post.publish_date.split('T')[0] : new Date().toISOString().split('T')[0];
-                        xml += `  <url>\n    <loc>${url}</loc>\n    <lastmod>${date}</lastmod>\n    <priority>0.7</priority>\n  </url>\n`;
+                        xml += `  <url>\n    <loc>${domain}/${slug}</loc>\n    <lastmod>${date}</lastmod>\n    <priority>0.7</priority>\n  </url>\n`;
                         postCount++;
                     }
                 });
-            } catch (e) { console.warn("Posts JSON not found or empty."); }
+            } catch (e) { console.warn("Posts JSON error:", e); }
 
             xml += `</urlset>`;
             outputArea.value = xml;
-            status.innerText = `Success: Found ${pageCount} pages and ${postCount} posts.`;
+            status.innerText = `Success: Found ${pageCount} Pages and ${postCount} Posts.`;
 
         } catch (error) {
             status.style.color = "#c0392b";
