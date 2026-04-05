@@ -6,18 +6,20 @@
 <head>
   <meta charset="UTF-8">
   <title>Redirecting...</title>
+
+  <style>
+    body { display: none; }
+  </style>
+
   <script>
     (function() {
       var path = window.location.pathname;
 
-      // ONLY run on wrong URLs
       if (path.includes('/posts/') || path.endsWith('.html')) {
-        
         var newPath = path
           .replace('/posts/', '/')
           .replace('.html', '');
 
-        // Prevent infinite loop
         if (newPath !== path) {
           window.location.replace(newPath);
         }
@@ -27,13 +29,9 @@
 </head>
 
 <body>
-  <h2 style="text-align:center;margin-top:50px;">
-    Redirecting...
-  </h2>
+  Redirecting...
 </body>
 </html>
-</head>
-</body>
 </html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
