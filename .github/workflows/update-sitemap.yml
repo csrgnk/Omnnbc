@@ -1,36 +1,51 @@
-name: GitHub Sitemap Auto-Update
+name: Unified Sitemap Auto-Update
 on:
   push:
     branches: [ main ]
     paths:
-      - 'data/posts.json'   # Triggers when you update your post list
-      - 'data/pages.json'   # Triggers when you update pages
-      - 'posts/**'          # Triggers if you upload HTML files directly
-      - 'generate_sitemap.py' # Triggers if you update the logic
+      - 'posts/*.html'
+      - 'pages/*.html'
 
 jobs:
-  build:
+  generate-sitemap:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-      
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
 
-      - name: Run Sitemap Generator
-        # Make sure your python file is named exactly this
-        run: python generate_sitemap.py 
+      - name: Build Sitemap
+        run: |
+          DOMAIN="https://omnnbc.com"
+          echo "<?xml version='1.0' encoding='UTF-8'?>" > sitemap.xml
+          echo "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>" >> sitemap.xml
+          
+          # 1. Add Home Page
+          echo "  <url><loc>$DOMAIN/</loc><priority>1.0</priority></url>" >> sitemap.xml
+          
+          # 2. Add all files from PAGES folder
+          if [ -d "pages" ]; then
+            for file in pages/*.html; do
+              filename=$(basename "$file")
+              echo "  <url><loc>$DOMAIN/pages/$filename</loc><priority>0.7</priority></url>" >> sitemap.xml
+            done
+          fi
 
-      - name: Auto-Commit Sitemap
+          # 3. Add all files from POSTS folder
+          if [ -d "posts" ]; then
+            for file in posts/*.html; do
+              filename=$(basename "$file")
+              echo "  <url><loc>$DOMAIN/posts/$filename</loc><priority>0.8</priority></url>" >> sitemap.xml
+            done
+          fi
+          
+          echo "</urlset>" >> sitemap.xml
+
+      - name: Commit and Push
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add sitemap.xml
-          # Commit only if changes exist to avoid workflow errors
-          git commit -m "chore: auto-update sitemap [skip ci]" || echo "No changes to commit"
+          git commit -m "Auto-update sitemap: Posts & Pages [skip ci]" || echo "No changes"
           git push
