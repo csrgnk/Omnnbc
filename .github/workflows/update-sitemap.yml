@@ -1,4 +1,4 @@
-name: Unified Sitemap Auto-Update
+name: Clean URL Sitemap Auto-Update
 on:
   push:
     branches: [ main ]
@@ -15,7 +15,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Build Sitemap
+      - name: Build Clean Sitemap
         run: |
           DOMAIN="https://omnnbc.com"
           DATE=$(date +%Y-%m-%d)
@@ -26,23 +26,22 @@ jobs:
           # 1. Home Page
           echo "  <url><loc>$DOMAIN/</loc><lastmod>$DATE</lastmod><priority>1.0</priority></url>" >> sitemap.xml
           
-          # 2. Add PAGES (Filter out empty names and index files)
+          # 2. Add PAGES as Clean URLs (removes 'pages/' and '.html')
           if [ -d "pages" ]; then
             for file in pages/*.html; do
-              filename=$(basename "$file")
-              if [ "$filename" != "index.html" ] && [ "$filename" != ".html" ]; then
-                echo "  <url><loc>$DOMAIN/pages/$filename</loc><lastmod>$DATE</lastmod><priority>0.7</priority></url>" >> sitemap.xml
+              filename=$(basename "$file" .html)
+              if [ "$filename" != "index" ] && [ "$filename" != "" ]; then
+                echo "  <url><loc>$DOMAIN/$filename</loc><lastmod>$DATE</lastmod><priority>0.7</priority></url>" >> sitemap.xml
               fi
             done
           fi
 
-          # 3. Add POSTS (Your 175+ Devotional Lyrics)
+          # 3. Add POSTS as Clean URLs (removes 'posts/' and '.html')
           if [ -d "posts" ]; then
             for file in posts/*.html; do
-              filename=$(basename "$file")
-              if [ "$filename" != "index.html" ] && [ "$filename" != ".html" ]; then
-                # Direct Path for Google
-                echo "  <url><loc>$DOMAIN/posts/$filename</loc><lastmod>$DATE</lastmod><priority>0.8</priority></url>" >> sitemap.xml
+              filename=$(basename "$file" .html)
+              if [ "$filename" != "index" ] && [ "$filename" != "" ]; then
+                echo "  <url><loc>$DOMAIN/$filename</loc><lastmod>$DATE</lastmod><priority>0.8</priority></url>" >> sitemap.xml
               fi
             done
           fi
@@ -54,5 +53,5 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add sitemap.xml
-          git commit -m "Fix: Unified sitemap without empty URLs [skip ci]" || echo "No changes"
+          git commit -m "Auto-update: 175+ Clean URLs in sitemap [skip ci]" || echo "No changes"
           git push
