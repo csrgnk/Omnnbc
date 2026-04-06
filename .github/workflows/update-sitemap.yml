@@ -18,25 +18,32 @@ jobs:
       - name: Build Sitemap
         run: |
           DOMAIN="https://omnnbc.com"
+          DATE=$(date +%Y-%m-%d)
+          
           echo "<?xml version='1.0' encoding='UTF-8'?>" > sitemap.xml
           echo "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>" >> sitemap.xml
           
-          # 1. Add Home Page
-          echo "  <url><loc>$DOMAIN/</loc><priority>1.0</priority></url>" >> sitemap.xml
+          # 1. Home Page
+          echo "  <url><loc>$DOMAIN/</loc><lastmod>$DATE</lastmod><priority>1.0</priority></url>" >> sitemap.xml
           
-          # 2. Add all files from PAGES folder
+          # 2. Add PAGES (Filter out empty names and index files)
           if [ -d "pages" ]; then
             for file in pages/*.html; do
               filename=$(basename "$file")
-              echo "  <url><loc>$DOMAIN/pages/$filename</loc><priority>0.7</priority></url>" >> sitemap.xml
+              if [ "$filename" != "index.html" ] && [ "$filename" != ".html" ]; then
+                echo "  <url><loc>$DOMAIN/pages/$filename</loc><lastmod>$DATE</lastmod><priority>0.7</priority></url>" >> sitemap.xml
+              fi
             done
           fi
 
-          # 3. Add all files from POSTS folder
+          # 3. Add POSTS (Your 175+ Devotional Lyrics)
           if [ -d "posts" ]; then
             for file in posts/*.html; do
               filename=$(basename "$file")
-              echo "  <url><loc>$DOMAIN/posts/$filename</loc><priority>0.8</priority></url>" >> sitemap.xml
+              if [ "$filename" != "index.html" ] && [ "$filename" != ".html" ]; then
+                # Direct Path for Google
+                echo "  <url><loc>$DOMAIN/posts/$filename</loc><lastmod>$DATE</lastmod><priority>0.8</priority></url>" >> sitemap.xml
+              fi
             done
           fi
           
@@ -47,5 +54,5 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add sitemap.xml
-          git commit -m "Auto-update sitemap: Posts & Pages [skip ci]" || echo "No changes"
+          git commit -m "Fix: Unified sitemap without empty URLs [skip ci]" || echo "No changes"
           git push
