@@ -3,8 +3,10 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'posts/**'
-      - 'pages/**'
+      - 'data/posts.json'   # Triggers when you update your post list
+      - 'data/pages.json'   # Triggers when you update pages
+      - 'posts/**'          # Triggers if you upload HTML files directly
+      - 'generate_sitemap.py' # Triggers if you update the logic
 
 jobs:
   build:
@@ -12,14 +14,23 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
       - name: Run Sitemap Generator
-        run: node generate-sitemap.js
+        # Make sure your python file is named exactly this
+        run: python generate_sitemap.py 
+
       - name: Auto-Commit Sitemap
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add sitemap.xml
-          git commit -m "chore: auto-update sitemap [skip ci]" || echo "No changes"
+          # Commit only if changes exist to avoid workflow errors
+          git commit -m "chore: auto-update sitemap [skip ci]" || echo "No changes to commit"
           git push
