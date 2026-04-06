@@ -1,22 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script>
-  // Get the current path (e.g., /chamara-vrutta-bheema-roopi-7th-stotra)
-  var path = window.location.pathname;
-
-  // 1. Ignore the home page and actual .html files
-  if (path !== "/" && !path.includes(".html") && !path.includes("data/")) {
-    
-    // 2. Remove any trailing slash /
-    var slug = path.replace(/\/$/, ""); 
-
-    // 3. Redirect to the physical file in the posts folder
-    // This turns /title into /posts/title.html
-    window.location.replace("/posts" + slug + ".html");
-  }
-</script>
-    
+    <!DOCTYPE html>
+<html>
+<head>
+    <title>Redirecting...</title>
+    <script>
+        var path = window.location.pathname;
+        // If user enters clean URL like /chamara-vrutta...
+        if (path !== "/" && !path.includes(".html")) {
+            var slug = path.replace(/\/$/, ""); 
+            // Redirect to the actual physical file
+            window.location.replace("/posts" + slug + ".html");
+        } else {
+            // If it's already a .html link but showing 404, go home
+            window.location.replace("/");
+        }
+    </script>
+</head>
+<body>
+    <p>Redirecting to devotional lyrics...</p>
+</body>
+</html>
+  
 </html>
 </html>
 <meta charset="UTF-8">
