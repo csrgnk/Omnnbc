@@ -2,52 +2,75 @@ import json
 import os
 from datetime import datetime
 
-# Settings
+# --- Configuration ---
 DOMAIN = "https://omnnbc.com"
 POSTS_JSON = "data/posts.json"
-SITEMAP_FILE = "sitemap.xml"
+PAGES_JSON = "data/pages.json"
+OUTPUT_FILE = "sitemap.xml"
 
-def build_sitemap():
-    # Start the XML structure
-    xml = [
+def get_today():
+    return datetime.now().strftime("%Y-%m-%d")
+
+def create_url_node(url, date, priority="0.8"):
+    """Helper to create XML URL nodes"""
+    return (
+        "  <url>\n"
+        f"    <loc>{url}</loc>\n"
+        f"    <lastmod>{date}</lastmod>\n"
+        f"    <priority>{priority}</priority>\n"
+        "  </url>"
+    )
+
+def generate():
+    print(f"🚀 Starting Sitemap Generation for {len(POSTS_JSON)} structure...")
+    
+    # Start XML Header
+    xml_content = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
     ]
 
-    # 1. Add Home Page
-    xml.append(f'  <url><loc>{DOMAIN}/</loc><lastmod>{datetime.now().strftime("%Y-%m-%d")}</lastmod><priority>1.0</priority></url>')
+    # 1. Add Home Page (Highest Priority)
+    xml_content.append(create_url_node(f"{DOMAIN}/", get_today(), "1.0"))
 
-    # 2. Process all 175 posts
+    # 2. Process Posts from JSON
     if os.path.exists(POSTS_JSON):
         with open(POSTS_JSON, 'r', encoding='utf-8') as f:
             posts = json.load(f)
             for post in posts:
-                url_slug = post.get('url', '').strip("/")
+                slug = post.get('url', '').strip("/")
                 
-                # IMPORTANT: To avoid 404 in Search Console, 
-                # link directly to the .html file in the posts folder
-                if not url_slug.endswith('.html'):
-                    clean_url = f"{DOMAIN}/posts/{url_slug}.html"
+                # CRITICAL: Append .html to bypass the 404 router for Google
+                if not slug.endswith('.html'):
+                    # If your files are in a 'posts' folder:
+                    full_url = f"{DOMAIN}/posts/{slug}.html"
                 else:
-                    clean_url = f"{DOMAIN}/{url_slug}"
+                    full_url = f"{DOMAIN}/{slug}"
 
-                # Get date from JSON or use today
-                raw_date = post.get('publish_date', datetime.now().strftime('%Y-%m-%d'))
-                date_only = raw_date[:10]
+                # Handle Date
+                raw_date = post.get('publish_date', get_today())
+                clean_date = raw_date[:10] # Ensure YYYY-MM-DD format
 
-                xml.append('  <url>')
-                xml.append(f'    <loc>{clean_url}</loc>')
-                xml.append(f'    <lastmod>{date_only}</lastmod>')
-                xml.append('    <priority>0.8</priority>')
-                xml.append('  </url>')
+                xml_content.append(create_url_node(full_url, clean_date))
+        print(f"✅ Added {len(posts)} devotional posts.")
 
-    xml.append('</urlset>')
+    # 3. Process Pages from JSON (Optional)
+    if os.path.exists(PAGES_JSON):
+        with open(PAGES_JSON, 'r', encoding='utf-8') as f:
+            pages = json.load(f)
+            for page in pages:
+                p_slug = page.get('url', '').strip("/")
+                p_url = f"{DOMAIN}/{p_slug}.html"
+                xml_content.append(create_url_node(p_url, get_today(), "0.5"))
 
-    # Write the file
-    with open(SITEMAP_FILE, 'w', encoding='utf-8') as f:
-        f.write('\n'.join(xml))
+    # Close XML
+    xml_content.append('</urlset>')
+
+    # Write to File
+    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
+        f.write('\n'.join(xml_content))
     
-    print(f"✅ Sitemap updated: {len(posts)} posts included.")
+    print(f"✨ Success: {OUTPUT_FILE} created in root directory.")
 
 if __name__ == "__main__":
-    build_sitemap()
+    generate()
