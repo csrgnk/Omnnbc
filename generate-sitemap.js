@@ -4,7 +4,7 @@ const path = require('path');
 const domain = "https://omnnbc.com";
 const rootDir = __dirname;
 
-// The physical folders on your GitHub
+// Folders containing your physical HTML files
 const foldersToScan = ['posts', 'pages'];
 
 function getAllHtmlFiles(dir, folderName) {
@@ -12,6 +12,7 @@ function getAllHtmlFiles(dir, folderName) {
     if (!fs.existsSync(dir)) return results;
 
     const list = fs.readdirSync(dir);
+
     list.forEach(file => {
         const filePath = path.join(dir, file);
         const stat = fs.statSync(filePath);
@@ -19,27 +20,26 @@ function getAllHtmlFiles(dir, folderName) {
         if (stat && stat.isDirectory()) {
             results = results.concat(getAllHtmlFiles(filePath, folderName));
         } else if (file.endsWith('.html')) {
-            // Skip index files to avoid duplication
             if (file.toLowerCase() !== 'index.html') {
-                // Construct the URL exactly as GitHub Pages expects it
-                // Format: domain/folder/filename.html
+                // IMPORTANT: Keep folder and .html so the link actually works
                 results.push(`${domain}/${folderName}/${file}`);
             }
         }
     });
+
     return results;
 }
 
 try {
-    console.log('--- Generating Full Path Sitemap ---');
-    
+    console.log('--- Generating Working Sitemap ---');
+
     let xml = [];
     const today = new Date().toISOString().split('T')[0];
 
     xml.push('<?xml version="1.0" encoding="UTF-8"?>');
     xml.push('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
 
-    // Add Homepage
+    // Homepage
     xml.push(`  <url>\n    <loc>${domain}/</loc>\n    <lastmod>${today}</lastmod>\n    <priority>1.0</priority>\n  </url>`);
 
     let allLinks = [];
@@ -57,8 +57,9 @@ try {
 
     xml.push('</urlset>');
     fs.writeFileSync(path.join(rootDir, 'sitemap.xml'), xml.join('\n'));
-    
-    console.log(`✅ Done: ${allLinks.length} files indexed.`);
+
+    console.log(`✅ SUCCESS: ${allLinks.length} working URLs added.`);
+
 } catch (err) {
-    console.error('Error:', err.message);
+    console.error('❌ Error:', err.message);
 }
