@@ -1,0 +1,65 @@
+name: Clean URL Sitemap Auto-Update
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'posts/*.html'
+      - 'data/pages.json'
+  workflow_dispatch: # This allows you to run it manually to test
+
+jobs:
+  generate-sitemap:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Clean Sitemap
+        run: |
+          DOMAIN="https://omnnbc.com"
+          DATE=$(date +%Y-%m-%d)
+          
+          echo "<?xml version='1.0' encoding='UTF-8'?>" > sitemap.xml
+          echo "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>" >> sitemap.xml
+          
+          # 1. Home Page
+          echo "  <url><loc>$DOMAIN/</loc><lastmod>$DATE</lastmod><priority>1.0</priority></url>" >> sitemap.xml
+          
+          # 2. Process PAGES
+          if [ -f "data/pages.json" ]; then
+            jq -r '.[].file' data/pages.json | sed 's/\.html$//' | while read page; do
+              if [ "$page" != "index" ] && [ "$page" != "null" ] && [ -n "$page" ]; then
+                echo "  <url><loc>$DOMAIN/$page</loc><lastmod>$DATE</lastmod><priority>0.8</priority></url>" >> sitemap.xml
+              fi
+            done
+          fi
+
+          # 3. Process POSTS
+          if [ -d "posts" ]; then
+            for file in posts/*.html; do
+              filename=$(basename "$file" .html)
+              if [ "$filename" != "index" ] && [ "$filename" != "*" ]; then
+                echo "  <url><loc>$DOMAIN/$filename</loc><lastmod>$DATE</lastmod><priority>0.7</priority></url>" >> sitemap.xml
+              fi
+            done
+          fi
+          
+          echo "</urlset>" >> sitemap.xml
+
+      - name: Commit and Push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add sitemap.xml
+          if git diff --staged --quiet; then
+            echo "No changes detected"
+          else
+            git commit -m "Auto-update sitemap: Clean URLs [skip ci]"
+            git push origin main
+          fi
