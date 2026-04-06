@@ -26,22 +26,23 @@ jobs:
           # 1. Home Page
           echo "  <url><loc>$DOMAIN/</loc><lastmod>$DATE</lastmod><priority>1.0</priority></url>" >> sitemap.xml
           
-          # 2. Add PAGES from data/pages.json (Clean URLs)
+          # 2. Process PAGES from data/pages.json
           if [ -f "data/pages.json" ]; then
-            # Uses 'jq' (pre-installed on GitHub) to parse your JSON
-            jq -r '.[].file' data/pages.json | while read page; do
-              if [ "$page" != "index" ] && [ "$page" != "" ]; then
-                echo "  <url><loc>$DOMAIN/$page</loc><lastmod>$DATE</lastmod><priority>0.7</priority></url>" >> sitemap.xml
+            # Reads the "file" value and ensures no .html suffix is added to the URL
+            jq -r '.[].file' data/pages.json | sed 's/\.html$//' | while read page; do
+              if [ "$page" != "index" ] && [ "$page" != "null" ]; then
+                echo "  <url><loc>$DOMAIN/$page</loc><lastmod>$DATE</lastmod><priority>0.8</priority></url>" >> sitemap.xml
               fi
             done
           fi
 
-          # 3. Add POSTS from posts/ folder (Clean URLs for 175+ posts)
+          # 3. Process POSTS from posts/ folder
           if [ -d "posts" ]; then
             for file in posts/*.html; do
+              # Extracts filename only (e.g., "sri-kethu-kavacham")
               filename=$(basename "$file" .html)
-              if [ "$filename" != "index" ] && [ "$filename" != "" ]; then
-                echo "  <url><loc>$DOMAIN/$filename</loc><lastmod>$DATE</lastmod><priority>0.8</priority></url>" >> sitemap.xml
+              if [ "$filename" != "index" ] && [ "$filename" != "*" ]; then
+                echo "  <url><loc>$DOMAIN/$filename</loc><lastmod>$DATE</lastmod><priority>0.7</priority></url>" >> sitemap.xml
               fi
             done
           fi
@@ -53,5 +54,5 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add sitemap.xml
-          git commit -m "Auto-update: Clean URLs for Pages and 175+ posts [skip ci]" || echo "No changes"
+          git commit -m "Auto-update sitemap: Clean URLs for Pages and Posts [skip ci]" || echo "No changes"
           git push
