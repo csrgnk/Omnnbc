@@ -1,5 +1,12 @@
 # Tells GitHub to remove .html from URLs
-permalink: /:basename
+permalink: /:title/
+# లేదా ఇది ట్రై చేయండి
+defaults:
+  - scope:
+      path: "posts"
+    values:
+      permalink: /:basename
+
 
 # Tells GitHub NOT to process these files for the website
 exclude:
