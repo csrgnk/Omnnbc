@@ -1,87 +1,47 @@
+---
+permalink: /404.html
+---
 <!DOCTYPE html>
-<html lang="en">
+<html lang="te">
 <head>
-    <!DOCTYPE html>
-<html>
-<head>
-    <title>Redirecting...</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Namo Narayanaya Bhakthi Channel</title>
+    
     <script>
         var path = window.location.pathname;
-        // If user enters clean URL like /chamara-vrutta...
-        if (path !== "/" && !path.includes(".html")) {
-            var slug = path.replace(/\/$/, ""); 
-            // Redirect to the actual physical file
-            window.location.replace("/posts" + slug + ".html");
-        } else {
-            // If it's already a .html link but showing 404, go home
-            window.location.replace("/");
+        // If path has .html, remove it and clean URL
+        if (path.endsWith(".html")) {
+            var cleanPath = path.replace(".html", "");
+            window.history.replaceState(null, '', cleanPath);
         }
     </script>
-</head>
-<body>
-    <p>Redirecting to devotional lyrics...</p>
-</body>
-</html>
-  
-</html>
-</html>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Namo Narayanaya Bhakthi Channel</title>
 
-<style>
-:root{ --primary-pink:#C71585; --dark-blue:#001a4d; --bg-yellow:#fff9db; }
-body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#fffdf0; color:#333; line-height:1.6; }
+    <style>
+    :root{ --primary-pink:#C71585; --dark-blue:#001a4d; --bg-yellow:#fff9db; }
+    body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#fffdf0; color:#333; line-height:1.6; }
 
-/* NAVIGATION */
-.top-links, .outer-links { display:flex; overflow-x:auto; white-space:nowrap; scrollbar-width: none; }
-.top-links { background:var(--dark-blue); }
-.top-links a { color:#fff; padding:12px 16px; text-decoration:none; font-size: 14px; }
-.outer-links { background:var(--primary-pink); padding:5px 0; }
-.outer-links a { background:#fff; color:var(--primary-pink); margin:5px; padding:8px 15px; border-radius:20px; text-decoration:none; font-weight:bold; font-size:12px; }
+    /* NAVIGATION */
+    .top-links { background:var(--dark-blue); display:flex; overflow-x:auto; white-space:nowrap; }
+    .top-links a { color:#fff; padding:12px 16px; text-decoration:none; font-size: 14px; }
+    .outer-links { background:var(--primary-pink); padding:5px 0; display:flex; overflow-x:auto; }
+    .outer-links a { background:#fff; color:var(--primary-pink); margin:5px; padding:8px 15px; border-radius:20px; text-decoration:none; font-weight:bold; font-size:12px; }
 
-/* RESPONSIVE HEADER */
-header { background: var(--bg-yellow); padding: 15px 5px; border-bottom: 2px solid var(--primary-pink); }
-.header-box { display: flex; align-items: center; justify-content: center; gap: 10px; max-width: 100%; margin: auto; text-align: center; }
-.logo { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--primary-pink); background: #fff; flex-shrink: 0; }
-.site-name-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.line1, .line2 { color: var(--primary-pink); font-size: 1.6rem; font-weight: 900; line-height: 1.2; margin: 0; white-space: nowrap; }
+    /* HEADER */
+    header { background: var(--bg-yellow); padding: 15px 5px; border-bottom: 2px solid var(--primary-pink); }
+    .header-box { display: flex; align-items: center; justify-content: center; gap: 10px; max-width: 100%; margin: auto; text-align: center; }
+    .logo { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--primary-pink); background: #fff; }
+    .site-name-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .line1, .line2 { color: var(--primary-pink); font-size: 1.6rem; font-weight: 900; line-height: 1.2; margin: 0; }
 
-@media (min-width: 768px) {
-    .site-name-wrapper { flex-direction: row; gap: 8px; }
-    .line1, .line2 { font-size: 1.5rem; }
-    .header-box { justify-content: flex-start; padding-left: 20px; }
-}
+    /* CONTENT */
+    .container { max-width: 850px; margin: auto; padding: 15px; min-height: 70vh; }
+    #breadcrumb { font-size: 11px; color: #777; margin-bottom: 15px; text-transform: uppercase; }
+    .post-title { text-align: center; font-size: 1.7rem; color: var(--dark-blue); margin-bottom: 20px; font-weight: 800; }
+    .post-content { background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.1rem; text-align: center; }
 
-/* CONTENT AREA */
-.container { max-width: 850px; margin: auto; padding: 15px; min-height: 70vh; }
-#breadcrumb { font-size: 11px; color: #777; margin-bottom: 15px; text-transform: uppercase; }
-.post-title { text-align: center; font-size: 1.7rem; color: var(--dark-blue); margin-bottom: 20px; font-weight: 800; }
-.post-content { background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.1rem; text-align: center; }
-
-/* SHARE SECTION */
-.share-section { background: #fff; padding: 15px; border-radius: 12px; margin-top: 25px; border: 1px solid #eee; text-align: center; }
-.share-buttons { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
-.share-btn { padding: 10px 16px; border-radius: 25px; color: #fff; border: none; text-decoration: none; cursor: pointer; font-weight: bold; font-size: 12px; }
-
-/* IMPROVED NAVIGATION - NO OVERLAP */
-.post-nav { display: flex; flex-direction: column; gap: 12px; margin: 30px 0 20px 0; }
-.post-nav a { display: block; background: #fff; padding: 15px; border-radius: 8px; text-decoration: none; color: var(--primary-pink); font-weight: bold; font-size: 14px; border: 1px solid #ddd; text-align: center; line-height: 1.4; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-
-@media (min-width: 768px) {
-    .post-nav { flex-direction: row; }
-    .post-nav a { flex: 1; }
-}
-
-.home-btn-container { text-align: center; margin-bottom: 40px; }
-.home-btn { display: inline-block; background: var(--dark-blue); color: #fff; padding: 12px 35px; border-radius: 30px; text-decoration: none; font-weight: bold; font-size: 14px; }
-
-.related-section { margin-top: 40px; border-top: 1px solid #ddd; padding-top: 20px; }
-.related-item { padding: 8px 0; border-bottom: 1px solid #eee; }
-.related-item a { color: var(--primary-pink); text-decoration: none; font-weight: bold; font-size: 14px; }
-
-footer { background: var(--dark-blue); color: #fff; text-align: center; padding: 25px; margin-top: 50px; }
-</style>
+    footer { background: var(--dark-blue); color: #fff; text-align: center; padding: 25px; margin-top: 50px; }
+    </style>
 </head>
 
 <body>
@@ -110,35 +70,22 @@ footer { background: var(--dark-blue); color: #fff; text-align: center; padding:
 </header>
 
 <div class="container">
-  <div id="breadcrumb"></div>
-  <h1 id="postTitle" class="post-title"></h1>
-  <div id="postContent" class="post-content">Loading...</div>
-
-  <div id="shareSection" class="share-section" style="display:none;">
-    <h3 style="color:var(--dark-blue); margin:0; font-size: 16px;">Share this Post</h3>
-    <div id="shareButtons" class="share-buttons"></div>
-  </div>
-
-  <div id="postExtras" style="display:none">
-    <div id="postNav" class="post-nav"></div>
-    <div class="home-btn-container">
-      <a href="/" class="home-btn">← Back to Home Page</a>
-    </div>
-    <div class="related-section">
-      <h3 style="color:var(--dark-blue); font-size: 18px;">Related Content</h3>
-      <div id="relatedList"></div>
-    </div>
+  <div id="breadcrumb">Home &raquo; Redirecting...</div>
+  <h1 id="postTitle" class="post-title">Loading...</h1>
+  <div id="postContent" class="post-content">
+      <p>Redirecting to devotional lyrics, please wait...</p>
   </div>
 </div>
 
 <footer>© 2026 Namo Narayanaya Bhakthi Channel</footer>
 
 <script>
+// --- Content Loading Logic ---
 const repoName="Omnnbc";
 const isGitHub=location.hostname.includes("github.io");
 const baseUrl=isGitHub?"/"+repoName:"";
-let path=location.pathname.replace(baseUrl,"").replace(/^\/|\/$/g,"");
-let slug=path||"home";
+let fullPath = location.pathname.replace(baseUrl,"").replace(/^\/|\/$/g,"");
+let slug = fullPath || "home";
 
 const staticPages = ["about-us", "contact-us", "privacy-policy", "dmca"];
 
@@ -148,95 +95,30 @@ if (staticPages.includes(slug)) {
     fetch(baseUrl + "/data/posts.json?v=" + Date.now())
       .then(r => r.json())
       .then(posts => {
-        posts.sort((a, b) => new Date(b.publish_date) - new Date(a.publish_date));
         let index = posts.findIndex(p => p.url === slug || p.url === slug.replace(".html", ""));
-        if (index !== -1) loadContent(posts[index].url, "posts", posts[index].title, index, posts);
-        else show404();
+        if (index !== -1) {
+            loadContent(posts[index].url, "posts", posts[index].title);
+        } else {
+            show404();
+        }
       }).catch(() => show404());
 }
 
-function loadContent(fileSlug, folder, title, index = -1, posts = []) {
+function loadContent(fileSlug, folder, title) {
     document.title = title;
-    document.getElementById("breadcrumb").innerHTML = "Home &raquo; " + title;
     document.getElementById("postTitle").innerText = title;
-
-    // Google Search Console Breadcrumb Fix
-    let schema = {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": window.location.origin + baseUrl + "/" },
-        { "@type": "ListItem", "position": 2, "name": title, "item": window.location.href }
-      ]
-    };
-    let script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.innerHTML = JSON.stringify(schema);
-    document.head.appendChild(script);
-
     fetch(`${baseUrl}/${folder}/${fileSlug}.html`)
     .then(res => res.text())
     .then(html => {
         document.getElementById("postContent").innerHTML = html;
-        if (folder === "posts") {
-            document.getElementById("postExtras").style.display = "block";
-            document.getElementById("shareSection").style.display = "block";
-            setupShare(title);
-            renderNavAndRelated(index, posts);
-        } else {
-            document.getElementById("postExtras").style.display = "none";
-            document.getElementById("shareSection").style.display = "none";
-        }
+        document.getElementById("breadcrumb").innerHTML = "Home &raquo; " + title;
     }).catch(() => show404());
 }
 
-function setupShare(title) {
-    let url = encodeURIComponent(location.href);
-    let text = encodeURIComponent(title + " - " + location.href);
-    document.getElementById("shareButtons").innerHTML = `
-        <a href="https://wa.me/?text=${text}" target="_blank" class="share-btn" style="background:#25D366">WhatsApp</a>
-        <a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" class="share-btn" style="background:#1877F2">Facebook</a>
-        <a href="https://twitter.com/intent/tweet?text=${text}" target="_blank" class="share-btn" style="background:#000">Twitter</a>
-        <button onclick="copyLink()" id="cpBtn" class="share-btn" style="background:#607d8b; border:none; color:white; cursor:pointer;">Copy Link</button>
-    `;
-}
-
-function renderNavAndRelated(index, posts) {
-    let newer = posts[index - 1], older = posts[index + 1];
-    document.getElementById("postNav").innerHTML = `
-        ${newer ? `<a href="${baseUrl}/${newer.url}"><b>&larr; Newer Post</b><br>${newer.title}</a>` : ""}
-        ${older ? `<a href="${baseUrl}/${older.url}"><b>Older Post &rarr;</b><br>${older.title}</a>` : ""}
-    `;
-    let related = posts.filter((_, i) => i !== index).sort(() => 0.5 - Math.random()).slice(0, 5);
-    let relHtml = "";
-    related.forEach(r => relHtml += `<div class="related-item"><a href="${baseUrl}/${r.url}">${r.title}</a></div>`);
-    document.getElementById("relatedList").innerHTML = relHtml;
-}
-
-function copyLink() {
-    navigator.clipboard.writeText(location.href);
-    let btn = document.getElementById("cpBtn");
-    btn.innerText = "Copied!";
-    setTimeout(() => btn.innerText = "Copy Link", 2000);
-}
-
 function show404() {
-    document.getElementById("postContent").innerHTML = `<div style="text-align:center;padding:50px;"><h2>404</h2><p>Page Not Found</p><a href="/">Home</a></div>`;
+    document.getElementById("postTitle").innerText = "404 - Page Not Found";
+    document.getElementById("postContent").innerHTML = `<p>సారీ! మీరు వెతుకుతున్న పేజీ దొరకలేదు.</p><a href="/" style="color:var(--primary-pink); font-weight:bold;">Back to Home</a>`;
 }
-/* --- EXTRA SCRIPT START --- */
-
-// 1. Automatic Redirect Fix (If needed)
-// ఒకవేళ URL లో పొరపాటున .html ఉంటే దాన్ని తీసేసి క్లీన్ గా చూపించడానికి
-if (window.location.pathname.endsWith('.html')) {
-    let cleanUrl = window.location.pathname.replace('.html', '');
-    window.history.replaceState(null, '', cleanUrl);
-}
-
-// 2. Google Analytics లేదా ఇతర ట్రాకింగ్ కోడ్ ఇక్కడ వేయవచ్చు
-console.log("Namo Narayanaya: Page Loaded Successfully via 404 Routing");
-
-/* --- EXTRA SCRIPT END --- */
-  
 </script>
 </body>
 </html>
