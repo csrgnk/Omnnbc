@@ -8,4 +8,3 @@ exclude:
   - package-lock.json
   - generate-sitemap.js
   - .github
-
