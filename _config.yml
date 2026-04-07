@@ -1,3 +1,11 @@
+# Tells GitHub to remove .html from URLs
 permalink: /:basename
-include: [sitemap.xml]
-exclude: [node_modules, package.json, package-lock.json]
+
+# Tells GitHub NOT to process these files for the website
+exclude:
+  - node_modules
+  - package.json
+  - package-lock.json
+  - generate-sitemap.js
+  - .github
+
