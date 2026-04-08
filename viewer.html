@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Namo Narayanaya Bhakthi Channel</title>
+    <style>
+        :root { --p-pink: #C71585; --d-blue: #001a4d; --bg: #fffdf0; }
+        body { font-family: sans-serif; background-color: var(--bg); margin: 0; padding: 0; }
+        .header { background: var(--p-pink); color: white; text-align: center; padding: 15px; font-size: 20px; font-weight: bold; border-bottom: 3px solid #ffd700; }
+        .container { max-width: 800px; margin: 20px auto; padding: 15px; }
+        .content-box { background: white; padding: 25px; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 4px 8px rgba(0,0,0,0.1); line-height: 1.8; text-align: center; }
+        .nav-btn { display: inline-block; padding: 10px 15px; border: 1px solid var(--p-pink); color: var(--p-pink); text-decoration: none; border-radius: 5px; margin: 5px; font-weight: bold; }
+        .share-box { margin-top: 20px; padding: 15px; background: #fdf2f8; border-radius: 10px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="header">Namo Narayanaya Bhakthi Channel</div>
+
+<div class="container">
+    <div class="content-box">
+        <h2 id="postTitle" style="color: var(--d-blue); border-bottom: 2px solid #eee; padding-bottom: 10px;">లోడ్ అవుతోంది...</h2>
+        <div id="mainContent" style="font-size: 1.2rem; margin-top: 20px;">స్తోత్రం వివరాలు సేకరిస్తున్నాము...</div>
+    </div>
+
+    <div id="navArea" style="text-align:center; margin-top:20px;"></div>
+
+    <div class="share-box">
+        <p style="font-weight:bold; color:var(--d-blue);">ఈ స్తోత్రాన్ని షేర్ చేయండి</p>
+        <button onclick="window.open('https://wa.me/?text=' + encodeURIComponent(window.location.href))" style="background:#25D366; color:white; border:none; padding:10px 20px; border-radius:5px; font-weight:bold; cursor:pointer;">WhatsApp</button>
+    </div>
+</div>
+
+<script>
+    // URL నుండి id తీసుకుంటుంది (e.g., viewer.html?id=stotra-name)
+    const urlParams = new URLSearchParams(window.location.search);
+    const postSlug = urlParams.get('id');
+
+    if (postSlug) {
+        fetch('/data/posts.json')
+            .then(res => res.json())
+            .then(posts => {
+                let index = posts.findIndex(p => p.url === postSlug);
+                if (index !== -1) {
+                    let post = posts[index];
+                    document.title = post.title;
+                    document.getElementById('postTitle').innerText = post.title;
+
+                    // posts ఫోల్డర్ నుండి HTML ఫైల్ ని లాగుతుంది
+                    fetch(`/posts/${postSlug}.html`)
+                        .then(r => r.text())
+                        .then(html => {
+                            document.getElementById('mainContent').innerHTML = html;
+                            // Navigation Links
+                            let nav = document.getElementById('navArea');
+                            if(posts[index-1]) nav.innerHTML += `<a href="viewer.html?id=${posts[index-1].url}" class="nav-btn">← Newer</a>`;
+                            if(posts[index+1]) nav.innerHTML += `<a href="viewer.html?id=${posts[index+1].url}" class="nav-btn">Older →</a>`;
+                        });
+                }
+            });
+    }
+</script>
+</body>
+</html>
