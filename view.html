@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Namo Narayanaya Bhakthi Channel</title>
+    <style>
+        :root { --p-pink: #C71585; --d-blue: #001a4d; --bg: #fffdf0; }
+        body { font-family: sans-serif; background-color: var(--bg); margin: 0; padding: 0; }
+        .header { background: var(--p-pink); color: white; text-align: center; padding: 15px; font-size: 20px; font-weight: bold; }
+        .container { max-width: 800px; margin: 20px auto; padding: 15px; }
+        .content-box { background: white; padding: 25px; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 4px 8px rgba(0,0,0,0.1); line-height: 1.8; text-align: center; min-height: 300px; }
+        .nav-btn { display: inline-block; padding: 10px 15px; background: white; border: 1px solid var(--p-pink); color: var(--p-pink); text-decoration: none; border-radius: 5px; font-weight: bold; margin: 5px; }
+        .share-box { margin-top: 20px; padding: 15px; background: #fdf2f8; border-radius: 10px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="header">Namo Narayanaya Bhakthi Channel</div>
+
+<div class="container">
+    <div class="content-box">
+        <h2 id="postTitle" style="color: var(--d-blue);">లోడ్ అవుతోంది...</h2>
+        <div id="mainContent">స్తోత్రం వివరాలు సేకరిస్తున్నాము...</div>
+    </div>
+
+    <div id="navArea" style="text-align:center; margin-top:20px;"></div>
+
+    <div class="share-box">
+        <p style="font-weight:bold; color:var(--d-blue);">ఈ స్తోత్రాన్ని షేర్ చేయండి</p>
+        <div id="shareBtns"></div>
+    </div>
+</div>
+
+<script>
+    // URL నుండి 'id' పారామీటర్ ని తీసుకుంటుంది (e.g., view.html?id=stotra-name)
+    const urlParams = new URLSearchParams(window.location.search);
+    const postSlug = urlParams.get('id');
+
+    if (postSlug) {
+        // 1. Posts Data లోడ్ చేయడం
+        fetch('/data/posts.json')
+            .then(res => res.json())
+            .then(posts => {
+                let index = posts.findIndex(p => p.url === postSlug);
+                
+                if (index !== -1) {
+                    let post = posts[index];
+                    document.title = post.title;
+                    document.getElementById('postTitle').innerText = post.title;
+
+                    // 2. Posts ఫోల్డర్ నుండి HTML కంటెంట్ తీసుకుంటుంది
+                    fetch(`/posts/${postSlug}.html`)
+                        .then(r => r.text())
+                        .then(html => {
+                            document.getElementById('mainContent').innerHTML = html;
+                            setupExtras(index, posts);
+                        });
+                }
+            });
+    }
+
+    function setupExtras(index, posts) {
+        // Navigation
+        let nav = document.getElementById('navArea');
+        if(posts[index-1]) nav.innerHTML += `<a href="view.html?id=${posts[index-1].url}" class="nav-btn">← Newer</a>`;
+        if(posts[index+1]) nav.innerHTML += `<a href="view.html?id=${posts[index+1].url}" class="nav-btn">Older →</a>`;
+
+        // Share
+        let u = encodeURIComponent(window.location.href);
+        document.getElementById('shareBtns').innerHTML = `
+            <a href="https://wa.me/?text=${u}" target="_blank" style="padding:10px 20px; background:#25D366; color:white; border-radius:5px; text-decoration:none; font-weight:bold;">WhatsApp</a>
+        `;
+    }
+</script>
+</body>
+</html>
