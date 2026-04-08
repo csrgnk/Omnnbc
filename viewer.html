@@ -1,35 +1,21 @@
 <!DOCTYPE html>
-<html lang="te">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namo Narayanaya Bhakthi Channel</title>
+    <title>{{ page.title }}</title>
     <style>
-        body { font-family: sans-serif; background-color: #fffdf0; margin: 0; padding: 0; text-align: center; color: #001a4d; }
-        .header { background: #C71585; color: white; padding: 15px; font-size: 22px; font-weight: bold; border-bottom: 3px solid #ffd700; }
-        .container { max-width: 800px; margin: 20px auto; padding: 25px; background: white; border: 1px solid #ddd; border-radius: 10px; line-height: 1.8; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        #stotraContent { font-size: 1.3rem; margin-top: 10px; white-space: pre-wrap; }
+        body { font-family: sans-serif; background-color: #fffdf0; text-align: center; margin: 0; }
+        .header { background: #C71585; color: white; padding: 20px; font-size: 24px; font-weight: bold; }
+        .container { max-width: 800px; margin: 20px auto; padding: 25px; background: white; border: 1px solid #ddd; border-radius: 10px; line-height: 1.8; }
     </style>
 </head>
 <body>
-
-<div class="header">Namo Narayanaya Bhakthi Channel</div>
-
-<div class="container">
-    <div id="stotraContent">లోడ్ అవుతోంది...</div>
-</div>
-
-<script>
-    // URL నుండి ఫైల్ పేరును తీసుకుంటుంది (e.g., view.html?p=madhurashtakam)
-    const p = new URLSearchParams(window.location.search).get('p');
-    if (p) {
-        fetch(`/posts/${p}.html`)
-            .then(res => res.text())
-            .then(data => {
-                document.getElementById('stotraContent').innerHTML = data;
-            });
-    }
-</script>
-
+    <div class="header">Namo Narayanaya Bhakthi Channel</div>
+    <div class="container">
+        <h1>{{ page.title }}</h1>
+        <p>తేదీ: {{ page.date | date: "%d-%m-%Y" }}</p>
+        <hr>
+        {{ content }}
+    </div>
 </body>
 </html>
