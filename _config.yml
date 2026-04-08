@@ -3,7 +3,7 @@ permalink: /:basename
 
 defaults:
   - scope:
-      path: "/posts/"
+      path: "posts"
     values:
       permalink: /:basename
 
