@@ -7,16 +7,15 @@ permalink: /404.html
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Namo Narayanaya Bhakthi Channel</title>
-
 <style>
   :root{ --primary-pink:#C71585; --dark-blue:#001a4d; --bg-yellow:#fff9db; }
-  body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#fffdf0; color:#333; line-height:1.6; }
+  body { margin:0; font-family:sans-serif; background:#fffdf0; color:#333; line-height:1.6; }
   
-  /* MENU STYLES */
+  /* MENU & HEADER */
   .top-links { background: var(--dark-blue); display: flex; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
   .top-links::-webkit-scrollbar { display: none; }
   .top-links a { color:#fff; padding:15px 20px; text-decoration:none; font-size: 14px; font-weight: bold; }
-
+  
   .outer-links { background: var(--primary-pink); display: flex; overflow-x: auto; white-space: nowrap; padding: 5px 0; scrollbar-width: none; }
   .outer-links::-webkit-scrollbar { display: none; }
   .outer-links a { background:#fff; color:var(--primary-pink); margin:5px; padding:8px 15px; border-radius:20px; text-decoration:none; font-weight:bold; font-size:12px; }
@@ -26,17 +25,17 @@ permalink: /404.html
   .logo { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--primary-pink); }
   .line1, .line2 { color: var(--primary-pink); font-size: 1.6rem; font-weight: 900; margin: 0; }
 
+  /* CONTENT AREA */
   .container { max-width: 850px; margin: auto; padding: 15px; min-height: 70vh; }
   .post-title { text-align: center; font-size: 1.7rem; color: var(--dark-blue); margin-bottom: 20px; font-weight: 800; }
-  .post-content { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.1rem; text-align: center; }
+  .post-content { background: #fff; padding: 25px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.2rem; text-align: center; line-height: 1.9; }
 
-  .share-section { margin-top: 30px; text-align: center; background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #eee; }
-  .share-btn { padding: 10px 15px; border-radius: 20px; color: #fff; text-decoration: none; font-size: 12px; font-weight: bold; display: inline-block; margin: 5px; cursor: pointer; border: none; }
-
+  /* NAV & SHARE */
   .post-nav { display: flex; flex-direction: column; gap: 10px; margin: 25px 0; }
   .nav-link { background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ddd; text-decoration: none; color: var(--primary-pink); font-weight: bold; text-align: center; flex: 1; }
   @media (min-width: 600px) { .post-nav { flex-direction: row; } }
 
+  .share-section { margin-top: 30px; text-align: center; background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #eee; }
   footer { background: var(--dark-blue); color: #fff; text-align: center; padding: 25px; margin-top: 40px; }
 </style>
 </head>
@@ -50,12 +49,6 @@ permalink: /404.html
   <a href="/privacy-policy">Privacy Policy</a>
 </nav>
 
-<div class="outer-links">
-  <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
-  <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
-  <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok</a>
-</div>
-
 <header>
   <div class="header-box">
     <img src="/assets/images/Omnnbc-new.png" class="logo" alt="Logo">
@@ -65,11 +58,11 @@ permalink: /404.html
 
 <div class="container">
   <h1 id="postTitle" class="post-title">Loading...</h1>
-  <div id="postContent" class="post-content">Loading devotional content...</div>
-
-  <div id="shareSection" class="share-section" style="display:none;">
+  <div id="postContent" class="post-content">Devotional content loading... Please wait.</div>
+  
+  <div id="shareSection" class="share-section" style="display:none; text-align:center;">
     <p style="font-weight:bold;">Share this Stotram</p>
-    <div id="shareButtons"></div>
+    <button onclick="window.open('https://wa.me/?text=' + encodeURIComponent(window.location.href))" style="background:#25D366; color:white; border:none; padding:10px 20px; border-radius:20px; font-weight:bold; cursor:pointer;">WhatsApp Share</button>
   </div>
 
   <div id="postNav" class="post-nav"></div>
@@ -78,47 +71,46 @@ permalink: /404.html
 <footer>© 2026 Namo Narayanaya Bhakthi Channel</footer>
 
 <script>
-  // UNIVERSAL URL HANDLER
-  let path = window.location.pathname;
-  // స్లగ్ ని శుభ్రం చేయడం (Removes /posts/ and .html)
-  let slug = path.split('/').pop().replace(".html", "") || "home";
+  // SMART URL CLEANER
+  let fullPath = window.location.pathname;
+  // చివరన ఉన్న / లేదా .html ని తీసేసి కేవలం పేరును (Slug) మాత్రమే తీసుకుంటుంది
+  let slug = fullPath.replace(/\/$/, "").split('/').pop().replace(".html", "");
 
-  fetch('/data/posts.json?v=' + Date.now())
-    .then(r => r.json())
-    .then(posts => {
-      let index = posts.findIndex(p => p.url === slug);
-      if (index !== -1) {
-        let post = posts[index];
-        document.title = post.title;
-        document.getElementById("postTitle").innerText = post.title;
+  if (!slug || slug === "" || slug === "home") {
+    window.location.href = "/";
+  } else {
+    fetch('/data/posts.json?v=' + Date.now())
+      .then(r => r.json())
+      .then(posts => {
+        let index = posts.findIndex(p => p.url === slug);
+        if (index !== -1) {
+          let post = posts[index];
+          document.title = post.title + " | Namo Narayanaya Bhakthi Channel";
+          document.getElementById("postTitle").innerText = post.title;
 
-        // POSTS ఫోల్డర్ నుండి నేరుగా HTML ని లాగుతుంది
-        fetch(`/posts/${slug}.html`)
-          .then(res => res.text())
-          .then(html => {
-            document.getElementById("postContent").innerHTML = html;
-            document.getElementById("shareSection").style.display = "block";
-            setupNav(index, posts);
-            setupShare(post.title);
-          });
-      } else {
-        show404();
-      }
-    }).catch(() => show404());
+          // FETCH FROM POSTS FOLDER
+          fetch(`/posts/${slug}.html`)
+            .then(res => {
+                if(!res.ok) throw new Error();
+                return res.text();
+            })
+            .then(html => {
+              document.getElementById("postContent").innerHTML = html;
+              document.getElementById("shareSection").style.display = "block";
+              setupNav(index, posts);
+            })
+            .catch(() => show404());
+        } else {
+          show404();
+        }
+      }).catch(() => show404());
+  }
 
   function setupNav(index, posts) {
     let navHtml = "";
     if (posts[index - 1]) navHtml += `<a href="/${posts[index-1].url}" class="nav-link">← Newer: ${posts[index-1].title}</a>`;
     if (posts[index + 1]) navHtml += `<a href="/${posts[index+1].url}" class="nav-link">Older: ${posts[index+1].title} →</a>`;
     document.getElementById("postNav").innerHTML = navHtml;
-  }
-
-  function setupShare(title) {
-    let url = encodeURIComponent(window.location.href);
-    document.getElementById("shareButtons").innerHTML = `
-      <a href="https://wa.me/?text=${encodeURIComponent(title)}%20${url}" target="_blank" class="share-btn" style="background:#25D366">WhatsApp</a>
-      <button onclick="navigator.clipboard.writeText(window.location.href); alert('Link Copied!')" class="share-btn" style="background:#607d8b;">Copy Link</button>
-    `;
   }
 
   function show404() {
@@ -128,5 +120,4 @@ permalink: /404.html
 </script>
 
 </body>
-    </html>
-    
+</html>
