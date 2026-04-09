@@ -8,8 +8,18 @@ permalink: /404.html
 <script>
 (function() {
   var path = window.location.pathname;
+  // .html ని తీసివేసి క్లీన్ స్లగ్ ని తయారు చేయడం
+  var cleanSlug = path.replace(/^\/|\/$/g, "").replace(".html", "");
+  var canonicalUrl = window.location.origin + "/" + cleanSlug;
+
+  // 1. Canonical Link ని డైనమిక్ గా క్రియేట్ చేయడం (SEO కోసం)
+  var link = document.createElement('link');
+  link.setAttribute('rel', 'canonical');
+  link.setAttribute('href', canonicalUrl);
+  document.head.appendChild(link);
+
+  // 2. URL ని క్లీన్ గా మార్చడం
   if (path !== "/" && !path.endsWith(".html")) {
-    var cleanSlug = path.replace(/^\/|\/$/g, "");
     window.history.replaceState(null, "", "/" + cleanSlug);
     window.__slug = cleanSlug;
   }
