@@ -12,8 +12,8 @@
     <meta name="keywords" content="Stotrams, Telugu Lyrics, Bhakthi, Ramayanam, Namo Narayanaya">
     <link rel="canonical" href="https://omnnbc.com/" />
 
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7573720131021971" crossorigin="anonymous"></script>
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
     <style>
         :root{ --primary-pink:#C71585; --dark-blue:#001a4d; }
@@ -27,7 +27,7 @@
         .scroll-container { background:var(--primary-pink); padding:5px 0; }
         .scroll-container a { background:#fff; color:var(--primary-pink); padding:8px 16px; margin:6px; border-radius:6px; text-decoration:none; font-weight:600; font-size: 14px; }
 
-        /* Header */
+        /* Header - Performance: Fixed height logo to prevent layout shift */
         .site-header{ background:#fff9db; padding:15px; border-bottom: 2px solid #ddd; }
         .header-box{ display:flex; align-items:center; gap:15px; max-width: 800px; margin: auto; }
         .logo{ width:60px; height:60px; border-radius:50%; object-fit: cover; border: 2px solid var(--primary-pink); }
@@ -37,25 +37,23 @@
             .site-name-wrapper h1 { flex-direction: column; gap: 0; font-size: 1.3rem; }
         }
 
-        /* Search Box Updated Width */
+        /* Search Box */
         .search-wrapper{ text-align:center; margin:25px 0; }
         #searchInput{ width: 70%; max-width: 320px; padding: 10px 18px; border-radius: 25px; border: 2px solid var(--primary-pink); font-size: 15px; outline: none; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
-        /* Posts */
-        .container{ max-width:800px; margin:auto; padding:10px; }
-        .post-card{ background:#FFFDE7; padding:18px; margin-bottom:15px; border-radius:12px; border-left:6px solid var(--primary-pink); transition: 0.3s; }
+        /* Posts - Best Practice: Content Visibility */
+        .container{ max-width:800px; margin:auto; padding:10px; min-height: 600px; }
+        .post-card{ background:#FFFDE7; padding:18px; margin-bottom:15px; border-radius:12px; border-left:6px solid var(--primary-pink); transition: 0.2s; content-visibility: auto; }
         .post-card h3 { margin: 0 0 8px 0; color: var(--dark-blue); font-size: 1.2rem; }
-        .post-link{ text-decoration:none; color:inherit; }
+        .post-link{ text-decoration:none; color:inherit; display: block; }
 
-        /* Horizontal Scrollable Pagination */
+        /* Pagination */
         .pagination-wrapper { max-width: 800px; margin: 25px auto; overflow-x: auto; display: flex; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 10px 0; }
         .pagination-wrapper::-webkit-scrollbar { display: none; }
         .pagination { display: flex; gap: 8px; margin: 0 auto; padding: 0 15px; }
 
-        .page-btn { min-width: 40px; height: 40px; border-radius: 8px; border: 2px solid var(--primary-pink); background: #fff; color: var(--primary-pink); font-weight: bold; cursor: pointer; flex-shrink: 0; transition: 0.2s; }
+        .page-btn { min-width: 44px; height: 44px; border-radius: 8px; border: 2px solid var(--primary-pink); background: #fff; color: var(--primary-pink); font-weight: bold; cursor: pointer; flex-shrink: 0; transition: 0.2s; }
         .page-btn.active { background: var(--primary-pink); color: #fff; }
-
-        /* Pink Boxes for First & Last */
         .page-edge { background: var(--primary-pink) !important; color: #fff !important; padding: 0 15px; font-size: 12px; text-transform: uppercase; border: none; }
 
         footer{ background:var(--dark-blue); color:#fff; text-align:center; padding:25px; margin-top: 30px; }
@@ -72,14 +70,14 @@
 </nav>
 
 <div class="scroll-container">
-    <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
-    <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
-    <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok Telugu</a>
+    <a href="https://csrgnk.github.io/Dasabodha/" rel="noopener">Dasabodha</a>
+    <a href="https://csrgnk.github.io/Upasana-Chandrika/" rel="noopener">Upasana Chandrika</a>
+    <a href="https://csrgnk.github.io/manache-shlok/" rel="noopener">Manache Shlok Telugu</a>
 </div>
 
 <header class="site-header">
     <div class="header-box">
-        <img src="/assets/images/Omnnbc-new.png" class="logo" alt="Logo">
+        <img src="/assets/images/Omnnbc-new.png" class="logo" alt="Logo" width="60" height="60">
         <div class="site-name-wrapper">
             <h1><span>Namo Narayanaya</span> <span>Bhakthi Channel</span></h1>
         </div>
@@ -87,7 +85,7 @@
 </header>
 
 <div class="search-wrapper">
-    <input type="text" id="searchInput" placeholder="Search stotrams...">
+    <input type="text" id="searchInput" placeholder="Search stotrams..." aria-label="Search stotrams">
 </div>
 
 <main class="container" id="posts"></main>
@@ -98,6 +96,8 @@
 
 <footer>© 2026 Namo Narayanaya Bhakthi Channel</footer>
 
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer></script>
+
 <script>
     const repoName = "Omnnbc";
     const isGitHub = location.hostname.includes("github.io");
@@ -107,66 +107,78 @@
     let currentPage = 1;
     const perPage = 25;
 
-    fetch(baseUrl + "/data/posts.json?v=" + Date.now())
+    // Load data with cache busting
+    fetch(`${baseUrl}/data/posts.json?v=${new Date().getTime()}`)
     .then(res => res.json())
     .then(data => {
         allPosts = data.sort((a,b) => new Date(b.publish_date) - new Date(a.publish_date));
         filteredPosts = [...allPosts];
         render();
-    });
+    })
+    .catch(err => console.error("Error loading posts:", err));
 
     function render() {
         const postsDiv = document.getElementById("posts");
-        let start = (currentPage - 1) * perPage;
-        let items = filteredPosts.slice(start, start + perPage);
+        const start = (currentPage - 1) * perPage;
+        const items = filteredPosts.slice(start, start + perPage);
+        
+        // Faster rendering using DocumentFragment
+        const fragment = document.createDocumentFragment();
         postsDiv.innerHTML = "";
+
         items.forEach(p => {
-            postsDiv.innerHTML += `
-                <article class="post-card">
-                    <a href="${baseUrl}/${p.url}" class="post-link">
-                        <h3>${p.title}</h3>
-                        <div class="desc">${(p.description || "").substring(0, 120)}...</div>
-                    </a>
-                </article>`;
+            const article = document.createElement("article");
+            article.className = "post-card";
+            article.innerHTML = `
+                <a href="${baseUrl}/${p.url}" class="post-link">
+                    <h3>${p.title}</h3>
+                    <div class="desc">${(p.description || "").substring(0, 120)}...</div>
+                </a>`;
+            fragment.appendChild(article);
         });
+        
+        postsDiv.appendChild(fragment);
         setupPagination();
     }
 
     function setupPagination() {
-        let total = Math.ceil(filteredPosts.length / perPage);
+        const total = Math.ceil(filteredPosts.length / perPage);
         const pagDiv = document.getElementById("pagination");
         pagDiv.innerHTML = "";
         if(total <= 1) return;
 
-        // First Page Pink Box
-        let firstBtn = document.createElement("button");
-        firstBtn.innerText = "First";
-        firstBtn.className = "page-btn page-edge";
-        firstBtn.onclick = () => { currentPage = 1; render(); window.scrollTo({top: 0, behavior: 'smooth'}); };
-        pagDiv.appendChild(firstBtn);
+        const createBtn = (text, targetPage, isEdge = false) => {
+            const btn = document.createElement("button");
+            btn.innerText = text;
+            btn.className = `page-btn ${isEdge ? 'page-edge' : ''} ${targetPage === currentPage ? 'active' : ''}`;
+            btn.onclick = () => { 
+                currentPage = targetPage; 
+                render(); 
+                window.scrollTo({top: 0, behavior: 'smooth'}); 
+            };
+            return btn;
+        };
 
-        // Page Numbers
+        pagDiv.appendChild(createBtn("First", 1, true));
+        
+        // Limit page numbers shown if there are many (optional logic could go here)
         for(let i = 1; i <= total; i++) {
-            let btn = document.createElement("button");
-            btn.innerText = i;
-            btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-            btn.onclick = () => { currentPage = i; render(); window.scrollTo({top: 0, behavior: 'smooth'}); };
-            pagDiv.appendChild(btn);
+            pagDiv.appendChild(createBtn(i, i));
         }
 
-        // Last Page Pink Box
-        let lastBtn = document.createElement("button");
-        lastBtn.innerText = "Last";
-        lastBtn.className = "page-btn page-edge";
-        lastBtn.onclick = () => { currentPage = total; render(); window.scrollTo({top: 0, behavior: 'smooth'}); };
-        pagDiv.appendChild(lastBtn);
+        pagDiv.appendChild(createBtn("Last", total, true));
     }
 
+    // Performance: Debounced search (waits 300ms after you stop typing)
+    let searchTimer;
     document.getElementById("searchInput").addEventListener("input", (e) => {
-        let val = e.target.value.toLowerCase().trim();
-        currentPage = 1; 
-        filteredPosts = allPosts.filter(p => p.title.toLowerCase().includes(val));
-        render();
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => {
+            const val = e.target.value.toLowerCase().trim();
+            currentPage = 1; 
+            filteredPosts = allPosts.filter(p => p.title.toLowerCase().includes(val));
+            render();
+        }, 300);
     });
 </script>
 
