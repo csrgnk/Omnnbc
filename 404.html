@@ -4,7 +4,23 @@ permalink: /404.html
 <!DOCTYPE html>
 <html lang="te">
 <head>
+<script>
+  (function() {
+    var currentPath = window.location.pathname;
 
+    // Check if the URL contains '/posts/' or ends with '.html'
+    if (currentPath.includes('/posts/') || currentPath.endsWith('.html')) {
+      
+      // 1. Remove '/posts/' prefix
+      // 2. Remove '.html' extension
+      var cleanPath = currentPath.replace('/posts/', '/').replace('.html', '');
+      
+      // Redirect to the new clean URL
+      window.location.replace(window.location.origin + cleanPath);
+    }
+  })();
+</script>
+  
 <script>
 (function() {
   var path = window.location.pathname;
