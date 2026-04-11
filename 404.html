@@ -4,22 +4,38 @@ permalink: /404.html
 <!DOCTYPE html>
 <html lang="te">
 <head>
-<script>
-  (function() {
-    var currentPath = window.location.pathname;
-
-    // Check if the URL contains '/posts/' or ends with '.html'
-    if (currentPath.includes('/posts/') || currentPath.endsWith('.html')) {
-      
-      // 1. Remove '/posts/' prefix
-      // 2. Remove '.html' extension
-      var cleanPath = currentPath.replace('/posts/', '/').replace('.html', '');
-      
-      // Redirect to the new clean URL
-      window.location.replace(window.location.origin + cleanPath);
-    }
-  })();
-</script>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirecting...</title>
+    <script>
+        (function() {
+            var path = window.location.pathname;
+            
+            // Check if it matches the old structure
+            if (path.includes('/posts/') || path.endsWith('.html')) {
+                // Clean the path
+                var cleanPath = path.replace('/posts/', '/').replace('.html', '');
+                
+                // Perform the redirect
+                window.location.replace(window.location.origin + cleanPath);
+            }
+        })();
+    </script>
+</head>
+<body>
+    <p>Redirecting you to the clean URL... If it doesn't load, 
+       <a id="manual-link" href="/">click here</a>.
+    </p>
+    <script>
+        // Update the manual link just in case
+        var path = window.location.pathname;
+        var cleanPath = path.replace('/posts/', '/').replace('.html', '');
+        document.getElementById('manual-link').href = cleanPath;
+    </script>
+</body>
+</html>
   
 <script>
 (function() {
