@@ -20,7 +20,7 @@ if (fs.existsSync(PAGES_FILE)) {
     pages.forEach(page => {
         const cleanName = page.file.replace('.html', '');
         if (cleanName !== 'index') {
-            xml += `  <url><loc>${DOMAIN}/${cleanName}</loc><lastmod>${today}</lastmod><priority>0.8</priority></url>\n`;
+            xml += `  <url><loc>${DOMAIN}/${cleanName}</loc><lastmod>${today}</lastmod><priority>0.9</priority></url>\n`;
         }
     });
 }
@@ -31,7 +31,7 @@ if (fs.existsSync(POSTS_DIR)) {
     files.forEach(file => {
         if (file.endsWith('.html') && file !== 'index.html') {
             const cleanName = file.replace('.html', '');
-            xml += `  <url><loc>${DOMAIN}/${cleanName}</loc><lastmod>${today}</lastmod><priority>0.7</priority></url>\n`;
+            xml += `  <url><loc>${DOMAIN}/${cleanName}</loc><lastmod>${today}</lastmod><priority>0.8</priority></url>\n`;
         }
     });
 }
