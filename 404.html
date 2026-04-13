@@ -7,7 +7,7 @@ permalink: /404.html
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Namo Narayanaya Bhakthi Channel - Devotional Content</title>
-<meta name="description" content="Explore traditional Telugu devotional lyrics, stotrams, and spiritual articles on Namo Narayanaya Bhakthi Channel.">
+<meta name="description" content="Read traditional Telugu devotional lyrics, stotrams, and spiritual articles on Namo Narayanaya Bhakthi Channel.">
 <meta name="robots" content="index, follow">
 
 <script>
@@ -41,7 +41,10 @@ permalink: /404.html
   .line1, .line2 { color: var(--primary-pink); font-size: 1.6rem; font-weight: 900; margin: 0; }
   .container { max-width: 850px; margin: auto; padding: 15px; min-height: 70vh; }
   .post-title { text-align: center; font-size: 1.7rem; color: var(--dark-blue); margin-bottom: 20px; font-weight: 800; }
-  .post-content { background: #fff; padding: 25px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.15rem; color: #000; min-height: 400px; }
+  
+  /* Fixed the empty box look */
+  .post-content { background: #fff; padding: 25px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.15rem; color: #000; min-height: 450px; }
+  
   .share-section { margin-top: 30px; text-align: center; background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #eee; display:none; }
   .share-buttons { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
   .share-btn { padding: 10px 18px; border-radius: 20px; color: #fff; text-decoration: none; font-size: 12px; font-weight: bold; border: none; cursor: pointer; }
@@ -63,10 +66,10 @@ permalink: /404.html
 <div class="container">
   <h1 id="postTitle" class="post-title">Devotional Lyrics & Stotrams</h1>
   <div id="postContent" class="post-content">
-    <article id="seo-placeholder">
+    <article id="static-seo-text">
         <h3>Welcome to Namo Narayanaya Bhakthi Channel</h3>
-        <p>We are loading the traditional Telugu lyrics and devotional content you requested. Our collection includes over 360 samasams, stotrams, and spiritual articles designed to guide your daily worship.</p>
-        <p>Please wait while the sacred text is being retrieved from our database...</p>
+        <p>Loading the sacred Telugu devotional lyrics, stotrams, and spiritual content for you. We provide a vast collection of traditional literature, including Dashabodha, Manache Shlok, and various stotras in Telugu and English.</p>
+        <p>Please stay on the page while we retrieve the full text for your spiritual guidance...</p>
     </article>
   </div>
 
@@ -85,12 +88,13 @@ permalink: /404.html
 
   async function startApp() {
     try {
-      const [pRes, sRes] = await Promise.all([
+      const [pagesRes, postsRes] = await Promise.all([
         fetch(`${currentBase}/data/pages.json?v=${Date.now()}`),
         fetch(`${currentBase}/data/posts.json?v=${Date.now()}`)
       ]);
-      const pages = await pRes.json();
-      const posts = await sRes.json();
+
+      const pages = await pagesRes.json();
+      const posts = await postsRes.json();
 
       const pageItem = pages.find(pg => pg.id === slug);
       if (pageItem) {
@@ -101,11 +105,11 @@ permalink: /404.html
           const post = posts[postIndex];
           await loadHTML(post.url, "posts", post.title, postIndex, posts);
         } else {
-          document.getElementById("postContent").innerHTML = "Page not found.";
+          show404();
         }
       }
     } catch (err) {
-      console.error("Initialization failed");
+      console.error("Data load failed");
     }
   }
 
@@ -116,18 +120,19 @@ permalink: /404.html
     try {
       const res = await fetch(`${currentBase}/${folder}/${fileSlug}.html?v=${Date.now()}`);
       if (!res.ok) throw new Error();
-      const text = await res.text();
+      const htmlContent = await res.text();
       
-      // Inject the content and ensure it is indexed
-      document.getElementById("postContent").innerHTML = "<article>" + text + "</article>";
+      // Replace the placeholder text with actual post content
+      document.getElementById("postContent").innerHTML = "<article>" + htmlContent + "</article>";
 
       if (folder === "posts") {
         document.getElementById("shareSection").style.display = "block";
         setupShare(title, slug);
         setupNav(index, posts);
+        setupRelated(index, posts);
       }
     } catch (e) {
-      document.getElementById("postContent").innerHTML = "Our devotional content is currently being updated. Please check back in a few minutes.";
+      document.getElementById("postContent").innerHTML = "The devotional content is currently being updated. Please check back shortly.";
     }
   }
 
@@ -137,7 +142,8 @@ permalink: /404.html
     document.getElementById("shareButtons").innerHTML = `
       <a href="https://wa.me/?text=${text}%20${url}" target="_blank" class="share-btn" style="background:#25D366">WhatsApp</a>
       <a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" class="share-btn" style="background:#1877F2">Facebook</a>
-      <a href="https://twitter.com/intent/tweet?text=${text}&url=${url}" target="_blank" class="share-btn" style="background:#1DA1F2">Twitter</a>`;
+      <a href="https://twitter.com/intent/tweet?text=${text}&url=${url}" target="_blank" class="share-btn" style="background:#1DA1F2">Twitter</a>
+      <button onclick="navigator.clipboard.writeText(window.location.href)" class="share-btn" style="background:#607d8b;">Copy Link</button>`;
   }
 
   function setupNav(index, posts) {
@@ -147,7 +153,19 @@ permalink: /404.html
     document.getElementById("postNav").innerHTML = navHtml;
   }
 
-  // Start immediately
+  function setupRelated(index, posts) {
+    let related = posts.filter((_, i) => i !== index).sort(() => 0.5 - Math.random()).slice(0, 5);
+    let relHtml = "<div style='margin-top:20px; border-top:1px solid #ddd; padding-top:20px;'><h3 style='color:var(--dark-blue); margin-top:0;'>Related Content</h3>";
+    related.forEach(r => { relHtml += `<div style='padding:10px; border-bottom:1px solid #eee;'><a href="/${r.url}" style='color:var(--primary-pink); text-decoration:none; font-weight:bold;'>${r.title}</a></div>`; });
+    relHtml += "</div>";
+    document.getElementById("postContent").innerHTML += relHtml;
+  }
+
+  function show404() {
+    document.getElementById("postTitle").innerText = "404 - Not Found";
+    document.getElementById("postContent").innerHTML = "Sorry, the requested page is not available. Please visit our <a href='/'>Home Page</a>.";
+  }
+
   startApp();
 </script>
 </body>
