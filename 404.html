@@ -2,12 +2,12 @@
 permalink: /404.html
 ---
 <!DOCTYPE html>
-<html lang="te">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Namo Narayanaya Bhakthi Channel - Devotional Content</title>
-<meta name="description" content="నమో నారాయణ భక్తి ఛానల్ - ఇక్కడ మీకు అన్ని రకాల స్తోత్రాలు, ఆధ్యాత్మిక వ్యాసాలు మరియు భక్తి సాహిత్యం లభిస్తాయి.">
+<title>Namo Narayanaya Bhakthi Channel</title>
+<meta name="description" content="Devotional stotram lyrics, bhakti articles, and traditional literature.">
 <meta name="robots" content="index, follow">
 
 <script>
@@ -17,7 +17,8 @@ permalink: /404.html
   var canonicalUrl = window.location.origin + "/" + cleanSlug;
 
   var link = document.createElement('link');
-  link.setAttribute('rel', 'canonical'); link.setAttribute('href', canonicalUrl);
+  link.setAttribute('rel', 'canonical');
+  link.setAttribute('href', canonicalUrl);
   document.head.appendChild(link);
 
   if (path.includes('/posts/') || path.endsWith('.html')) {
@@ -30,34 +31,83 @@ permalink: /404.html
 <style>
   :root{ --primary-pink:#C71585; --dark-blue:#001a4d; --bg-yellow:#fff9db; }
   body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#fffdf0; color:#333; line-height:1.6; }
+
+  /* Navigation */
+  .top-links { background: var(--dark-blue); display: flex; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+  .top-links::-webkit-scrollbar { display: none; }
+  .top-links a { color:#fff; padding:15px 20px; text-decoration:none; font-size: 14px; font-weight: bold; }
+
+  .outer-links { background: var(--primary-pink); display: flex; overflow-x: auto; white-space: nowrap; padding: 5px 0; }
+  .outer-links a { background:#fff; color:var(--primary-pink); margin:5px; padding:8px 15px; border-radius:20px; text-decoration:none; font-weight:bold; font-size:12px; }
+
+  /* Header */
   header { background: var(--bg-yellow); padding: 15px 5px; border-bottom: 2px solid var(--primary-pink); text-align: center; }
+  .header-box { display: flex; align-items: center; justify-content: center; gap: 10px; }
   .logo { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--primary-pink); }
   .line1, .line2 { color: var(--primary-pink); font-size: 1.6rem; font-weight: 900; margin: 0; }
-  .container { max-width: 850px; margin: auto; padding: 15px; min-height: 80vh; }
+
+  /* Content */
+  .container { max-width: 850px; margin: auto; padding: 15px; min-height: 70vh; }
   .post-title { text-align: center; font-size: 1.7rem; color: var(--dark-blue); margin-bottom: 20px; font-weight: 800; }
-  .post-content { background: #fff; padding: 25px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.15rem; color: #000; min-height: 500px; }
+  .post-content { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.1rem; min-height: 300px; }
+
+  /* Share & Nav */
+  .share-section { margin-top: 30px; text-align: center; background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #eee; display:none; }
+  .share-buttons { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+  .share-btn { padding: 10px 18px; border-radius: 20px; color: #fff; text-decoration: none; font-size: 12px; font-weight: bold; border: none; cursor: pointer; }
+  
+  .post-nav { display: flex; flex-direction: column; gap: 10px; margin: 25px 0; }
+  .nav-link { background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ddd; text-decoration: none; color: var(--primary-pink); font-weight: bold; text-align: center; flex: 1; }
+  @media (min-width: 600px) { .post-nav { flex-direction: row; } }
+
+  .related-item { padding: 10px; border-bottom: 1px solid #eee; }
+  .related-item a { color: var(--primary-pink); text-decoration: none; font-weight: bold; }
   footer { background: var(--dark-blue); color: #fff; text-align: center; padding: 25px; margin-top: 40px; }
 </style>
 </head>
 
 <body>
+
+<nav class="top-links">
+  <a href="/">Home</a>
+  <a href="/about-us">About Us</a>
+  <a href="/contact-us">Contact Us</a>
+  <a href="/privacy-policy">Privacy Policy</a>
+  <a href="/dmca">DMCA Policy</a>
+</nav>
+
+<div class="outer-links">
+  <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
+  <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
+  <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok</a>
+</div>
+
 <header>
   <div class="header-box">
     <img src="/assets/images/Omnnbc-new.png" class="logo" alt="Logo">
-    <div><div class="line1">Namo Narayanaya</div><div class="line2">Bhakthi Channel</div></div>
+    <div>
+      <div class="line1">Namo Narayanaya</div>
+      <div class="line2">Bhakthi Channel</div>
+    </div>
   </div>
 </header>
 
 <div class="container">
-  <h1 id="postTitle" class="post-title">ఆధ్యాత్మిక భక్తి సాహిత్యం</h1>
+  <h1 id="postTitle" class="post-title">Loading...</h1>
   <div id="postContent" class="post-content">
-    <article id="seo-rich-content">
-        <h2>నమో నారాయణ భక్తి ఛానల్ కు స్వాగతం</h2>
-        <p>మీరు కోరుకున్న భక్తి సాహిత్యం మరియు స్తోత్రాలు ఇక్కడ లోడ్ అవుతున్నాయి. మా ఛానల్ ద్వారా మేము దాసబోధ, మనాచే శ్లోక్ మరియు వందలాది స్తోత్రాలను తెలుగులో అందిస్తున్నాము.</p>
-        <p>భక్తి మార్గంలో ప్రయాణించే వారికి ఇది ఒక చక్కని వేదిక. దయచేసి కంటెంట్ లోడ్ అయ్యే వరకు వేచి ఉండండి. ఒకవేళ లోడ్ అవ్వకపోతే పేజీని రీఫ్రెష్ చేయండి.</p>
-        <hr>
-        <p>Welcome to <b>Namo Narayanaya Bhakthi Channel</b>. We are retrieving the devotional lyrics and stotrams you requested. Our platform hosts over 360 sacred texts and articles for spiritual growth.</p>
-    </article>
+    <p>Please wait while we load the devotional content...</p>
+  </div>
+
+  <div id="shareSection" class="share-section">
+    <p style="font-weight:bold; color:var(--dark-blue);">Share this Post</p>
+    <div id="shareButtons" class="share-buttons"></div>
+  </div>
+
+  <div id="postNav" class="post-nav"></div>
+
+  <div id="relatedSection" class="related-section" style="display:none; margin-top:20px; border-top:1px solid #ddd; padding-top:20px;">
+    <h3 style="color:var(--dark-blue); margin-top:0;">Related Content</h3>
+    <div id="relatedList"></div>
   </div>
 </div>
 
@@ -69,23 +119,93 @@ permalink: /404.html
 
   async function startApp() {
     try {
-      const resPosts = await fetch(`${currentBase}/data/posts.json?v=${Date.now()}`);
-      const posts = await resPosts.json();
-      const post = posts.find(p => p.url === slug);
+      // Parallel fetch for speed - helpful for Search Console crawling
+      const [pagesRes, postsRes] = await Promise.all([
+        fetch(`${currentBase}/data/pages.json?v=${Date.now()}`),
+        fetch(`${currentBase}/data/posts.json?v=${Date.now()}`)
+      ]);
 
-      if (post) {
-        const resHtml = await fetch(`${currentBase}/posts/${post.url}.html?v=${Date.now()}`);
-        if (resHtml.ok) {
-          const content = await resHtml.text();
-          document.getElementById("postTitle").innerText = post.title;
-          document.title = post.title + " | Namo Narayanaya";
-          document.getElementById("postContent").innerHTML = "<article>" + content + "</article>";
+      const pages = await pagesRes.json();
+      const posts = await postsRes.json();
+
+      const pageItem = pages.find(pg => pg.id === slug);
+      if (pageItem) {
+        await loadHTML(pageItem.file, "pages", pageItem.title);
+      } else {
+        const postIndex = posts.findIndex(p => p.url === slug);
+        if (postIndex !== -1) {
+          const post = posts[postIndex];
+          await loadHTML(post.url, "posts", post.title, postIndex, posts);
+        } else {
+          show404();
         }
       }
-    } catch (e) {
-      console.log("Loading...");
+    } catch (err) {
+      show404();
     }
   }
+
+  async function loadHTML(fileSlug, folder, title, index = -1, posts = []) {
+    document.getElementById("postTitle").innerText = title;
+    document.title = title + " | Namo Narayanaya";
+
+    try {
+      const res = await fetch(`${currentBase}/${folder}/${fileSlug}.html?v=${Date.now()}`);
+      const htmlContent = await res.text();
+      document.getElementById("postContent").innerHTML = htmlContent;
+
+      if (folder === "posts") {
+        document.getElementById("shareSection").style.display = "block";
+        document.getElementById("relatedSection").style.display = "block";
+        setupShare(title, slug);
+        setupNav(index, posts);
+        setupRelated(index, posts);
+      } else {
+        document.getElementById("shareSection").style.display = "none";
+        document.getElementById("relatedSection").style.display = "none";
+        document.getElementById("postNav").innerHTML = "";
+      }
+    } catch (e) {
+      show404();
+    }
+  }
+
+  function setupShare(title, slug) {
+    let url = encodeURIComponent(window.location.origin + "/" + slug);
+    let text = encodeURIComponent(title);
+    document.getElementById("shareButtons").innerHTML = `
+      <a href="https://wa.me/?text=${text}%20${url}" target="_blank" class="share-btn" style="background:#25D366">WhatsApp</a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" class="share-btn" style="background:#1877F2">Facebook</a>
+      <a href="https://twitter.com/intent/tweet?text=${text}&url=${url}" target="_blank" class="share-btn" style="background:#1DA1F2">Twitter</a>
+      <button onclick="copyToClipboard()" class="share-btn" style="background:#607d8b;">Copy Link</button>`;
+  }
+
+  function copyToClipboard() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+        alert("Link copied to clipboard!");
+    });
+  }
+
+  function setupNav(index, posts) {
+    let newer = posts[index - 1], older = posts[index + 1], navHtml = "";
+    if (newer) navHtml += `<a href="/${newer.url}" class="nav-link">← Newer: ${newer.title}</a>`;
+    if (older) navHtml += `<a href="/${older.url}" class="nav-link">Older: ${older.title} →</a>`;
+    document.getElementById("postNav").innerHTML = navHtml;
+  }
+
+  function setupRelated(index, posts) {
+    let related = posts.filter((_, i) => i !== index).sort(() => 0.5 - Math.random()).slice(0, 5);
+    let relHtml = "";
+    related.forEach(r => { relHtml += `<div class="related-item"><a href="/${r.url}">${r.title}</a></div>`; });
+    document.getElementById("relatedList").innerHTML = relHtml;
+  }
+
+  function show404() {
+    document.getElementById("postTitle").innerText = "404 - Not Found";
+    document.getElementById("postContent").innerHTML = "Sorry, the page you requested was not found.<br><br><a href='/'>Return to Home</a>";
+  }
+
+  // Start fetching as soon as possible
   startApp();
 </script>
 </body>
