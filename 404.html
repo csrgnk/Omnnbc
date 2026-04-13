@@ -2,7 +2,7 @@
 permalink: /404.html
 ---
 <!DOCTYPE html>
-<html lang="te">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,22 +13,22 @@ permalink: /404.html
 <script>
 (function() {
   var path = window.location.pathname;
-  // .html ని తీసివేసి క్లీన్ స్లగ్ ని తయారు చేయడం
+  // Create clean slug by removing .html and /posts/
   var cleanSlug = path.replace(/^\/|\/$/g, "").replace(".html", "").replace("posts/", "");
   var canonicalUrl = window.location.origin + "/" + cleanSlug;
 
-  // 1. Canonical Link
+  // 1. Set Canonical Link for SEO
   var link = document.createElement('link');
   link.setAttribute('rel', 'canonical');
   link.setAttribute('href', canonicalUrl);
   document.head.appendChild(link);
 
-  // 2. Old URL Redirect Logic (/posts/ లేదా .html ఉంటే)
+  // 2. Redirect logic for old structures (/posts/ or .html files)
   if (path.includes('/posts/') || path.endsWith('.html')) {
     window.location.replace(window.location.origin + "/" + cleanSlug);
   }
 
-  // 3. Clean URL for App
+  // 3. Set global slug variable for the app
   if (path !== "/" && !path.endsWith(".html")) {
     window.history.replaceState(null, "", "/" + cleanSlug);
     window.__slug = cleanSlug;
@@ -40,6 +40,7 @@ permalink: /404.html
   :root{ --primary-pink:#C71585; --dark-blue:#001a4d; --bg-yellow:#fff9db; }
   body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#fffdf0; color:#333; line-height:1.6; }
 
+  /* Navigation Bar */
   .top-links { background: var(--dark-blue); display: flex; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
   .top-links::-webkit-scrollbar { display: none; }
   .top-links a { color:#fff; padding:15px 20px; text-decoration:none; font-size: 14px; font-weight: bold; }
@@ -48,20 +49,23 @@ permalink: /404.html
   .outer-links::-webkit-scrollbar { display: none; }
   .outer-links a { background:#fff; color:var(--primary-pink); margin:5px; padding:8px 15px; border-radius:20px; text-decoration:none; font-weight:bold; font-size:12px; }
 
+  /* Header Section */
   header { background: var(--bg-yellow); padding: 15px 5px; border-bottom: 2px solid var(--primary-pink); text-align: center; }
   .header-box { display: flex; align-items: center; justify-content: center; gap: 10px; }
   .logo { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--primary-pink); }
   .line1, .line2 { color: var(--primary-pink); font-size: 1.6rem; font-weight: 900; margin: 0; }
 
+  /* Content Layout */
   .breadcrumbs { max-width: 850px; margin: 15px auto 0; padding: 0 15px; font-size: 13px; color: #666; }
   .breadcrumbs a { color: var(--primary-pink); text-decoration: none; font-weight: bold; }
   .container { max-width: 850px; margin: auto; padding: 15px; min-height: 70vh; }
   .post-title { text-align: center; font-size: 1.7rem; color: var(--dark-blue); margin-bottom: 20px; font-weight: 800; }
   .post-content { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.1rem; }
 
+  /* Sharing & Navigation */
   .share-section { margin-top: 30px; text-align: center; background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #eee; }
   .share-buttons { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-  .share-btn { padding: 10px 18px; border-radius: 20px; color: #fff; text-decoration: none; font-size: 12px; font-weight: bold; border: none; cursor: pointer; display: flex; align-items: center; }
+  .share-btn { padding: 10px 18px; border-radius: 20px; color: #fff; text-decoration: none; font-size: 12px; font-weight: bold; border: none; cursor: pointer; }
   
   .post-nav { display: flex; flex-direction: column; gap: 10px; margin: 25px 0; }
   .nav-link { background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ddd; text-decoration: none; color: var(--primary-pink); font-weight: bold; text-align: center; }
@@ -108,7 +112,7 @@ permalink: /404.html
 <div class="container">
   <h1 id="postTitle" class="post-title">Loading...</h1>
   <div id="postContent" class="post-content">
-    <p>ప్రార్థనా కంటెంట్ లోడ్ అవుతోంది, దయచేసి వేచి ఉండండి...</p>
+    <p>Loading devotional content, please wait...</p>
   </div>
 
   <div id="shareSection" class="share-section" style="display:none;">
@@ -131,27 +135,29 @@ permalink: /404.html
   let slug = window.__slug || window.location.pathname.replace(/^\/|\/$/g, "").replace(".html", "") || "home";
   const staticPages = ["about-us", "contact-us", "privacy-policy", "dmca"];
 
-  // బాట్ కోసం పక్కాగా డేటా ని ఫెచ్ చేసే ఫంక్షన్
   async function startApp() {
-    if (staticPages.includes(slug)) {
-      await loadContent(slug, "pages", slug.replace(/-/g, " ").toUpperCase());
-    } else {
-      try {
-        const res = await fetch(`${currentBase}/data/posts.json?v=${Date.now()}`);
-        const posts = await res.json();
-        
-        posts.sort((a, b) => new Date(b.publish_date) - new Date(a.publish_date));
-        let index = posts.findIndex(p => p.url === slug);
-        
-        if (index !== -1) {
-          await loadContent(posts[index].url, "posts", posts[index].title, index, posts);
-        } else {
+    // 500ms Timeout gives Google Bot time to settle before the network fetch
+    setTimeout(async () => {
+      if (staticPages.includes(slug)) {
+        await loadContent(slug, "pages", slug.replace(/-/g, " ").toUpperCase());
+      } else {
+        try {
+          const res = await fetch(`${currentBase}/data/posts.json?v=${Date.now()}`);
+          const posts = await res.json();
+          
+          posts.sort((a, b) => new Date(b.publish_date) - new Date(a.publish_date));
+          let index = posts.findIndex(p => p.url === slug);
+          
+          if (index !== -1) {
+            await loadContent(posts[index].url, "posts", posts[index].title, index, posts);
+          } else {
+            show404();
+          }
+        } catch (err) {
           show404();
         }
-      } catch (err) {
-        show404();
       }
-    }
+    }, 500);
   }
 
   async function loadContent(fileSlug, folder, title, index = -1, posts = []) {
@@ -159,7 +165,7 @@ permalink: /404.html
     document.getElementById("postTitle").innerText = title;
 
     try {
-      const res = await fetch(`${currentBase}/${folder}/${fileSlug}.html`);
+      const res = await fetch(`${currentBase}/${folder}/${fileSlug}.html?v=${Date.now()}`);
       const html = await res.text();
       
       document.getElementById("postContent").innerHTML = html;
@@ -212,7 +218,7 @@ permalink: /404.html
   function show404() {
     document.title = "404 - Page Not Found";
     document.getElementById("postTitle").innerText = "404 - Page Not Found";
-    document.getElementById("postContent").innerHTML = "<p>క్షమించండి, మీరు వెతుకుతున్న పేజీ లభించలేదు.</p><p><a href='/'>Home కి వెళ్ళండి</a></p>";
+    document.getElementById("postContent").innerHTML = "<p>Sorry, the page you are looking for was not found.</p><p><a href='/'>Go Home</a></p>";
     document.getElementById("breadcrumbNav").style.display = "none";
     document.getElementById("shareSection").style.display = "none";
     document.getElementById("relatedSection").style.display = "none";
