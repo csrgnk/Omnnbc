@@ -41,8 +41,7 @@ permalink: /404.html
   .line1, .line2 { color: var(--primary-pink); font-size: 1.6rem; font-weight: 900; margin: 0; }
   .container { max-width: 850px; margin: auto; padding: 15px; min-height: 70vh; }
   .post-title { text-align: center; font-size: 1.7rem; color: var(--dark-blue); margin-bottom: 20px; font-weight: 800; }
-  /* Fixed the content box height issues */
-  .post-content { background: #fff; padding: 25px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.15rem; color: #000; min-height: 100px; display: block; visibility: visible !important; }
+  .post-content { background: #fff; padding: 25px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.15rem; color: #000; min-height: 200px; }
   .share-section { margin-top: 30px; text-align: center; background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #eee; display:none; }
   .share-buttons { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
   .share-btn { padding: 10px 18px; border-radius: 20px; color: #fff; text-decoration: none; font-size: 12px; font-weight: bold; border: none; cursor: pointer; }
@@ -73,7 +72,7 @@ permalink: /404.html
 
 <div class="container">
   <h1 id="postTitle" class="post-title">Loading...</h1>
-  <div id="postContent" class="post-content">Connecting to server...</div>
+  <div id="postContent" class="post-content">Connecting...</div>
 
   <div id="shareSection" class="share-section">
     <p style="font-weight:bold; color:var(--dark-blue);">Share this Post</p>
@@ -96,19 +95,19 @@ permalink: /404.html
 
   async function startApp() {
     try {
-      const [pagesRes, postsRes] = await Promise.all([
-        fetch(`${currentBase}/data/pages.json?v=${Date.now()}`),
-        fetch(`${currentBase}/data/posts.json?v=${Date.now()}`)
-      ]);
-
-      const pages = await pagesRes.json();
-      const posts = await postsRes.json();
-
+      // Step 1: Check Pages JSON
+      const pgeRes = await fetch(`${currentBase}/data/pages.json?v=${Date.now()}`);
+      const pages = await pgeRes.json();
       const pageItem = pages.find(pg => pg.id === slug);
+
       if (pageItem) {
         await loadHTML(pageItem.file, "pages", pageItem.title);
       } else {
+        // Step 2: Check Posts JSON
+        const pstRes = await fetch(`${currentBase}/data/posts.json?v=${Date.now()}`);
+        const posts = await pstRes.json();
         const postIndex = posts.findIndex(p => p.url === slug);
+
         if (postIndex !== -1) {
           const post = posts[postIndex];
           await loadHTML(post.url, "posts", post.title, postIndex, posts);
@@ -126,18 +125,12 @@ permalink: /404.html
     document.title = title + " | Namo Narayanaya";
 
     try {
-      const contentUrl = `${currentBase}/${folder}/${fileSlug}.html?v=${Date.now()}`;
-      const res = await fetch(contentUrl);
-      if (!res.ok) throw new Error('Not found');
+      const targetUrl = `${currentBase}/${folder}/${fileSlug}.html?v=${Date.now()}`;
+      const res = await fetch(targetUrl);
+      if (!res.ok) throw new Error('File Missing');
       
-      const htmlContent = await res.text();
-      
-      // Safety check: ensure content is not empty
-      if (htmlContent.trim().length > 0) {
-        document.getElementById("postContent").innerHTML = htmlContent;
-      } else {
-        document.getElementById("postContent").innerHTML = "Content currently unavailable.";
-      }
+      const textContent = await res.text();
+      document.getElementById("postContent").innerHTML = textContent;
 
       if (folder === "posts") {
         document.getElementById("shareSection").style.display = "block";
@@ -147,7 +140,7 @@ permalink: /404.html
         setupRelated(index, posts);
       }
     } catch (e) {
-      document.getElementById("postContent").innerHTML = "Error loading specific post content.";
+      document.getElementById("postContent").innerHTML = "Content could not be loaded.";
     }
   }
 
@@ -158,10 +151,10 @@ permalink: /404.html
       <a href="https://wa.me/?text=${text}%20${url}" target="_blank" class="share-btn" style="background:#25D366">WhatsApp</a>
       <a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" class="share-btn" style="background:#1877F2">Facebook</a>
       <a href="https://twitter.com/intent/tweet?text=${text}&url=${url}" target="_blank" class="share-btn" style="background:#1DA1F2">Twitter</a>
-      <button onclick="copyUrl()" class="share-btn" style="background:#607d8b;">Copy Link</button>`;
+      <button onclick="copyToClip()" class="share-btn" style="background:#607d8b;">Copy Link</button>`;
   }
 
-  function copyUrl() {
+  function copyToClip() {
     navigator.clipboard.writeText(window.location.href);
     alert("Link Copied!");
   }
