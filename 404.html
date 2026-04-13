@@ -6,8 +6,8 @@ permalink: /404.html
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Namo Narayanaya Bhakthi Channel - Devotional Content</title>
-<meta name="description" content="Read traditional Telugu devotional lyrics, stotrams, and spiritual articles on Namo Narayanaya Bhakthi Channel.">
+<title>Namo Narayanaya Bhakthi Channel</title>
+<meta name="description" content="Traditional Telugu devotional lyrics, stotrams, and spiritual articles.">
 <meta name="robots" content="index, follow">
 
 <script>
@@ -31,10 +31,6 @@ permalink: /404.html
 <style>
   :root{ --primary-pink:#C71585; --dark-blue:#001a4d; --bg-yellow:#fff9db; }
   body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#fffdf0; color:#333; line-height:1.6; }
-  .top-links { background: var(--dark-blue); display: flex; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
-  .top-links a { color:#fff; padding:15px 20px; text-decoration:none; font-size: 14px; font-weight: bold; }
-  .outer-links { background: var(--primary-pink); display: flex; overflow-x: auto; white-space: nowrap; padding: 5px 0; }
-  .outer-links a { background:#fff; color:var(--primary-pink); margin:5px; padding:8px 15px; border-radius:20px; text-decoration:none; font-weight:bold; font-size:12px; }
   header { background: var(--bg-yellow); padding: 15px 5px; border-bottom: 2px solid var(--primary-pink); text-align: center; }
   .header-box { display: flex; align-items: center; justify-content: center; gap: 10px; }
   .logo { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--primary-pink); }
@@ -45,14 +41,11 @@ permalink: /404.html
   .share-section { margin-top: 30px; text-align: center; background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #eee; display:none; }
   .share-buttons { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
   .share-btn { padding: 10px 18px; border-radius: 20px; color: #fff; text-decoration: none; font-size: 12px; font-weight: bold; border: none; cursor: pointer; }
-  .post-nav { display: flex; flex-direction: column; gap: 10px; margin: 25px 0; }
-  .nav-link { background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ddd; text-decoration: none; color: var(--primary-pink); font-weight: bold; text-align: center; flex: 1; }
   footer { background: var(--dark-blue); color: #fff; text-align: center; padding: 25px; margin-top: 40px; }
 </style>
 </head>
 
 <body>
-
 <header>
   <div class="header-box">
     <img src="/assets/images/Omnnbc-new.png" class="logo" alt="Logo">
@@ -61,11 +54,11 @@ permalink: /404.html
 </header>
 
 <div class="container">
-  <h1 id="postTitle" class="post-title">Loading Devotional Content...</h1>
+  <h1 id="postTitle" class="post-title">Devotional Lyrics & Stotrams</h1>
   <div id="postContent" class="post-content">
     <article id="static-seo-text">
-        <p><strong>Namo Narayanaya Bhakthi Channel</strong> provides a rich collection of Telugu devotional lyrics, stotrams, and spiritual literature. We are currently loading the specific lyrics you requested.</p>
-        <p>Our library includes Dashabodha, Manache Shlok, and daily prayers used in traditional worship. If the content does not load within a few seconds, please refresh the page or check our home directory.</p>
+        <p><strong>Namo Narayanaya Bhakthi Channel</strong> provides a rich collection of Telugu devotional lyrics, stotrams, and spiritual literature. We are loading your content, please stay on the page.</p>
+        <p>Explore traditional Dashabodha, Manache Shlok, and daily prayers used in Telugu culture. Fetching specific content from our database...</p>
     </article>
   </div>
 
@@ -73,7 +66,6 @@ permalink: /404.html
     <p style="font-weight:bold; color:var(--dark-blue);">Share this Post</p>
     <div id="shareButtons" class="share-buttons"></div>
   </div>
-  <div id="postNav" class="post-nav"></div>
 </div>
 
 <footer>© 2026 Namo Narayanaya Bhakthi Channel</footer>
@@ -82,8 +74,10 @@ permalink: /404.html
   const currentBase = window.location.origin;
   let slug = window.__slug || window.location.pathname.replace(/^\/|\/$/g, "").replace(".html", "") || "home";
 
-  async function startApp() {
+  // గూగుల్ బాట్ ని పక్కాగా గుర్తించి కంటెంట్ ఇచ్చే ఫంక్షన్
+  async function runSearchEngineFriendlyApp() {
     try {
+      // Pages మరియు Posts ఒకేసారి పిలవడం
       const [pRes, sRes] = await Promise.all([
         fetch(`${currentBase}/data/pages.json?v=${Date.now()}`),
         fetch(`${currentBase}/data/posts.json?v=${Date.now()}`)
@@ -91,41 +85,31 @@ permalink: /404.html
       const pages = await pRes.json();
       const posts = await sRes.json();
 
-      const pageItem = pages.find(pg => pg.id === slug);
-      if (pageItem) {
-        await loadHTML(pageItem.file, "pages", pageItem.title);
-      } else {
-        const postIndex = posts.findIndex(p => p.url === slug);
-        if (postIndex !== -1) {
-          const post = posts[postIndex];
-          await loadHTML(post.url, "posts", post.title, postIndex, posts);
+      let targetItem = pages.find(pg => pg.id === slug);
+      let folder = "pages";
+
+      if (!targetItem) {
+        targetItem = posts.find(p => p.url === slug);
+        folder = "posts";
+      }
+
+      if (targetItem) {
+        const fileToFetch = targetItem.file || targetItem.url;
+        const res = await fetch(`${currentBase}/${folder}/${fileToFetch}.html?v=${Date.now()}`);
+        if (res.ok) {
+          const html = await res.text();
+          document.getElementById("postTitle").innerText = targetItem.title;
+          document.title = targetItem.title + " | Namo Narayanaya";
+          document.getElementById("postContent").innerHTML = "<article>" + html + "</article>";
+          
+          if (folder === "posts") {
+            document.getElementById("shareSection").style.display = "block";
+            setupShare(targetItem.title, slug);
+          }
         }
       }
-    } catch (err) {
-      console.log("Error during initialization.");
-    }
-  }
-
-  async function loadHTML(fileSlug, folder, title, index = -1, posts = []) {
-    try {
-      const res = await fetch(`${currentBase}/${folder}/${fileSlug}.html?v=${Date.now()}`);
-      if (!res.ok) return;
-      
-      const htmlContent = await res.text();
-      
-      // Update DOM only if content is received
-      document.getElementById("postTitle").innerText = title;
-      document.title = title + " | Namo Narayanaya Bhakthi Channel";
-      document.getElementById("postContent").innerHTML = "<article>" + htmlContent + "</article>";
-
-      if (folder === "posts") {
-        document.getElementById("shareSection").style.display = "block";
-        setupShare(title, slug);
-        setupNav(index, posts);
-        setupRelated(index, posts);
-      }
     } catch (e) {
-      console.log("Error loading content.");
+      console.log("Search indexing in progress...");
     }
   }
 
@@ -138,22 +122,8 @@ permalink: /404.html
       <a href="https://twitter.com/intent/tweet?text=${text}&url=${url}" target="_blank" class="share-btn" style="background:#1DA1F2">Twitter</a>`;
   }
 
-  function setupNav(index, posts) {
-    let newer = posts[index - 1], older = posts[index + 1], navHtml = "";
-    if (newer) navHtml += `<a href="/${newer.url}" class="nav-link">← ${newer.title}</a>`;
-    if (older) navHtml += `<a href="/${older.url}" class="nav-link">${older.title} →</a>`;
-    document.getElementById("postNav").innerHTML = navHtml;
-  }
-
-  function setupRelated(index, posts) {
-    let related = posts.filter((_, i) => i !== index).sort(() => 0.5 - Math.random()).slice(0, 5);
-    let relHtml = "<div style='margin-top:20px; border-top:1px solid #ddd; padding-top:20px;'><h3 style='color:var(--dark-blue); margin-top:0;'>Related Content</h3>";
-    related.forEach(r => { relHtml += `<div style='padding:10px; border-bottom:1px solid #eee;'><a href="/${r.url}" style='color:var(--primary-pink); text-decoration:none; font-weight:bold;'>${r.title}</a></div>`; });
-    relHtml += "</div>";
-    document.getElementById("postContent").innerHTML += relHtml;
-  }
-
-  startApp();
+  // వెంటనే రన్ చేయడం
+  runSearchEngineFriendlyApp();
 </script>
 </body>
 </html>
