@@ -36,12 +36,10 @@ permalink: /404.html
   :root{ --primary-pink:#C71585; --dark-blue:#001a4d; --bg-yellow:#fff9db; }
   body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#fffdf0; color:#333; line-height:1.6; }
 
-  /* Top Navigation */
   .top-links { background: var(--dark-blue); display: flex; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
   .top-links::-webkit-scrollbar { display: none; }
   .top-links a { color:#fff; padding:15px 20px; text-decoration:none; font-size: 14px; font-weight: bold; }
 
-  /* Secondary Links */
   .outer-links { background: var(--primary-pink); display: flex; overflow-x: auto; white-space: nowrap; padding: 5px 0; scrollbar-width: none; }
   .outer-links::-webkit-scrollbar { display: none; }
   .outer-links a { background:#fff; color:var(--primary-pink); margin:5px; padding:8px 15px; border-radius:20px; text-decoration:none; font-weight:bold; font-size:12px; }
@@ -61,8 +59,7 @@ permalink: /404.html
   
   .post-nav { display: flex; flex-direction: column; gap: 10px; margin: 25px 0; }
   .nav-link { background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ddd; text-decoration: none; color: var(--primary-pink); font-weight: bold; text-align: center; flex: 1; }
-  @media (min-width: 600px) { .post-nav { flex-direction: row; } }
-
+  
   .related-item { padding: 10px; border-bottom: 1px solid #eee; }
   .related-item a { color: var(--primary-pink); text-decoration: none; font-weight: bold; }
   footer { background: var(--dark-blue); color: #fff; text-align: center; padding: 25px; margin-top: 40px; }
@@ -120,31 +117,56 @@ permalink: /404.html
 
   async function startApp() {
     try {
-      const resJson = await fetch(`${currentBase}/data/posts.json?v=${Date.now()}`);
-      const posts = await resJson.json();
-      const index = posts.findIndex(p => p.url === slug);
+      // 1. Fetch Pages Data first to check if it's a static page
+      const resPages = await fetch(`${currentBase}/data/pages.json?v=${Date.now()}`);
+      const pages = await resPages.json();
+      const pageIndex = pages.findIndex(pg => pg.id === slug);
 
-      if (index !== -1) {
-        const post = posts[index];
-        document.title = post.title + " | Namo Narayanaya";
-        document.getElementById("postTitle").innerText = post.title;
+      if (pageIndex !== -1) {
+        // Handle Static Pages
+        const page = pages[pageIndex];
+        await loadPageOrPost(page.file, "pages", page.title);
+      } else {
+        // 2. If not a page, check Posts Data
+        const resPosts = await fetch(`${currentBase}/data/posts.json?v=${Date.now()}`);
+        const posts = await resPosts.json();
+        const postIndex = posts.findIndex(p => p.url === slug);
 
-        // Fetch Content
-        const resHtml = await fetch(`${currentBase}/posts/${post.url}.html?v=${Date.now()}`);
-        const htmlBody = await resHtml.text();
-        document.getElementById("postContent").innerHTML = htmlBody;
+        if (postIndex !== -1) {
+          const post = posts[postIndex];
+          await loadPageOrPost(post.url, "posts", post.title, postIndex, posts);
+        } else {
+          show404();
+        }
+      }
+    } catch (err) {
+      show404();
+    }
+  }
 
-        // Setup UI
+  async function loadPageOrPost(fileSlug, folder, title, index = -1, posts = []) {
+    document.title = title + " | Namo Narayanaya";
+    document.getElementById("postTitle").innerText = title;
+
+    try {
+      const resHtml = await fetch(`${currentBase}/${folder}/${fileSlug}.html?v=${Date.now()}`);
+      const htmlBody = await resHtml.text();
+      document.getElementById("postContent").innerHTML = htmlBody;
+
+      if (folder === "posts") {
         document.getElementById("shareSection").style.display = "block";
         document.getElementById("relatedSection").style.display = "block";
-        setupShare(post.title, slug);
+        setupShare(title, slug);
         setupNav(index, posts);
         setupRelated(index, posts);
       } else {
-        document.getElementById("postContent").innerHTML = "Page not found.";
+        // For static pages, hide social/related sections
+        document.getElementById("shareSection").style.display = "none";
+        document.getElementById("relatedSection").style.display = "none";
+        document.getElementById("postNav").innerHTML = "";
       }
-    } catch (err) {
-      document.getElementById("postContent").innerHTML = "Error loading content.";
+    } catch (e) {
+      show404();
     }
   }
 
@@ -170,6 +192,11 @@ permalink: /404.html
     let relHtml = "";
     related.forEach(r => { relHtml += `<div class="related-item"><a href="/${r.url}">${r.title}</a></div>`; });
     document.getElementById("relatedList").innerHTML = relHtml;
+  }
+
+  function show404() {
+    document.getElementById("postTitle").innerText = "404 - Not Found";
+    document.getElementById("postContent").innerHTML = "Sorry, the page was not found.";
   }
 
   window.addEventListener('DOMContentLoaded', startApp);
