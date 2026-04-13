@@ -6,8 +6,9 @@ permalink: /404.html
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Namo Narayanaya Bhakthi Channel</title>
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<title>Namo Narayanaya Bhakthi Channel - Devotional Content</title>
+<meta name="description" content="Explore traditional Telugu devotional lyrics, stotrams, and spiritual articles on Namo Narayanaya Bhakthi Channel.">
+<meta name="robots" content="index, follow">
 
 <script>
 (function() {
@@ -40,7 +41,7 @@ permalink: /404.html
   .line1, .line2 { color: var(--primary-pink); font-size: 1.6rem; font-weight: 900; margin: 0; }
   .container { max-width: 850px; margin: auto; padding: 15px; min-height: 70vh; }
   .post-title { text-align: center; font-size: 1.7rem; color: var(--dark-blue); margin-bottom: 20px; font-weight: 800; }
-  .post-content { background: #fff; padding: 25px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.15rem; color: #000; min-height: 300px; }
+  .post-content { background: #fff; padding: 25px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.15rem; color: #000; min-height: 400px; }
   .share-section { margin-top: 30px; text-align: center; background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #eee; display:none; }
   .share-buttons { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
   .share-btn { padding: 10px 18px; border-radius: 20px; color: #fff; text-decoration: none; font-size: 12px; font-weight: bold; border: none; cursor: pointer; }
@@ -51,6 +52,7 @@ permalink: /404.html
 </head>
 
 <body>
+
 <header>
   <div class="header-box">
     <img src="/assets/images/Omnnbc-new.png" class="logo" alt="Logo">
@@ -59,10 +61,12 @@ permalink: /404.html
 </header>
 
 <div class="container">
-  <h1 id="postTitle" class="post-title">Devotional Content</h1>
+  <h1 id="postTitle" class="post-title">Devotional Lyrics & Stotrams</h1>
   <div id="postContent" class="post-content">
-    <article>
-        <p>Loading the latest devotional lyrics and stotrams from Namo Narayanaya Bhakthi Channel. Please wait a moment...</p>
+    <article id="seo-placeholder">
+        <h3>Welcome to Namo Narayanaya Bhakthi Channel</h3>
+        <p>We are loading the traditional Telugu lyrics and devotional content you requested. Our collection includes over 360 samasams, stotrams, and spiritual articles designed to guide your daily worship.</p>
+        <p>Please wait while the sacred text is being retrieved from our database...</p>
     </article>
   </div>
 
@@ -81,7 +85,6 @@ permalink: /404.html
 
   async function startApp() {
     try {
-      // Parallel loading for speed
       const [pRes, sRes] = await Promise.all([
         fetch(`${currentBase}/data/pages.json?v=${Date.now()}`),
         fetch(`${currentBase}/data/posts.json?v=${Date.now()}`)
@@ -98,25 +101,25 @@ permalink: /404.html
           const post = posts[postIndex];
           await loadHTML(post.url, "posts", post.title, postIndex, posts);
         } else {
-          show404();
+          document.getElementById("postContent").innerHTML = "Page not found.";
         }
       }
     } catch (err) {
-      show404();
+      console.error("Initialization failed");
     }
   }
 
   async function loadHTML(fileSlug, folder, title, index = -1, posts = []) {
     document.getElementById("postTitle").innerText = title;
-    document.title = title + " | Namo Narayanaya";
+    document.title = title + " | Namo Narayanaya Bhakthi Channel";
 
     try {
       const res = await fetch(`${currentBase}/${folder}/${fileSlug}.html?v=${Date.now()}`);
       if (!res.ok) throw new Error();
       const text = await res.text();
       
-      // Inject content inside an article tag for better SEO crawling
-      document.getElementById("postContent").innerHTML = `<article>${text}</article>`;
+      // Inject the content and ensure it is indexed
+      document.getElementById("postContent").innerHTML = "<article>" + text + "</article>";
 
       if (folder === "posts") {
         document.getElementById("shareSection").style.display = "block";
@@ -124,7 +127,7 @@ permalink: /404.html
         setupNav(index, posts);
       }
     } catch (e) {
-      document.getElementById("postContent").innerHTML = "Content is currently being updated. Please check back soon.";
+      document.getElementById("postContent").innerHTML = "Our devotional content is currently being updated. Please check back in a few minutes.";
     }
   }
 
@@ -144,11 +147,7 @@ permalink: /404.html
     document.getElementById("postNav").innerHTML = navHtml;
   }
 
-  function show404() {
-    document.getElementById("postTitle").innerText = "404 - Not Found";
-    document.getElementById("postContent").innerHTML = "Page not found.";
-  }
-
+  // Start immediately
   startApp();
 </script>
 </body>
