@@ -1,0 +1,99 @@
+---
+permalink: /404.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Namo Narayanaya Bhakthi Channel</title>
+<meta name="robots" content="index, follow">
+
+<script>
+(function() {
+  var path = window.location.pathname;
+  var cleanSlug = path.replace(/^\/|\/$/g, "").replace(".html", "").replace("posts/", "");
+  var canonicalUrl = window.location.origin + "/" + cleanSlug;
+
+  var link = document.createElement('link');
+  link.setAttribute('rel', 'canonical');
+  link.setAttribute('href', canonicalUrl);
+  document.head.appendChild(link);
+
+  if (path.includes('/posts/') || path.endsWith('.html')) {
+    window.location.replace(window.location.origin + "/" + cleanSlug);
+  }
+  window.__slug = cleanSlug;
+})();
+</script>
+
+<style>
+  :root{ --primary-pink:#C71585; --dark-blue:#001a4d; --bg-yellow:#fff9db; }
+  body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#fffdf0; color:#333; }
+  header { background: var(--bg-yellow); padding: 15px 5px; border-bottom: 2px solid var(--primary-pink); text-align: center; }
+  .logo { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--primary-pink); }
+  .line1, .line2 { color: var(--primary-pink); font-size: 1.6rem; font-weight: 900; margin: 0; }
+  .container { max-width: 850px; margin: auto; padding: 15px; }
+  .post-title { text-align: center; font-size: 1.7rem; color: var(--dark-blue); margin-bottom: 20px; font-weight: 800; }
+  
+  /* Iframe Container */
+  #contentFrame { width: 100%; border: 1px solid #ddd; border-radius: 8px; background: #fff; min-height: 600px; }
+  
+  footer { background: var(--dark-blue); color: #fff; text-align: center; padding: 25px; margin-top: 40px; }
+</style>
+</head>
+
+<body>
+<header>
+  <div class="header-box">
+    <img src="/assets/images/Omnnbc-new.png" class="logo" alt="Logo">
+    <div><div class="line1">Namo Narayanaya</div><div class="line2">Bhakthi Channel</div></div>
+  </div>
+</header>
+
+<div class="container">
+  <h1 id="postTitle" class="post-title">Devotional Content</h1>
+  
+  <iframe id="contentFrame" src="" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
+</div>
+
+<footer>© 2026 Namo Narayanaya Bhakthi Channel</footer>
+
+<script>
+  const currentBase = window.location.origin;
+  let slug = window.__slug || window.location.pathname.replace(/^\/|\/$/g, "").replace(".html", "") || "home";
+
+  async function init() {
+    try {
+      const res = await fetch(`${currentBase}/data/posts.json?v=${Date.now()}`);
+      const posts = await res.json();
+      const post = posts.find(p => p.url === slug);
+
+      if (post) {
+        document.getElementById("postTitle").innerText = post.title;
+        document.title = post.title + " | Namo Narayanaya";
+        // Iframe ద్వారా కంటెంట్ ని నేరుగా లోడ్ చేయడం
+        document.getElementById("contentFrame").src = `${currentBase}/posts/${post.url}.html`;
+      } else {
+        // Pages check
+        const pRes = await fetch(`${currentBase}/data/pages.json?v=${Date.now()}`);
+        const pages = await pRes.json();
+        const page = pages.find(pg => pg.id === slug);
+        if (page) {
+          document.getElementById("postTitle").innerText = page.title;
+          document.getElementById("contentFrame").src = `${currentBase}/pages/${page.file}.html`;
+        }
+      }
+    } catch (e) {
+      console.log("Loading...");
+    }
+  }
+
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+  }
+
+  init();
+</script>
+</body>
+</html>
