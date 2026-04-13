@@ -7,7 +7,7 @@ permalink: /404.html
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Namo Narayanaya Bhakthi Channel</title>
-<meta name="description" content="Telugu devotional stotram content and bhakti articles.">
+<meta name="description" content="Devotional stotram lyrics, bhakti articles, and traditional literature.">
 <meta name="robots" content="index, follow">
 
 <script>
@@ -24,11 +24,7 @@ permalink: /404.html
   if (path.includes('/posts/') || path.endsWith('.html')) {
     window.location.replace(window.location.origin + "/" + cleanSlug);
   }
-
-  if (path !== "/" && !path.endsWith(".html")) {
-    window.history.replaceState(null, "", "/" + cleanSlug);
-    window.__slug = cleanSlug;
-  }
+  window.__slug = cleanSlug;
 })();
 </script>
 
@@ -36,30 +32,34 @@ permalink: /404.html
   :root{ --primary-pink:#C71585; --dark-blue:#001a4d; --bg-yellow:#fff9db; }
   body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#fffdf0; color:#333; line-height:1.6; }
 
+  /* Navigation */
   .top-links { background: var(--dark-blue); display: flex; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
   .top-links::-webkit-scrollbar { display: none; }
   .top-links a { color:#fff; padding:15px 20px; text-decoration:none; font-size: 14px; font-weight: bold; }
 
-  .outer-links { background: var(--primary-pink); display: flex; overflow-x: auto; white-space: nowrap; padding: 5px 0; scrollbar-width: none; }
-  .outer-links::-webkit-scrollbar { display: none; }
+  .outer-links { background: var(--primary-pink); display: flex; overflow-x: auto; white-space: nowrap; padding: 5px 0; }
   .outer-links a { background:#fff; color:var(--primary-pink); margin:5px; padding:8px 15px; border-radius:20px; text-decoration:none; font-weight:bold; font-size:12px; }
 
+  /* Header */
   header { background: var(--bg-yellow); padding: 15px 5px; border-bottom: 2px solid var(--primary-pink); text-align: center; }
   .header-box { display: flex; align-items: center; justify-content: center; gap: 10px; }
   .logo { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--primary-pink); }
   .line1, .line2 { color: var(--primary-pink); font-size: 1.6rem; font-weight: 900; margin: 0; }
 
+  /* Content */
   .container { max-width: 850px; margin: auto; padding: 15px; min-height: 70vh; }
   .post-title { text-align: center; font-size: 1.7rem; color: var(--dark-blue); margin-bottom: 20px; font-weight: 800; }
-  .post-content { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.1rem; }
+  .post-content { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.1rem; min-height: 300px; }
 
-  .share-section { margin-top: 30px; text-align: center; background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #eee; }
+  /* Share & Nav */
+  .share-section { margin-top: 30px; text-align: center; background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #eee; display:none; }
   .share-buttons { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
   .share-btn { padding: 10px 18px; border-radius: 20px; color: #fff; text-decoration: none; font-size: 12px; font-weight: bold; border: none; cursor: pointer; }
   
   .post-nav { display: flex; flex-direction: column; gap: 10px; margin: 25px 0; }
   .nav-link { background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ddd; text-decoration: none; color: var(--primary-pink); font-weight: bold; text-align: center; flex: 1; }
-  
+  @media (min-width: 600px) { .post-nav { flex-direction: row; } }
+
   .related-item { padding: 10px; border-bottom: 1px solid #eee; }
   .related-item a { color: var(--primary-pink); text-decoration: none; font-weight: bold; }
   footer { background: var(--dark-blue); color: #fff; text-align: center; padding: 25px; margin-top: 40px; }
@@ -94,9 +94,11 @@ permalink: /404.html
 
 <div class="container">
   <h1 id="postTitle" class="post-title">Loading...</h1>
-  <div id="postContent" class="post-content">Preparing content...</div>
+  <div id="postContent" class="post-content">
+    <p>Please wait while we load the devotional content...</p>
+  </div>
 
-  <div id="shareSection" class="share-section" style="display:none;">
+  <div id="shareSection" class="share-section">
     <p style="font-weight:bold; color:var(--dark-blue);">Share this Post</p>
     <div id="shareButtons" class="share-buttons"></div>
   </div>
@@ -117,24 +119,23 @@ permalink: /404.html
 
   async function startApp() {
     try {
-      // 1. Fetch Pages Data first to check if it's a static page
-      const resPages = await fetch(`${currentBase}/data/pages.json?v=${Date.now()}`);
-      const pages = await resPages.json();
-      const pageIndex = pages.findIndex(pg => pg.id === slug);
+      // Parallel fetch for speed - helpful for Search Console crawling
+      const [pagesRes, postsRes] = await Promise.all([
+        fetch(`${currentBase}/data/pages.json?v=${Date.now()}`),
+        fetch(`${currentBase}/data/posts.json?v=${Date.now()}`)
+      ]);
 
-      if (pageIndex !== -1) {
-        // Handle Static Pages
-        const page = pages[pageIndex];
-        await loadPageOrPost(page.file, "pages", page.title);
+      const pages = await pagesRes.json();
+      const posts = await postsRes.json();
+
+      const pageItem = pages.find(pg => pg.id === slug);
+      if (pageItem) {
+        await loadHTML(pageItem.file, "pages", pageItem.title);
       } else {
-        // 2. If not a page, check Posts Data
-        const resPosts = await fetch(`${currentBase}/data/posts.json?v=${Date.now()}`);
-        const posts = await resPosts.json();
         const postIndex = posts.findIndex(p => p.url === slug);
-
         if (postIndex !== -1) {
           const post = posts[postIndex];
-          await loadPageOrPost(post.url, "posts", post.title, postIndex, posts);
+          await loadHTML(post.url, "posts", post.title, postIndex, posts);
         } else {
           show404();
         }
@@ -144,14 +145,14 @@ permalink: /404.html
     }
   }
 
-  async function loadPageOrPost(fileSlug, folder, title, index = -1, posts = []) {
-    document.title = title + " | Namo Narayanaya";
+  async function loadHTML(fileSlug, folder, title, index = -1, posts = []) {
     document.getElementById("postTitle").innerText = title;
+    document.title = title + " | Namo Narayanaya";
 
     try {
-      const resHtml = await fetch(`${currentBase}/${folder}/${fileSlug}.html?v=${Date.now()}`);
-      const htmlBody = await resHtml.text();
-      document.getElementById("postContent").innerHTML = htmlBody;
+      const res = await fetch(`${currentBase}/${folder}/${fileSlug}.html?v=${Date.now()}`);
+      const htmlContent = await res.text();
+      document.getElementById("postContent").innerHTML = htmlContent;
 
       if (folder === "posts") {
         document.getElementById("shareSection").style.display = "block";
@@ -160,7 +161,6 @@ permalink: /404.html
         setupNav(index, posts);
         setupRelated(index, posts);
       } else {
-        // For static pages, hide social/related sections
         document.getElementById("shareSection").style.display = "none";
         document.getElementById("relatedSection").style.display = "none";
         document.getElementById("postNav").innerHTML = "";
@@ -177,13 +177,19 @@ permalink: /404.html
       <a href="https://wa.me/?text=${text}%20${url}" target="_blank" class="share-btn" style="background:#25D366">WhatsApp</a>
       <a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" class="share-btn" style="background:#1877F2">Facebook</a>
       <a href="https://twitter.com/intent/tweet?text=${text}&url=${url}" target="_blank" class="share-btn" style="background:#1DA1F2">Twitter</a>
-      <button onclick="navigator.clipboard.writeText(window.location.href)" class="share-btn" style="background:#607d8b;">Copy Link</button>`;
+      <button onclick="copyToClipboard()" class="share-btn" style="background:#607d8b;">Copy Link</button>`;
+  }
+
+  function copyToClipboard() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+        alert("Link copied to clipboard!");
+    });
   }
 
   function setupNav(index, posts) {
     let newer = posts[index - 1], older = posts[index + 1], navHtml = "";
-    if (newer) navHtml += `<a href="/${newer.url}" class="nav-link">← ${newer.title}</a>`;
-    if (older) navHtml += `<a href="/${older.url}" class="nav-link">${older.title} →</a>`;
+    if (newer) navHtml += `<a href="/${newer.url}" class="nav-link">← Newer: ${newer.title}</a>`;
+    if (older) navHtml += `<a href="/${older.url}" class="nav-link">Older: ${older.title} →</a>`;
     document.getElementById("postNav").innerHTML = navHtml;
   }
 
@@ -196,10 +202,11 @@ permalink: /404.html
 
   function show404() {
     document.getElementById("postTitle").innerText = "404 - Not Found";
-    document.getElementById("postContent").innerHTML = "Sorry, the page was not found.";
+    document.getElementById("postContent").innerHTML = "Sorry, the page you requested was not found.<br><br><a href='/'>Return to Home</a>";
   }
 
-  window.addEventListener('DOMContentLoaded', startApp);
+  // Start fetching as soon as possible
+  startApp();
 </script>
 </body>
 </html>
