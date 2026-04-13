@@ -1,13 +1,15 @@
 User-agent: *
 Allow: /
+# Allow Google to read your content folders
+Allow: /posts/
+Allow: /pages/
+Allow: /data/
 
 # Block Category and Tag archives from being indexed
 Disallow: /category/
 Disallow: /categories/
 Disallow: /tag/
 Disallow: /tags/
-Disallow: /posts/
-Disallow: /pages/
 
 # Block internal GitHub/Jekyll system folders
 Disallow: /_data/
@@ -15,5 +17,5 @@ Disallow: /_includes/
 Disallow: /_layouts/
 Disallow: /_posts/
 
-# Direct link to your Posts and Pages Sitemap
+# Direct link to your Sitemap
 Sitemap: https://omnnbc.com/sitemap.xml
