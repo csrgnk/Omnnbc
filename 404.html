@@ -31,35 +31,23 @@ permalink: /404.html
 <style>
   :root{ --primary-pink:#C71585; --dark-blue:#001a4d; --bg-yellow:#fff9db; }
   body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#fffdf0; color:#333; line-height:1.6; }
-
-  /* Navigation */
   .top-links { background: var(--dark-blue); display: flex; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
-  .top-links::-webkit-scrollbar { display: none; }
   .top-links a { color:#fff; padding:15px 20px; text-decoration:none; font-size: 14px; font-weight: bold; }
-
   .outer-links { background: var(--primary-pink); display: flex; overflow-x: auto; white-space: nowrap; padding: 5px 0; }
   .outer-links a { background:#fff; color:var(--primary-pink); margin:5px; padding:8px 15px; border-radius:20px; text-decoration:none; font-weight:bold; font-size:12px; }
-
-  /* Header */
   header { background: var(--bg-yellow); padding: 15px 5px; border-bottom: 2px solid var(--primary-pink); text-align: center; }
   .header-box { display: flex; align-items: center; justify-content: center; gap: 10px; }
   .logo { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--primary-pink); }
   .line1, .line2 { color: var(--primary-pink); font-size: 1.6rem; font-weight: 900; margin: 0; }
-
-  /* Content */
   .container { max-width: 850px; margin: auto; padding: 15px; min-height: 70vh; }
   .post-title { text-align: center; font-size: 1.7rem; color: var(--dark-blue); margin-bottom: 20px; font-weight: 800; }
-  .post-content { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.1rem; min-height: 300px; }
-
-  /* Share & Nav */
+  /* Fixed the content box height issues */
+  .post-content { background: #fff; padding: 25px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.15rem; color: #000; min-height: 100px; display: block; visibility: visible !important; }
   .share-section { margin-top: 30px; text-align: center; background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #eee; display:none; }
   .share-buttons { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
   .share-btn { padding: 10px 18px; border-radius: 20px; color: #fff; text-decoration: none; font-size: 12px; font-weight: bold; border: none; cursor: pointer; }
-  
   .post-nav { display: flex; flex-direction: column; gap: 10px; margin: 25px 0; }
   .nav-link { background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ddd; text-decoration: none; color: var(--primary-pink); font-weight: bold; text-align: center; flex: 1; }
-  @media (min-width: 600px) { .post-nav { flex-direction: row; } }
-
   .related-item { padding: 10px; border-bottom: 1px solid #eee; }
   .related-item a { color: var(--primary-pink); text-decoration: none; font-weight: bold; }
   footer { background: var(--dark-blue); color: #fff; text-align: center; padding: 25px; margin-top: 40px; }
@@ -69,34 +57,23 @@ permalink: /404.html
 <body>
 
 <nav class="top-links">
-  <a href="/">Home</a>
-  <a href="/about-us">About Us</a>
-  <a href="/contact-us">Contact Us</a>
-  <a href="/privacy-policy">Privacy Policy</a>
-  <a href="/dmca">DMCA Policy</a>
+  <a href="/">Home</a><a href="/about-us">About Us</a><a href="/contact-us">Contact Us</a><a href="/privacy-policy">Privacy Policy</a><a href="/dmca">DMCA Policy</a>
 </nav>
 
 <div class="outer-links">
-  <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
-  <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
-  <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok</a>
+  <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a><a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a><a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok</a>
 </div>
 
 <header>
   <div class="header-box">
     <img src="/assets/images/Omnnbc-new.png" class="logo" alt="Logo">
-    <div>
-      <div class="line1">Namo Narayanaya</div>
-      <div class="line2">Bhakthi Channel</div>
-    </div>
+    <div><div class="line1">Namo Narayanaya</div><div class="line2">Bhakthi Channel</div></div>
   </div>
 </header>
 
 <div class="container">
   <h1 id="postTitle" class="post-title">Loading...</h1>
-  <div id="postContent" class="post-content">
-    <p>Please wait while we load the devotional content...</p>
-  </div>
+  <div id="postContent" class="post-content">Connecting to server...</div>
 
   <div id="shareSection" class="share-section">
     <p style="font-weight:bold; color:var(--dark-blue);">Share this Post</p>
@@ -119,7 +96,6 @@ permalink: /404.html
 
   async function startApp() {
     try {
-      // Parallel fetch for speed - helpful for Search Console crawling
       const [pagesRes, postsRes] = await Promise.all([
         fetch(`${currentBase}/data/pages.json?v=${Date.now()}`),
         fetch(`${currentBase}/data/posts.json?v=${Date.now()}`)
@@ -150,9 +126,18 @@ permalink: /404.html
     document.title = title + " | Namo Narayanaya";
 
     try {
-      const res = await fetch(`${currentBase}/${folder}/${fileSlug}.html?v=${Date.now()}`);
+      const contentUrl = `${currentBase}/${folder}/${fileSlug}.html?v=${Date.now()}`;
+      const res = await fetch(contentUrl);
+      if (!res.ok) throw new Error('Not found');
+      
       const htmlContent = await res.text();
-      document.getElementById("postContent").innerHTML = htmlContent;
+      
+      // Safety check: ensure content is not empty
+      if (htmlContent.trim().length > 0) {
+        document.getElementById("postContent").innerHTML = htmlContent;
+      } else {
+        document.getElementById("postContent").innerHTML = "Content currently unavailable.";
+      }
 
       if (folder === "posts") {
         document.getElementById("shareSection").style.display = "block";
@@ -160,13 +145,9 @@ permalink: /404.html
         setupShare(title, slug);
         setupNav(index, posts);
         setupRelated(index, posts);
-      } else {
-        document.getElementById("shareSection").style.display = "none";
-        document.getElementById("relatedSection").style.display = "none";
-        document.getElementById("postNav").innerHTML = "";
       }
     } catch (e) {
-      show404();
+      document.getElementById("postContent").innerHTML = "Error loading specific post content.";
     }
   }
 
@@ -177,13 +158,12 @@ permalink: /404.html
       <a href="https://wa.me/?text=${text}%20${url}" target="_blank" class="share-btn" style="background:#25D366">WhatsApp</a>
       <a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" class="share-btn" style="background:#1877F2">Facebook</a>
       <a href="https://twitter.com/intent/tweet?text=${text}&url=${url}" target="_blank" class="share-btn" style="background:#1DA1F2">Twitter</a>
-      <button onclick="copyToClipboard()" class="share-btn" style="background:#607d8b;">Copy Link</button>`;
+      <button onclick="copyUrl()" class="share-btn" style="background:#607d8b;">Copy Link</button>`;
   }
 
-  function copyToClipboard() {
-    navigator.clipboard.writeText(window.location.href).then(() => {
-        alert("Link copied to clipboard!");
-    });
+  function copyUrl() {
+    navigator.clipboard.writeText(window.location.href);
+    alert("Link Copied!");
   }
 
   function setupNav(index, posts) {
@@ -202,10 +182,9 @@ permalink: /404.html
 
   function show404() {
     document.getElementById("postTitle").innerText = "404 - Not Found";
-    document.getElementById("postContent").innerHTML = "Sorry, the page you requested was not found.<br><br><a href='/'>Return to Home</a>";
+    document.getElementById("postContent").innerHTML = "Sorry, page not found.";
   }
 
-  // Start fetching as soon as possible
   startApp();
 </script>
 </body>
