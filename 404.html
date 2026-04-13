@@ -35,54 +35,91 @@ permalink: /404.html
 <style>
   :root{ --primary-pink:#C71585; --dark-blue:#001a4d; --bg-yellow:#fff9db; }
   body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#fffdf0; color:#333; line-height:1.6; }
-  .top-links { background: var(--dark-blue); display: flex; overflow-x: auto; white-space: nowrap; }
+
+  /* Top Navigation */
+  .top-links { background: var(--dark-blue); display: flex; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+  .top-links::-webkit-scrollbar { display: none; }
   .top-links a { color:#fff; padding:15px 20px; text-decoration:none; font-size: 14px; font-weight: bold; }
-  .outer-links { background: var(--primary-pink); display: flex; overflow-x: auto; white-space: nowrap; padding: 5px 0; }
+
+  /* Secondary Links */
+  .outer-links { background: var(--primary-pink); display: flex; overflow-x: auto; white-space: nowrap; padding: 5px 0; scrollbar-width: none; }
+  .outer-links::-webkit-scrollbar { display: none; }
   .outer-links a { background:#fff; color:var(--primary-pink); margin:5px; padding:8px 15px; border-radius:20px; text-decoration:none; font-weight:bold; font-size:12px; }
+
   header { background: var(--bg-yellow); padding: 15px 5px; border-bottom: 2px solid var(--primary-pink); text-align: center; }
   .header-box { display: flex; align-items: center; justify-content: center; gap: 10px; }
   .logo { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--primary-pink); }
   .line1, .line2 { color: var(--primary-pink); font-size: 1.6rem; font-weight: 900; margin: 0; }
+
   .container { max-width: 850px; margin: auto; padding: 15px; min-height: 70vh; }
   .post-title { text-align: center; font-size: 1.7rem; color: var(--dark-blue); margin-bottom: 20px; font-weight: 800; }
-  .post-content { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #ddd; min-height: 200px; font-size: 1.1rem; }
+  .post-content { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.1rem; }
+
   .share-section { margin-top: 30px; text-align: center; background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #eee; }
   .share-buttons { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
   .share-btn { padding: 10px 18px; border-radius: 20px; color: #fff; text-decoration: none; font-size: 12px; font-weight: bold; border: none; cursor: pointer; }
+  
+  .post-nav { display: flex; flex-direction: column; gap: 10px; margin: 25px 0; }
   .nav-link { background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ddd; text-decoration: none; color: var(--primary-pink); font-weight: bold; text-align: center; flex: 1; }
+  @media (min-width: 600px) { .post-nav { flex-direction: row; } }
+
+  .related-item { padding: 10px; border-bottom: 1px solid #eee; }
+  .related-item a { color: var(--primary-pink); text-decoration: none; font-weight: bold; }
   footer { background: var(--dark-blue); color: #fff; text-align: center; padding: 25px; margin-top: 40px; }
 </style>
 </head>
 
 <body>
+
+<nav class="top-links">
+  <a href="/">Home</a>
+  <a href="/about-us">About Us</a>
+  <a href="/contact-us">Contact Us</a>
+  <a href="/privacy-policy">Privacy Policy</a>
+  <a href="/dmca">DMCA Policy</a>
+</nav>
+
+<div class="outer-links">
+  <a href="https://csrgnk.github.io/Dasabodha/">Dasabodha</a>
+  <a href="https://csrgnk.github.io/Upasana-Chandrika/">Upasana Chandrika</a>
+  <a href="https://csrgnk.github.io/manache-shlok/">Manache Shlok</a>
+</div>
+
 <header>
   <div class="header-box">
     <img src="/assets/images/Omnnbc-new.png" class="logo" alt="Logo">
-    <div><div class="line1">Namo Narayanaya</div><div class="line2">Bhakthi Channel</div></div>
+    <div>
+      <div class="line1">Namo Narayanaya</div>
+      <div class="line2">Bhakthi Channel</div>
+    </div>
   </div>
 </header>
 
 <div class="container">
   <h1 id="postTitle" class="post-title">Loading...</h1>
-  <div id="postContent" class="post-content">Preparing content for search engine...</div>
+  <div id="postContent" class="post-content">Preparing content...</div>
 
   <div id="shareSection" class="share-section" style="display:none;">
     <p style="font-weight:bold; color:var(--dark-blue);">Share this Post</p>
     <div id="shareButtons" class="share-buttons"></div>
   </div>
 
-  <div id="postNav" style="display: flex; gap: 10px; margin-top: 20px;"></div>
+  <div id="postNav" class="post-nav"></div>
+
+  <div id="relatedSection" class="related-section" style="display:none; margin-top:20px; border-top:1px solid #ddd; padding-top:20px;">
+    <h3 style="color:var(--dark-blue); margin-top:0;">Related Content</h3>
+    <div id="relatedList"></div>
+  </div>
 </div>
 
 <footer>© 2026 Namo Narayanaya Bhakthi Channel</footer>
 
 <script>
-  async function startApp() {
-    const currentBase = window.location.origin;
-    let slug = window.__slug || window.location.pathname.replace(/^\/|\/$/g, "").replace(".html", "") || "home";
+  const currentBase = window.location.origin;
+  let slug = window.__slug || window.location.pathname.replace(/^\/|\/$/g, "").replace(".html", "") || "home";
 
+  async function startApp() {
     try {
-      // 1. Fetch JSON first
       const resJson = await fetch(`${currentBase}/data/posts.json?v=${Date.now()}`);
       const posts = await resJson.json();
       const index = posts.findIndex(p => p.url === slug);
@@ -92,22 +129,22 @@ permalink: /404.html
         document.title = post.title + " | Namo Narayanaya";
         document.getElementById("postTitle").innerText = post.title;
 
-        // 2. Fetch HTML Content
+        // Fetch Content
         const resHtml = await fetch(`${currentBase}/posts/${post.url}.html?v=${Date.now()}`);
         const htmlBody = await resHtml.text();
-        
-        // Inject into DOM immediately
         document.getElementById("postContent").innerHTML = htmlBody;
-        
+
         // Setup UI
         document.getElementById("shareSection").style.display = "block";
+        document.getElementById("relatedSection").style.display = "block";
         setupShare(post.title, slug);
         setupNav(index, posts);
+        setupRelated(index, posts);
       } else {
         document.getElementById("postContent").innerHTML = "Page not found.";
       }
     } catch (err) {
-        document.getElementById("postContent").innerHTML = "Error loading content.";
+      document.getElementById("postContent").innerHTML = "Error loading content.";
     }
   }
 
@@ -128,7 +165,13 @@ permalink: /404.html
     document.getElementById("postNav").innerHTML = navHtml;
   }
 
-  // బాట్ కోసం వేచి ఉండకుండా వెంటనే రన్ చేయడం
+  function setupRelated(index, posts) {
+    let related = posts.filter((_, i) => i !== index).sort(() => 0.5 - Math.random()).slice(0, 5);
+    let relHtml = "";
+    related.forEach(r => { relHtml += `<div class="related-item"><a href="/${r.url}">${r.title}</a></div>`; });
+    document.getElementById("relatedList").innerHTML = relHtml;
+  }
+
   window.addEventListener('DOMContentLoaded', startApp);
 </script>
 </body>
