@@ -2,11 +2,12 @@
 permalink: /404.html
 ---
 <!DOCTYPE html>
-<html lang="en">
+<html lang="te">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Namo Narayanaya Bhakthi Channel</title>
+<title>Namo Narayanaya Bhakthi Channel - Devotional Content</title>
+<meta name="description" content="నమో నారాయణ భక్తి ఛానల్ - ఇక్కడ మీకు అన్ని రకాల స్తోత్రాలు, ఆధ్యాత్మిక వ్యాసాలు మరియు భక్తి సాహిత్యం లభిస్తాయి.">
 <meta name="robots" content="index, follow">
 
 <script>
@@ -16,8 +17,7 @@ permalink: /404.html
   var canonicalUrl = window.location.origin + "/" + cleanSlug;
 
   var link = document.createElement('link');
-  link.setAttribute('rel', 'canonical');
-  link.setAttribute('href', canonicalUrl);
+  link.setAttribute('rel', 'canonical'); link.setAttribute('href', canonicalUrl);
   document.head.appendChild(link);
 
   if (path.includes('/posts/') || path.endsWith('.html')) {
@@ -29,16 +29,13 @@ permalink: /404.html
 
 <style>
   :root{ --primary-pink:#C71585; --dark-blue:#001a4d; --bg-yellow:#fff9db; }
-  body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#fffdf0; color:#333; }
+  body { margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#fffdf0; color:#333; line-height:1.6; }
   header { background: var(--bg-yellow); padding: 15px 5px; border-bottom: 2px solid var(--primary-pink); text-align: center; }
   .logo { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--primary-pink); }
   .line1, .line2 { color: var(--primary-pink); font-size: 1.6rem; font-weight: 900; margin: 0; }
-  .container { max-width: 850px; margin: auto; padding: 15px; }
+  .container { max-width: 850px; margin: auto; padding: 15px; min-height: 80vh; }
   .post-title { text-align: center; font-size: 1.7rem; color: var(--dark-blue); margin-bottom: 20px; font-weight: 800; }
-  
-  /* Iframe Container */
-  #contentFrame { width: 100%; border: 1px solid #ddd; border-radius: 8px; background: #fff; min-height: 600px; }
-  
+  .post-content { background: #fff; padding: 25px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.15rem; color: #000; min-height: 500px; }
   footer { background: var(--dark-blue); color: #fff; text-align: center; padding: 25px; margin-top: 40px; }
 </style>
 </head>
@@ -52,9 +49,16 @@ permalink: /404.html
 </header>
 
 <div class="container">
-  <h1 id="postTitle" class="post-title">Devotional Content</h1>
-  
-  <iframe id="contentFrame" src="" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
+  <h1 id="postTitle" class="post-title">ఆధ్యాత్మిక భక్తి సాహిత్యం</h1>
+  <div id="postContent" class="post-content">
+    <article id="seo-rich-content">
+        <h2>నమో నారాయణ భక్తి ఛానల్ కు స్వాగతం</h2>
+        <p>మీరు కోరుకున్న భక్తి సాహిత్యం మరియు స్తోత్రాలు ఇక్కడ లోడ్ అవుతున్నాయి. మా ఛానల్ ద్వారా మేము దాసబోధ, మనాచే శ్లోక్ మరియు వందలాది స్తోత్రాలను తెలుగులో అందిస్తున్నాము.</p>
+        <p>భక్తి మార్గంలో ప్రయాణించే వారికి ఇది ఒక చక్కని వేదిక. దయచేసి కంటెంట్ లోడ్ అయ్యే వరకు వేచి ఉండండి. ఒకవేళ లోడ్ అవ్వకపోతే పేజీని రీఫ్రెష్ చేయండి.</p>
+        <hr>
+        <p>Welcome to <b>Namo Narayanaya Bhakthi Channel</b>. We are retrieving the devotional lyrics and stotrams you requested. Our platform hosts over 360 sacred texts and articles for spiritual growth.</p>
+    </article>
+  </div>
 </div>
 
 <footer>© 2026 Namo Narayanaya Bhakthi Channel</footer>
@@ -63,37 +67,26 @@ permalink: /404.html
   const currentBase = window.location.origin;
   let slug = window.__slug || window.location.pathname.replace(/^\/|\/$/g, "").replace(".html", "") || "home";
 
-  async function init() {
+  async function startApp() {
     try {
-      const res = await fetch(`${currentBase}/data/posts.json?v=${Date.now()}`);
-      const posts = await res.json();
+      const resPosts = await fetch(`${currentBase}/data/posts.json?v=${Date.now()}`);
+      const posts = await resPosts.json();
       const post = posts.find(p => p.url === slug);
 
       if (post) {
-        document.getElementById("postTitle").innerText = post.title;
-        document.title = post.title + " | Namo Narayanaya";
-        // Iframe ద్వారా కంటెంట్ ని నేరుగా లోడ్ చేయడం
-        document.getElementById("contentFrame").src = `${currentBase}/posts/${post.url}.html`;
-      } else {
-        // Pages check
-        const pRes = await fetch(`${currentBase}/data/pages.json?v=${Date.now()}`);
-        const pages = await pRes.json();
-        const page = pages.find(pg => pg.id === slug);
-        if (page) {
-          document.getElementById("postTitle").innerText = page.title;
-          document.getElementById("contentFrame").src = `${currentBase}/pages/${page.file}.html`;
+        const resHtml = await fetch(`${currentBase}/posts/${post.url}.html?v=${Date.now()}`);
+        if (resHtml.ok) {
+          const content = await resHtml.text();
+          document.getElementById("postTitle").innerText = post.title;
+          document.title = post.title + " | Namo Narayanaya";
+          document.getElementById("postContent").innerHTML = "<article>" + content + "</article>";
         }
       }
     } catch (e) {
       console.log("Loading...");
     }
   }
-
-  function resizeIframe(obj) {
-    obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
-  }
-
-  init();
+  startApp();
 </script>
 </body>
 </html>
