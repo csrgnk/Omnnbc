@@ -41,10 +41,7 @@ permalink: /404.html
   .line1, .line2 { color: var(--primary-pink); font-size: 1.6rem; font-weight: 900; margin: 0; }
   .container { max-width: 850px; margin: auto; padding: 15px; min-height: 70vh; }
   .post-title { text-align: center; font-size: 1.7rem; color: var(--dark-blue); margin-bottom: 20px; font-weight: 800; }
-  
-  /* Fixed the empty box look */
-  .post-content { background: #fff; padding: 25px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.15rem; color: #000; min-height: 450px; }
-  
+  .post-content { background: #fff; padding: 25px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 1.15rem; color: #000; min-height: 500px; }
   .share-section { margin-top: 30px; text-align: center; background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #eee; display:none; }
   .share-buttons { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
   .share-btn { padding: 10px 18px; border-radius: 20px; color: #fff; text-decoration: none; font-size: 12px; font-weight: bold; border: none; cursor: pointer; }
@@ -64,12 +61,11 @@ permalink: /404.html
 </header>
 
 <div class="container">
-  <h1 id="postTitle" class="post-title">Devotional Lyrics & Stotrams</h1>
+  <h1 id="postTitle" class="post-title">Loading Devotional Content...</h1>
   <div id="postContent" class="post-content">
     <article id="static-seo-text">
-        <h3>Welcome to Namo Narayanaya Bhakthi Channel</h3>
-        <p>Loading the sacred Telugu devotional lyrics, stotrams, and spiritual content for you. We provide a vast collection of traditional literature, including Dashabodha, Manache Shlok, and various stotras in Telugu and English.</p>
-        <p>Please stay on the page while we retrieve the full text for your spiritual guidance...</p>
+        <p><strong>Namo Narayanaya Bhakthi Channel</strong> provides a rich collection of Telugu devotional lyrics, stotrams, and spiritual literature. We are currently loading the specific lyrics you requested.</p>
+        <p>Our library includes Dashabodha, Manache Shlok, and daily prayers used in traditional worship. If the content does not load within a few seconds, please refresh the page or check our home directory.</p>
     </article>
   </div>
 
@@ -88,13 +84,12 @@ permalink: /404.html
 
   async function startApp() {
     try {
-      const [pagesRes, postsRes] = await Promise.all([
+      const [pRes, sRes] = await Promise.all([
         fetch(`${currentBase}/data/pages.json?v=${Date.now()}`),
         fetch(`${currentBase}/data/posts.json?v=${Date.now()}`)
       ]);
-
-      const pages = await pagesRes.json();
-      const posts = await postsRes.json();
+      const pages = await pRes.json();
+      const posts = await sRes.json();
 
       const pageItem = pages.find(pg => pg.id === slug);
       if (pageItem) {
@@ -104,25 +99,23 @@ permalink: /404.html
         if (postIndex !== -1) {
           const post = posts[postIndex];
           await loadHTML(post.url, "posts", post.title, postIndex, posts);
-        } else {
-          show404();
         }
       }
     } catch (err) {
-      console.error("Data load failed");
+      console.log("Error during initialization.");
     }
   }
 
   async function loadHTML(fileSlug, folder, title, index = -1, posts = []) {
-    document.getElementById("postTitle").innerText = title;
-    document.title = title + " | Namo Narayanaya Bhakthi Channel";
-
     try {
       const res = await fetch(`${currentBase}/${folder}/${fileSlug}.html?v=${Date.now()}`);
-      if (!res.ok) throw new Error();
+      if (!res.ok) return;
+      
       const htmlContent = await res.text();
       
-      // Replace the placeholder text with actual post content
+      // Update DOM only if content is received
+      document.getElementById("postTitle").innerText = title;
+      document.title = title + " | Namo Narayanaya Bhakthi Channel";
       document.getElementById("postContent").innerHTML = "<article>" + htmlContent + "</article>";
 
       if (folder === "posts") {
@@ -132,7 +125,7 @@ permalink: /404.html
         setupRelated(index, posts);
       }
     } catch (e) {
-      document.getElementById("postContent").innerHTML = "The devotional content is currently being updated. Please check back shortly.";
+      console.log("Error loading content.");
     }
   }
 
@@ -142,8 +135,7 @@ permalink: /404.html
     document.getElementById("shareButtons").innerHTML = `
       <a href="https://wa.me/?text=${text}%20${url}" target="_blank" class="share-btn" style="background:#25D366">WhatsApp</a>
       <a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" class="share-btn" style="background:#1877F2">Facebook</a>
-      <a href="https://twitter.com/intent/tweet?text=${text}&url=${url}" target="_blank" class="share-btn" style="background:#1DA1F2">Twitter</a>
-      <button onclick="navigator.clipboard.writeText(window.location.href)" class="share-btn" style="background:#607d8b;">Copy Link</button>`;
+      <a href="https://twitter.com/intent/tweet?text=${text}&url=${url}" target="_blank" class="share-btn" style="background:#1DA1F2">Twitter</a>`;
   }
 
   function setupNav(index, posts) {
@@ -159,11 +151,6 @@ permalink: /404.html
     related.forEach(r => { relHtml += `<div style='padding:10px; border-bottom:1px solid #eee;'><a href="/${r.url}" style='color:var(--primary-pink); text-decoration:none; font-weight:bold;'>${r.title}</a></div>`; });
     relHtml += "</div>";
     document.getElementById("postContent").innerHTML += relHtml;
-  }
-
-  function show404() {
-    document.getElementById("postTitle").innerText = "404 - Not Found";
-    document.getElementById("postContent").innerHTML = "Sorry, the requested page is not available. Please visit our <a href='/'>Home Page</a>.";
   }
 
   startApp();
