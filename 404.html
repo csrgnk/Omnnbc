@@ -4,42 +4,64 @@ permalink: /404.html
 <!DOCTYPE html>
 <html lang="te">
 <head>
-<script>
-    // 1. Block Right-Click with custom message
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-        alert("Public Purpose Display Only: Content protected by Sangameshwar - Namo Narayanaya Bhakthi Channel.");
-    });
-
-    // 2. Block Copying via Keyboard (Ctrl+C, Ctrl+U, etc.)
-    document.onkeydown = function(e) {
-        if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 85 || e.keyCode === 83 || e.keyCode === 73)) {
-            alert("This content is for viewing only. Copying is not allowed.");
-            return false;
-        }
-        // Block F12 (Inspect Element)
-        if (e.keyCode === 123) {
-            return false;
-        }
-    };
-
-    // 3. Block "Drag and Drop" of content
-    document.addEventListener('dragstart', function(e) {
-        e.preventDefault();
-    });
-</script>
-
 <style>
-    /* Prevent text highlighting while keeping it readable */
+    /* 1. Prevent Text Selection */
     body {
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
-        /* Ensures the cursor doesn't look like a text-selector */
-        cursor: default;
+    }
+
+    /* 2. Small Red Alert Bar Styling */
+    #copy-warning {
+        display: none;
+        position: fixed;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #ff0000;
+        color: white;
+        padding: 8px 16px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 5px;
+        z-index: 10000;
+        box-shadow: 0px 4px 6px rgba(0,0,0,0.2);
     }
 </style>
+
+<div id="copy-warning">You are not allowed copy this script</div>
+
+<script>
+    function showRedAlert() {
+        const warning = document.getElementById('copy-warning');
+        warning.style.display = 'block';
+        setTimeout(() => {
+            warning.style.display = 'none';
+        }, 2000); // Disappears after 2 seconds
+    }
+
+    // Block Right-Click
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        showRedAlert();
+    });
+
+    // Block Ctrl+C and Ctrl+U
+    document.onkeydown = function(e) {
+        if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 85)) {
+            showRedAlert();
+            return false;
+        }
+    };
+
+    // Block Copy Event
+    document.addEventListener('copy', function(e) {
+        e.preventDefault();
+        showRedAlert();
+    });
+</script>
     
 <script>
 (function() {
