@@ -4,6 +4,35 @@ permalink: /404.html
 <!DOCTYPE html>
 <html lang="te">
 <head>
+<script>
+    // 1. Content Protection: Disable Right-Click
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+    // 2. Content Protection: Disable Copy and View Source Shortcuts
+    document.onkeydown = function(e) {
+        // Blocks F12, Ctrl+Shift+I, Ctrl+Shift+J, and Ctrl+U
+        if (e.keyCode == 123 || 
+            (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || 
+            (e.ctrlKey && e.keyCode == 85)) {
+            return false;
+        }
+    };
+
+    // 3. Auto-Redirect: Send back to Home after 5 seconds
+    setTimeout(function() {
+        window.location.href = "https://omnnbc.com";
+    }, 5000); 
+</script>
+
+<style>
+    /* 4. Content Protection: Disable Text Highlighting */
+    body {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+</style>
 
 <script>
 (function() {
