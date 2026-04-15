@@ -5,35 +5,42 @@ permalink: /404.html
 <html lang="te">
 <head>
 <script>
-    // 1. Content Protection: Disable Right-Click
-    document.addEventListener('contextmenu', event => event.preventDefault());
+    // 1. Block Right-Click with custom message
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        alert("Public Purpose Display Only: Content protected by Sangameshwar - Namo Narayanaya Bhakthi Channel.");
+    });
 
-    // 2. Content Protection: Disable Copy and View Source Shortcuts
+    // 2. Block Copying via Keyboard (Ctrl+C, Ctrl+U, etc.)
     document.onkeydown = function(e) {
-        // Blocks F12, Ctrl+Shift+I, Ctrl+Shift+J, and Ctrl+U
-        if (e.keyCode == 123 || 
-            (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || 
-            (e.ctrlKey && e.keyCode == 85)) {
+        if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 85 || e.keyCode === 83 || e.keyCode === 73)) {
+            alert("This content is for viewing only. Copying is not allowed.");
+            return false;
+        }
+        // Block F12 (Inspect Element)
+        if (e.keyCode === 123) {
             return false;
         }
     };
 
-    // 3. Auto-Redirect: Send back to Home after 5 seconds
-    setTimeout(function() {
-        window.location.href = "https://omnnbc.com";
-    }, 5000); 
+    // 3. Block "Drag and Drop" of content
+    document.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+    });
 </script>
 
 <style>
-    /* 4. Content Protection: Disable Text Highlighting */
+    /* Prevent text highlighting while keeping it readable */
     body {
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+        /* Ensures the cursor doesn't look like a text-selector */
+        cursor: default;
     }
 </style>
-
+    
 <script>
 (function() {
   var path = window.location.pathname;
