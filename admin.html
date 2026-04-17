@@ -2,26 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Login | OMNNBC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin Login</title>
     <style>
-        body { font-family: sans-serif; background: #e9ecef; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; width: 300px; }
-        input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        button { background: #C71585; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        body { font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto; background: #f0f2f5; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .login-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 350px; text-align: center; }
+        h2 { color: #C71585; margin-bottom: 20px; }
+        input { width: 100%; padding: 15px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; box-sizing: border-box; }
+        button { background: #C71585; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
     <div class="login-card">
-        <h2 style="color:#C71585">OMNNBC Admin</h2>
-        <input type="password" id="pass" placeholder="Enter Secret Code">
-        <button onclick="login()">Login</button>
+        <h2>OMNNBC Admin</h2>
+        <input type="password" id="pass" placeholder="Secret Code" inputmode="numeric">
+        <button onclick="login()">Open Dashboard</button>
     </div>
     <script>
         function login() {
             if(document.getElementById('pass').value === "Namo123") {
-                sessionStorage.setItem("admin_auth", "true");
+                localStorage.setItem("admin_active", "true");
                 window.location.href = "admin-posts.html";
-            } else { alert("Wrong Code"); }
+            } else { alert("Access Denied"); }
         }
     </script>
 </body>
