@@ -14,26 +14,32 @@ jobs:
       - name: Process Issue Data
         shell: bash
         run: |
+          # 1. Get the Title from Issue Title
           RAW_TITLE=$(echo "${{ github.event.issue.title }}" | sed 's/POST: //')
-          DATE=$(date +'%Y-%m-%d')
-          # Create URL slug from title
+          
+          # 2. Create the Slug (URL)
           SLUG=$(echo "$RAW_TITLE" | sed -e 's/[^[:alnum:]]/-/g' | tr '[:upper:]' '[:lower:]' | sed 's/--/-/g' | sed 's/^-//;s/-$//')
+          
+          # 3. Get the Date
+          DATE=$(date +'%Y-%m-%d')
 
-          # Line 1 of issue body = meta_description
-          META=$(echo "${{ github.event.issue.body }}" | head -n 1)
-          # Remaining lines = HTML content
-          CONTENT=$(echo "${{ github.event.issue.body }}" | tail -n +2)
+          # 4. SPLIT DATA: First line is Description, the rest is HTML Content
+          # We use a temporary file to handle multi-line HTML safely
+          echo "${{ github.event.issue.body }}" > full_body.txt
+          
+          # Extract first line for JSON description
+          JSON_DESC=$(head -n 1 full_body.txt)
+          
+          # Extract everything from line 2 onwards for the HTML file
+          tail -n +2 full_body.txt > "omnnbc/posts/$SLUG.html"
 
-          # Save HTML File
-          mkdir -p omnnbc/posts
-          echo "$CONTENT" > "omnnbc/posts/$SLUG.html"
-
-          # Update JSON with your specific keys
+          # 5. Update data/posts.json
           mkdir -p omnnbc/data
           if [ ! -f omnnbc/data/posts.json ]; then echo "[]" > omnnbc/data/posts.json; fi
           
-          jq --arg t "$RAW_TITLE" --arg u "$SLUG" --arg d "$DATE" --arg m "$META" \
-          '. = [{"title": $t, "url": $u, "meta_description": $m, "publish_date": $d}] + .' \
+          # Prepend new data to JSON with 'description' key
+          jq --arg t "$RAW_TITLE" --arg u "$SLUG" --arg d "$DATE" --arg m "$JSON_DESC" \
+          '. = [{"title": $t, "url": $u, "publish_date": $d, "description": $m}] + .' \
           omnnbc/data/posts.json > temp.json && mv temp.json omnnbc/data/posts.json
 
       - name: Commit and Push
@@ -41,10 +47,10 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .
-          git commit -m "Add post: $RAW_TITLE"
+          git commit -m "Update/Create Post: ${{ github.event.issue.title }}"
           git push
 
-      - name: Auto-Close Issue
+      - name: Close Issue
         run: gh issue close ${{ github.event.issue.number }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
