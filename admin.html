@@ -3,28 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Admin Login</title>
+    <title>Admin Login | OMNNBC</title>
     <style>
-        body { font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto; background: #f0f2f5; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .login-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 350px; text-align: center; }
-        h2 { color: #C71585; margin-bottom: 20px; }
-        input { width: 100%; padding: 15px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; box-sizing: border-box; }
-        button { background: #C71585; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; }
+        :root { --primary: #C71585; --bg: #f8f9fa; }
+        body { 
+            font-family: -apple-system, system-ui, sans-serif; 
+            background: var(--bg); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+            margin: 0; 
+        }
+        .login-card { 
+            background: white; 
+            padding: 35px 25px; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+            width: 85%; 
+            max-width: 320px; 
+            text-align: center; 
+        }
+        h2 { color: var(--primary); margin: 0 0 10px 0; font-size: 22px; }
+        p { color: #666; font-size: 14px; margin-bottom: 25px; }
+        
+        /* Numeric Input Styling */
+        input[type="password"] { 
+            width: 100%; 
+            padding: 18px; 
+            margin-bottom: 25px; 
+            border: 2px solid #eee; 
+            border-radius: 12px; 
+            font-size: 24px; 
+            text-align: center; 
+            letter-spacing: 8px;
+            box-sizing: border-box;
+            background: #fafafa;
+        }
+        input:focus { border-color: var(--primary); outline: none; background: #fff; }
+
+        button { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 16px; 
+            width: 100%; 
+            border-radius: 12px; 
+            font-size: 18px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: transform 0.2s;
+        }
+        button:active { transform: scale(0.96); }
     </style>
 </head>
 <body>
+
     <div class="login-card">
-        <h2>OMNNBC Admin</h2>
-        <input type="password" id="pass" placeholder="Secret Code" inputmode="numeric">
-        <button onclick="login()">Open Dashboard</button>
+        <h2>Admin Access</h2>
+        <p>Enter your numeric PIN code</p>
+        
+        <input type="password" 
+               id="pass" 
+               placeholder="••••" 
+               inputmode="numeric" 
+               pattern="[0-9]*" 
+               autocomplete="one-time-code">
+               
+        <button onclick="login()">Verify PIN</button>
     </div>
+
     <script>
+        // Set your numeric code here (e.g., 1234)
+        const MY_PIN = "1234"; 
+
         function login() {
-            if(document.getElementById('pass').value === "Namo123") {
+            const inputVal = document.getElementById('pass').value;
+            if(inputVal === MY_PIN) {
                 localStorage.setItem("admin_active", "true");
                 window.location.href = "admin-posts.html";
-            } else { alert("Access Denied"); }
+            } else { 
+                alert("Invalid PIN. Please try again."); 
+                document.getElementById('pass').value = "";
+            }
         }
+
+        // Allow pressing "Enter" key to login
+        document.getElementById("pass").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                login();
+            }
+        });
     </script>
+
 </body>
 </html>
