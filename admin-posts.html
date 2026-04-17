@@ -3,49 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Management</title>
+    <title>Dashboard</title>
+    <script>
+        // Check for secret code access
+        if(sessionStorage.getItem("admin_key") !== "active") { window.location.href = "./admin.html"; }
+    </script>
     <style>
-        body { font-family: -apple-system, sans-serif; background: #f8f9fa; margin: 0; padding-bottom: 80px; }
-        .header { background: #C71585; color: white; padding: 20px; text-align: center; position: sticky; top: 0; z-index: 100; font-weight: bold; }
+        body { font-family: sans-serif; background: #f8f9fa; margin: 0; }
+        .header { background: #C71585; color: white; padding: 20px; text-align: center; font-weight: bold; }
         .container { padding: 15px; max-width: 600px; margin: auto; }
-        .post-card { background: white; padding: 18px; border-radius: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; border-left: 5px solid #C71585; }
-        .info h3 { margin: 0 0 5px 0; font-size: 16px; color: #333; }
-        .info p { margin: 0; font-size: 12px; color: #888; }
-        .edit-btn { background: #007bff; color: white; text-decoration: none; padding: 8px 15px; border-radius: 6px; font-size: 13px; font-weight: bold; }
-        .fab { position: fixed; bottom: 25px; right: 25px; background: #C71585; color: white; width: 60px; height: 60px; border-radius: 30px; display: flex; align-items: center; justify-content: center; font-size: 30px; text-decoration: none; box-shadow: 0 5px 15px rgba(199,21,133,0.4); }
+        .post-card { background: white; padding: 15px; border-radius: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .edit-btn { background: #007bff; color: white; text-decoration: none; padding: 8px 15px; border-radius: 6px; font-size: 13px; }
+        .fab { position: fixed; bottom: 20px; right: 20px; background: #C71585; color: white; width: 60px; height: 60px; border-radius: 30px; display: flex; align-items: center; justify-content: center; font-size: 30px; text-decoration: none; }
     </style>
 </head>
 <body>
-    <div class="header">OMNNBC Dashboard</div>
-    <div class="container" id="list-container">Fetching data...</div>
+    <div class="header">Posts Dashboard</div>
+    <div class="container" id="list">Loading...</div>
     <a href="./admin-add-post.html" class="fab">+</a>
 
     <script>
-        if(localStorage.getItem("admin_active") !== "true") window.location.href="./admin.html";
-        
-        // Fetch using relative path to fix 404
-        fetch('./data/posts.json')
-            .then(res => {
-                if(!res.ok) throw new Error("JSON not found at ./data/posts.json");
-                return res.json();
-            })
-            .then(data => {
-                const container = document.getElementById('list-container');
-                container.innerHTML = data.length ? "" : "No posts found.";
-                data.forEach(post => {
-                    container.innerHTML += `
-                        <div class="post-card">
-                            <div class="info">
-                                <h3>${post.title}</h3>
-                                <p>${post.publish_date}</p>
-                            </div>
-                            <a href="./admin-add-post.html?edit=${post.url}&t=${encodeURIComponent(post.title)}" class="edit-btn">Edit</a>
-                        </div>`;
-                });
-            })
-            .catch(err => {
-                document.getElementById('list-container').innerHTML = `<p style="color:red">Error: ${err.message}. Make sure data/posts.json exists.</p>`;
+        fetch('./data/posts.json').then(res => res.json()).then(data => {
+            const container = document.getElementById('list');
+            container.innerHTML = "";
+            data.forEach(post => {
+                container.innerHTML += `
+                    <div class="post-card">
+                        <div><strong>${post.title}</strong><br><small>${post.publish_date}</small></div>
+                        <a href="./admin-add-post.html?edit=${post.url}" class="edit-btn">Edit</a>
+                    </div>`;
             });
+        });
     </script>
 </body>
 </html>
