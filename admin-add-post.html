@@ -1,43 +1,59 @@
 <script>
 function submit() {
-    const title = document.getElementById('p-title').value.trim();
-    const desc = document.getElementById('p-desc').value.trim() || "No description";
-
-    // Get content from active editor
-    let content = "";
+    const titleEl = document.getElementById('p-title');
+    const descEl = document.getElementById('p-desc');
     const rawEditor = document.getElementById('html-raw');
 
-    if (rawEditor.style.display === "block") {
+    const title = titleEl.value.trim();
+    const desc = descEl.value.trim() || "No description";
+
+    let content = "";
+
+    // ✅ Reliable editor detection (FIXED)
+    const isRawVisible = rawEditor && window.getComputedStyle(rawEditor).display !== "none";
+
+    if (isRawVisible) {
         content = rawEditor.value.trim();
-    } else {
+    } else if (typeof quill !== "undefined" && quill.root) {
         content = quill.root.innerHTML.trim();
     }
 
-    // ✅ Better empty check (works for Quill)
-    const isEmpty = (!content || content === "<p><br></p>" || quill.getText().trim().length === 0);
+    // ✅ Strong empty check (FIXED)
+    let plainText = content;
+    if (typeof quill !== "undefined") {
+        plainText = quill.getText().trim();
+    } else {
+        plainText = content.replace(/<[^>]*>/g, '').trim();
+    }
 
-    if (!title || isEmpty) {
+    if (!title || !plainText) {
         alert("Title and Content required!");
         return;
     }
 
-    // ✅ Prevent GitHub URL truncation issue
-    if (content.length > 6000) {
+    // ✅ Prevent GitHub URL limit issue (IMPORTANT)
+    if (content.length > 4000) {
         alert("Content too long! Please shorten your post.");
         return;
     }
 
-    // ✅ Better formatting (prevents description-only issue)
-    const body = `${desc}
+    // ✅ CLEAN HTML (prevents blank issue)
+    content = content
+        .replace(/\n/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
 
----
+    // ✅ FINAL BODY FORMAT (VERY IMPORTANT)
+    const body = desc + "\n\n---\n\n" + content;
 
-${content}`;
+    console.log("FINAL BODY:", body); // debug
 
-    // ✅ Encode safely
-    const githubUrl = `https://github.com/csrgnk/csrgnk.github.io/issues/new?title=${encodeURIComponent("POST: " + title)}&body=${encodeURIComponent(body)}`;
+    // ✅ ENCODE SAFELY
+    const url = "https://github.com/csrgnk/csrgnk.github.io/issues/new"
+        + "?title=" + encodeURIComponent("POST: " + title)
+        + "&body=" + encodeURIComponent(body);
 
-    // ✅ FIXED (_blank bug)
-    window.open(githubUrl, '_blank');
+    // ✅ OPEN (FIXED)
+    window.open(url, "_blank");
 }
 </script>
