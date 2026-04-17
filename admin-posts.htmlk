@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post Management</title>
+    <style>
+        body { font-family: sans-serif; margin: 0; background: #f8f9fa; }
+        nav { background: #C71585; padding: 15px; color: white; display: flex; gap: 20px; }
+        nav a { color: white; text-decoration: none; font-weight: bold; }
+        .container { padding: 30px; max-width: 900px; margin: auto; }
+        .post-card { background: white; padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .edit-btn { background: #007bff; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <nav>
+        <span>OMNNBC ADMIN</span>
+        <a href="admin-posts.html">All Posts</a>
+        <a href="admin-add-post.html">Add New Post</a>
+    </nav>
+    <div class="container">
+        <h2>Published Posts</h2>
+        <div id="post-list">Loading posts...</div>
+    </div>
+    <script>
+        if(sessionStorage.getItem("admin_auth") !== "true") window.location.href="admin.html";
+
+        fetch('data/posts.json')
+            .then(res => res.json())
+            .then(data => {
+                const list = document.getElementById('post-list');
+                list.innerHTML = "";
+                data.forEach(post => {
+                    list.innerHTML += `
+                        <div class="post-card">
+                            <div>
+                                <strong>${post.title}</strong><br>
+                                <small>${post.publish_date} | ${post.url}</small>
+                            </div>
+                            <a href="admin-edit-post.html?slug=${post.url}&title=${encodeURIComponent(post.title)}" class="edit-btn">Edit Post</a>
+                        </div>`;
+                });
+            });
+    </script>
+</body>
+</html>
