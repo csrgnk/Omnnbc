@@ -5,35 +5,27 @@ function submit() {
 
     let content = "";
 
-    // ✅ ALWAYS try Quill first
-    if (typeof quill !== "undefined" && quill.root) {
+    // 1. Check if HTML Raw editor is active and has content
+    const raw = document.getElementById('html-raw');
+    if (raw && document.getElementById('html-raw').style.display === "block") {
+        content = raw.value;
+    } 
+    // 2. Otherwise, get content from Quill
+    else if (typeof quill !== "undefined" && quill.root) {
         content = quill.root.innerHTML;
     }
 
-    // ✅ fallback to raw editor if empty
-    if (!content || content === "<p><br></p>") {
-        const raw = document.getElementById('html-raw');
-        if (raw) content = raw.value;
-    }
-
-    // ❗ FINAL SAFETY: convert HTML → plain text (prevents blank issue)
-    const safeContent = content
-        .replace(/<[^>]*>/g, '')   // remove HTML
-        .replace(/\s+/g, ' ')
-        .trim();
-
-    if (!title || !safeContent) {
-        alert("Title and Content required!");
+    // Validation: Check if both are empty
+    if (!title || !content || content === "<p><br></p>") {
+        alert("Title and Content are required!");
         return;
     }
 
-    // ✅ keep body simple (GitHub-safe)
-    const body = desc + "\n\n---\n\n" + safeContent;
+    // ✅ IMPORTANT: DO NOT remove HTML tags. 
+    // We send Description on Line 1 and HTML Content from Line 2.
+    const body = desc + "\n" + content;
 
-    console.log("BODY:", body); // debug
-
-    const url =
-        "https://github.com/csrgnk/csrgnk.github.io/issues/new" +
+    const url = "https://github.com/csrgnk/csrgnk.github.io/issues/new" +
         "?title=" + encodeURIComponent("POST: " + title) +
         "&body=" + encodeURIComponent(body);
 
