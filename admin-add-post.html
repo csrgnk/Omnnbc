@@ -2,53 +2,81 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Editor | OMNNBC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Editor</title>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; margin: 0; background: #f4f7f6; }
-        nav { background: #C71585; padding: 15px; color: white; display: flex; gap: 20px; }
-        nav a { color: white; text-decoration: none; }
-        .container { padding: 30px; max-width: 800px; margin: auto; background: white; margin-top: 20px; border-radius: 10px; }
-        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        #editor { height: 300px; }
-        .publish-btn { background: #C71585; color: white; border: none; padding: 15px; width: 100%; margin-top: 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        body { font-family: -apple-system, sans-serif; margin: 0; background: #fff; padding-bottom: 90px; }
+        .top-bar { background: #f4f4f4; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; }
+        .btn-cancel { text-decoration: none; color: #d9534f; font-weight: bold; font-size: 14px; }
+        .container { padding: 15px; }
+        input[type="text"] { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        .toggle-box { display: flex; margin-bottom: 10px; border: 1px solid #C71585; border-radius: 8px; overflow: hidden; }
+        .toggle-btn { flex: 1; padding: 10px; border: none; background: white; color: #C71585; font-weight: bold; }
+        .toggle-btn.active { background: #C71585; color: white; }
+        #editor-wrapper { height: 350px; border: 1px solid #ddd; border-radius: 0 0 8px 8px; }
+        #html-raw { width: 100%; height: 350px; display: none; font-family: monospace; padding: 10px; border: 1px solid #ddd; box-sizing: border-box; }
+        .footer { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); box-sizing: border-box; }
+        .btn-send { background: #C71585; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 18px; font-weight: bold; }
     </style>
 </head>
 <body>
-    <nav>
-        <a href="admin-posts.html">← Back to Posts</a>
-    </nav>
+    <div class="top-bar">
+        <a href="./admin-posts.html" class="btn-cancel">Cancel</a>
+        <strong id="mode-text">New Post</strong>
+        <div style="width:50px"></div>
+    </div>
+
     <div class="container">
-        <h2 id="page-title">Create New Post</h2>
-        <input type="text" id="post-title" placeholder="Post Title">
-        <div id="editor"></div>
-        <button class="publish-btn" onclick="submitToGitHub()">Update/Publish via GitHub</button>
+        <input type="text" id="p-title" placeholder="Post Title">
+        <div class="toggle-box">
+            <button id="v-btn" class="toggle-btn active" onclick="setMode('v')">Visual</button>
+            <button id="h-btn" class="toggle-btn" onclick="setMode('h')">HTML Code</button>
+        </div>
+        <div id="editor-wrapper"></div>
+        <textarea id="html-raw"></textarea>
+    </div>
+
+    <div class="footer">
+        <button class="btn-send" onclick="submit()">Update / Publish</button>
     </div>
 
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script>
-        if(sessionStorage.getItem("admin_auth") !== "true") window.location.href="admin.html";
-        var quill = new Quill('#editor', { theme: 'snow' });
+        if(localStorage.getItem("admin_active") !== "true") window.location.href="./admin.html";
+        var quill = new Quill('#editor-wrapper', { theme: 'snow' });
 
-        // Check if editing
         const params = new URLSearchParams(window.location.search);
-        if(params.has('slug')) {
-            document.getElementById('page-title').innerText = "Edit Post";
-            document.getElementById('post-title').value = decodeURIComponent(params.get('title'));
-            
-            // Fetch old content
-            fetch(`posts/${params.get('slug')}.html`)
-                .then(res => res.text())
-                .then(html => { quill.root.innerHTML = html; });
+        if(params.has('edit')) {
+            document.getElementById('mode-text').innerText = "Edit Post";
+            document.getElementById('p-title').value = decodeURIComponent(params.get('t'));
+            fetch(`./posts/${params.get('edit')}.html`)
+                .then(r => r.text())
+                .then(h => { quill.root.innerHTML = h; });
         }
 
-        function submitToGitHub() {
-            const title = document.getElementById('post-title').value;
-            const content = quill.root.innerHTML;
-            const repo = "csrgnk/csrgnk.github.io";
+        function setMode(m) {
+            const ev = document.getElementById('editor-wrapper');
+            const hr = document.getElementById('html-raw');
+            if(m === 'v') {
+                ev.style.display = "block"; hr.style.display = "none";
+                document.getElementById('v-btn').classList.add('active');
+                document.getElementById('h-btn').classList.remove('active');
+                quill.root.innerHTML = hr.value;
+            } else {
+                ev.style.display = "none"; hr.style.display = "block";
+                document.getElementById('h-btn').classList.add('active');
+                document.getElementById('v-btn').classList.remove('active');
+                hr.value = quill.root.innerHTML;
+            }
+        }
+
+        function submit() {
+            const title = document.getElementById('p-title').value;
+            const content = (document.getElementById('html-raw').style.display === "block") ? document.getElementById('html-raw').value : quill.root.innerHTML;
+            if(!title) return alert("Please enter a title");
             
-            // Redirect to GitHub Issue
-            const githubUrl = `https://github.com/${repo}/issues/new?title=POST: ${encodeURIComponent(title)}&body=${encodeURIComponent(content)}`;
+            const githubUrl = `https://github.com/csrgnk/csrgnk.github.io/issues/new?title=POST: ${encodeURIComponent(title)}&body=${encodeURIComponent(content)}`;
             window.open(githubUrl, '_blank');
         }
     </script>
