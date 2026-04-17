@@ -6,95 +6,29 @@
     <title>Admin Login | OMNNBC</title>
     <style>
         :root { --primary: #C71585; --bg: #f8f9fa; }
-        body { 
-            font-family: -apple-system, system-ui, sans-serif; 
-            background: var(--bg); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            height: 100vh; 
-            margin: 0; 
-        }
-        .login-card { 
-            background: white; 
-            padding: 35px 25px; 
-            border-radius: 20px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
-            width: 85%; 
-            max-width: 320px; 
-            text-align: center; 
-        }
+        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .login-card { background: white; padding: 35px 25px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); width: 85%; max-width: 320px; text-align: center; }
         h2 { color: var(--primary); margin: 0 0 10px 0; font-size: 22px; }
-        p { color: #666; font-size: 14px; margin-bottom: 25px; }
-        
-        /* Numeric Input Styling */
-        input[type="password"] { 
-            width: 100%; 
-            padding: 18px; 
-            margin-bottom: 25px; 
-            border: 2px solid #eee; 
-            border-radius: 12px; 
-            font-size: 24px; 
-            text-align: center; 
-            letter-spacing: 8px;
-            box-sizing: border-box;
-            background: #fafafa;
-        }
+        input[type="password"] { width: 100%; padding: 18px; margin-bottom: 25px; border: 2px solid #eee; border-radius: 12px; font-size: 24px; text-align: center; letter-spacing: 8px; box-sizing: border-box; background: #fafafa; }
         input:focus { border-color: var(--primary); outline: none; background: #fff; }
-
-        button { 
-            background: var(--primary); 
-            color: white; 
-            border: none; 
-            padding: 16px; 
-            width: 100%; 
-            border-radius: 12px; 
-            font-size: 18px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            transition: transform 0.2s;
-        }
-        button:active { transform: scale(0.96); }
+        button { background: var(--primary); color: white; border: none; padding: 16px; width: 100%; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
-
     <div class="login-card">
         <h2>Admin Access</h2>
-        <p>Enter your numeric PIN code</p>
-        
-        <input type="password" 
-               id="pass" 
-               placeholder="••••" 
-               inputmode="numeric" 
-               pattern="[0-9]*" 
-               autocomplete="one-time-code">
-               
+        <p style="color:#666; font-size:14px;">Enter Numeric PIN</p>
+        <input type="password" id="pass" placeholder="••••" inputmode="numeric" pattern="[0-9]*">
         <button onclick="login()">Verify PIN</button>
     </div>
-
     <script>
-        // Set your numeric code here (e.g., 1234)
-        const MY_PIN = "1234"; 
-
+        const MY_PIN = "1234"; // CHANGE THIS TO YOUR NUMBER
         function login() {
-            const inputVal = document.getElementById('pass').value;
-            if(inputVal === MY_PIN) {
+            if(document.getElementById('pass').value === MY_PIN) {
                 localStorage.setItem("admin_active", "true");
-                window.location.href = "admin-posts.html";
-            } else { 
-                alert("Invalid PIN. Please try again."); 
-                document.getElementById('pass').value = "";
-            }
+                window.location.href = "./admin-posts.html";
+            } else { alert("Invalid PIN"); }
         }
-
-        // Allow pressing "Enter" key to login
-        document.getElementById("pass").addEventListener("keyup", function(event) {
-            if (event.key === "Enter") {
-                login();
-            }
-        });
     </script>
-
 </body>
 </html>
