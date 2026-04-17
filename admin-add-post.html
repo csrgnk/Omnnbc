@@ -1,34 +1,134 @@
-<script>
-function submit() {
-    const title = document.getElementById('p-title').value.trim();
-    const desc = document.getElementById('p-desc').value.trim() || "No description";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Editor | OMNNBC</title>
+    <script>
+        // --- 1. SECRET CODE CHECK ---
+        if(sessionStorage.getItem("auth_status") !== "verified") { 
+            window.location.href = "./admin.html"; 
+        }
+    </script>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <style>
+        body { font-family: -apple-system, sans-serif; margin: 0; background: #fff; padding-bottom: 100px; }
+        .top-bar { background: #f8f9fa; padding: 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; position: sticky; top:0; z-index:100; }
+        .container { padding: 15px; }
+        label { font-size: 11px; color: #C71585; font-weight: bold; display: block; margin-top: 15px; text-transform: uppercase; }
+        input, textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        input:disabled { background: #f0f0f0; color: #888; }
+        .toggle-box { display: flex; margin: 15px 0 10px; border: 1px solid #C71585; border-radius: 8px; overflow: hidden; }
+        .toggle-btn { flex: 1; padding: 10px; border: none; background: #fff; color: #C71585; font-weight: bold; cursor: pointer; }
+        .toggle-btn.active { background: #C71585; color: #fff; }
+        #editor-wrapper { height: 350px; }
+        #html-raw { width: 100%; height: 350px; display: none; font-family: monospace; white-space: pre; overflow: auto; }
+        .footer { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); box-sizing: border-box; }
+        .btn-main { background: #C71585; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
 
-    let content = "";
+    <div class="top-bar">
+        <a href="./admin-posts.html" style="text-decoration:none; color:#666;">✕ Cancel</a>
+        <strong id="title-mode">Create Post</strong>
+        <div style="width:40px"></div>
+    </div>
 
-    // 1. Check if HTML Raw editor is active and has content
-    const raw = document.getElementById('html-raw');
-    if (raw && document.getElementById('html-raw').style.display === "block") {
-        content = raw.value;
-    } 
-    // 2. Otherwise, get content from Quill
-    else if (typeof quill !== "undefined" && quill.root) {
-        content = quill.root.innerHTML;
-    }
+    <div class="container">
+        <label>Post Title</label>
+        <input type="text" id="p-title" placeholder="Enter title...">
 
-    // Validation: Check if both are empty
-    if (!title || !content || content === "<p><br></p>") {
-        alert("Title and Content are required!");
-        return;
-    }
+        <label>Permanent URL (Slug)</label>
+        <input type="text" id="p-url" disabled placeholder="Automatic URL">
 
-    // ✅ IMPORTANT: DO NOT remove HTML tags. 
-    // We send Description on Line 1 and HTML Content from Line 2.
-    const body = desc + "\n" + content;
+        <label>Description (For JSON)</label>
+        <textarea id="p-desc" rows="2" placeholder="Short description for posts.json"></textarea>
+        
+        <div class="toggle-box">
+            <button id="v-btn" class="toggle-btn active" onclick="setMode('v')">Visual Text</button>
+            <button id="h-btn" class="toggle-btn" onclick="setMode('h')">HTML Script</button>
+        </div>
 
-    const url = "https://github.com/csrgnk/csrgnk.github.io/issues/new" +
-        "?title=" + encodeURIComponent("POST: " + title) +
-        "&body=" + encodeURIComponent(body);
+        <div id="editor-wrapper"></div>
+        <textarea id="html-raw" placeholder="Paste HTML code here..."></textarea>
+    </div>
 
-    window.open(url, "_blank");
-}
-</script>
+    <div class="footer">
+        <button id="btn-submit" class="btn-main" onclick="submit()">🚀 Publish Post</button>
+    </div>
+
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script>
+        // --- 2. INITIALIZE EDITOR ---
+        var quill = new Quill('#editor-wrapper', { 
+            theme: 'snow', 
+            modules: { toolbar: [[{ 'header': [1, 2, false] }], ['bold', 'italic', 'underline'], [{ 'align': [] }], ['clean']] } 
+        });
+
+        const params = new URLSearchParams(window.location.search);
+        const slug = params.get('edit');
+
+        // --- 3. FETCH DATA IF EDITING ---
+        if (slug) {
+            document.getElementById('title-mode').innerText = "Update Post";
+            document.getElementById('btn-submit').innerText = "🔄 Update Post";
+
+            // Get Title and Description from JSON
+            fetch('./data/posts.json').then(r => r.json()).then(data => {
+                const post = data.find(p => p.url === slug);
+                if (post) {
+                    document.getElementById('p-title').value = post.title;
+                    document.getElementById('p-url').value = post.url;
+                    document.getElementById('p-desc').value = post.description || "";
+                }
+            });
+
+            // Get HTML Content from posts folder
+            fetch(`./posts/${slug}.html`).then(r => r.text()).then(html => {
+                quill.root.innerHTML = html;
+                document.getElementById('html-raw').value = html;
+            });
+        }
+
+        // --- 4. TOGGLE MODE (Visual vs HTML) ---
+        function setMode(m) {
+            const ev = document.getElementById('editor-wrapper');
+            const hr = document.getElementById('html-raw');
+            if(m === 'v') {
+                ev.style.display="block"; hr.style.display="none";
+                document.getElementById('v-btn').classList.add('active');
+                document.getElementById('h-btn').classList.remove('active');
+                quill.root.innerHTML = hr.value; // Move HTML to Visual
+            } else {
+                ev.style.display="none"; hr.style.display="block";
+                document.getElementById('h-btn').classList.add('active');
+                document.getElementById('v-btn').classList.remove('active');
+                hr.value = quill.root.innerHTML; // Move Visual to HTML
+            }
+        }
+
+        // --- 5. SUBMIT TO GITHUB ---
+        function submit() {
+            const title = document.getElementById('p-title').value.trim();
+            const desc = document.getElementById('p-desc').value.trim() || "No description";
+            
+            // Get data from whichever editor is currently being used
+            let content = (document.getElementById('html-raw').style.display === "block") 
+                          ? document.getElementById('html-raw').value 
+                          : quill.root.innerHTML;
+
+            if(!title || !content || content === "<p><br></p>") {
+                alert("Please enter Title and Content!");
+                return;
+            }
+
+            // Important: Line 1 = Description, Line 2+ = HTML Content
+            const body = desc + "\n" + content;
+            
+            const issueUrl = `https://github.com/csrgnk/csrgnk.github.io/issues/new?title=POST: ${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+            window.open(issueUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
