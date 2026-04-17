@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMNNBC Admin Panel</title>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <style>
+        :root { --primary: #C71585; --bg: #f0f2f5; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); padding: 40px; }
+        .card { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .hidden { display: none; }
+        
+        /* Login Styles */
+        #login-area { text-align: center; max-width: 400px; margin-top: 100px; }
+        
+        /* Editor Styles */
+        h2 { color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box; }
+        .toolbar { display: flex; gap: 10px; margin-bottom: 10px; }
+        .btn-toggle { background: #666; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
+        #quill-editor { height: 350px; border-radius: 0 0 6px 6px; }
+        #html-output { width: 100%; height: 350px; display: none; font-family: monospace; padding: 10px; border: 1px solid #ccc; box-sizing: border-box; }
+        .btn-submit { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 6px; font-size: 18px; font-weight: bold; margin-top: 20px; cursor: pointer; }
+        .btn-submit:hover { background: #a0106a; }
+    </style>
+</head>
+<body>
+
+<div id="login-area" class="card">
+    <h2>Admin Login</h2>
+    <p>Please enter your secret access code:</p>
+    <input type="password" id="passcode" placeholder="Secret Code">
+    <button class="btn-submit" onclick="checkCode()">Enter Editor</button>
+</div>
+
+<div id="editor-panel" class="card hidden">
+    <h2>Create New Post</h2>
+    <input type="text" id="post-title" placeholder="Post Title (e.g. Sri Surya Stotram)">
+    
+    <div class="toolbar">
+        <button class="btn-toggle" onclick="showVisual()">Visual Editor</button>
+        <button class="btn-toggle" onclick="showHTML()">HTML Code</button>
+    </div>
+
+    <div id="quill-editor"></div>
+    <textarea id="html-output"></textarea>
+
+    <button class="btn-submit" onclick="submitToGitHub()">Generate Post via GitHub</button>
+</div>
+
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+    // --- SETUP YOUR CODE HERE ---
+    const SECRET_CODE = "Namo123"; 
+    // ----------------------------
+
+    var quill = new Quill('#quill-editor', { theme: 'snow' });
+
+    function checkCode() {
+        const input = document.getElementById('passcode').value;
+        if (input === SECRET_CODE) {
+            document.getElementById('login-area').classList.add('hidden');
+            document.getElementById('editor-panel').classList.remove('hidden');
+        } else {
+            alert("Incorrect Secret Code!");
+        }
+    }
+
+    function showVisual() {
+        document.getElementById('quill-editor').style.display = 'block';
+        document.getElementById('html-output').style.display = 'none';
+        quill.root.innerHTML = document.getElementById('html-output').value;
+    }
+
+    function showHTML() {
+        document.getElementById('quill-editor').style.display = 'none';
+        document.getElementById('html-output').style.display = 'block';
+        document.getElementById('html-output').value = quill.root.innerHTML;
+    }
+
+    function submitToGitHub() {
+        const title = document.getElementById('post-title').value;
+        const content = quill.root.innerHTML;
+        const repo = "csrgnk/csrgnk.github.io";
+
+        if(!title || content === "<p><br></p>") {
+            alert("Please fill in both title and content!");
+            return;
+        }
+
+        const issueTitle = `POST: ${title}`;
+        const issueBody = encodeURIComponent(content);
+        const githubUrl = `https://github.com/${repo}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${issueBody}`;
+        
+        window.open(githubUrl, '_blank');
+    }
+</script>
+</body>
+</html>
