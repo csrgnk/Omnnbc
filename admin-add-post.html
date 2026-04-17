@@ -3,34 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Editor</title>
+    <title>Post Editor | OMNNBC</title>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <style>
-        body { font-family: -apple-system, sans-serif; margin: 0; background: #fff; padding-bottom: 90px; }
-        .top-bar { background: #f4f4f4; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; }
-        .btn-cancel { text-decoration: none; color: #d9534f; font-weight: bold; font-size: 14px; }
+        body { font-family: -apple-system, sans-serif; margin: 0; background: #fff; padding-bottom: 100px; }
+        .top-bar { background: #f8f9fa; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; position: sticky; top:0; z-index:100; }
         .container { padding: 15px; }
-        input[type="text"] { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        input, textarea#meta-input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        label { font-size: 12px; color: #C71585; font-weight: bold; display: block; margin-bottom: 5px; text-transform: uppercase; }
         .toggle-box { display: flex; margin-bottom: 10px; border: 1px solid #C71585; border-radius: 8px; overflow: hidden; }
-        .toggle-btn { flex: 1; padding: 10px; border: none; background: white; color: #C71585; font-weight: bold; }
+        .toggle-btn { flex: 1; padding: 10px; border: none; background: white; color: #C71585; font-weight: bold; cursor: pointer; }
         .toggle-btn.active { background: #C71585; color: white; }
-        #editor-wrapper { height: 350px; border: 1px solid #ddd; border-radius: 0 0 8px 8px; }
-        #html-raw { width: 100%; height: 350px; display: none; font-family: monospace; padding: 10px; border: 1px solid #ddd; box-sizing: border-box; }
+        #editor-wrapper { height: 400px; border-radius: 0 0 8px 8px; }
+        #html-raw { width: 100%; height: 400px; display: none; font-family: monospace; padding: 10px; border: 1px solid #ddd; box-sizing: border-box; }
         .footer { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); box-sizing: border-box; }
-        .btn-send { background: #C71585; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 18px; font-weight: bold; }
+        .btn-send { background: #C71585; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
     <div class="top-bar">
-        <a href="./admin-posts.html" class="btn-cancel">Cancel</a>
-        <strong id="mode-text">New Post</strong>
-        <div style="width:50px"></div>
+        <a href="./admin-posts.html" style="text-decoration:none; color:#666;">✕ Cancel</a>
+        <strong>Create Post</strong>
+        <div style="width:40px"></div>
     </div>
 
     <div class="container">
-        <input type="text" id="p-title" placeholder="Post Title">
+        <label>Post Title</label>
+        <input type="text" id="p-title" placeholder="e.g., Sri Surya Sahasra Nama Stotram">
+
+        <label>Meta Description (JSON SEO)</label>
+        <textarea id="meta-input" rows="2" placeholder="Enter SEO summary for JSON..."></textarea>
+        
+        <label>Post Content</label>
         <div class="toggle-box">
-            <button id="v-btn" class="toggle-btn active" onclick="setMode('v')">Visual</button>
+            <button id="v-btn" class="toggle-btn active" onclick="setMode('v')">Visual Editor</button>
             <button id="h-btn" class="toggle-btn" onclick="setMode('h')">HTML Code</button>
         </div>
         <div id="editor-wrapper"></div>
@@ -38,33 +44,33 @@
     </div>
 
     <div class="footer">
-        <button class="btn-send" onclick="submit()">Update / Publish</button>
+        <button class="btn-send" onclick="submit()">Publish to GitHub</button>
     </div>
 
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script>
-        if(localStorage.getItem("admin_active") !== "true") window.location.href="./admin.html";
-        var quill = new Quill('#editor-wrapper', { theme: 'snow' });
-
-        const params = new URLSearchParams(window.location.search);
-        if(params.has('edit')) {
-            document.getElementById('mode-text').innerText = "Edit Post";
-            document.getElementById('p-title').value = decodeURIComponent(params.get('t'));
-            fetch(`./posts/${params.get('edit')}.html`)
-                .then(r => r.text())
-                .then(h => { quill.root.innerHTML = h; });
-        }
+        // Quill setup with Alignment
+        var quill = new Quill('#editor-wrapper', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, false] }],
+                    ['bold', 'italic', 'underline'],
+                    [{ 'align': [] }], // Centering support for Slokas
+                    ['clean']
+                ]
+            }
+        });
 
         function setMode(m) {
-            const ev = document.getElementById('editor-wrapper');
-            const hr = document.getElementById('html-raw');
+            const ev = document.getElementById('editor-wrapper'), hr = document.getElementById('html-raw');
             if(m === 'v') {
-                ev.style.display = "block"; hr.style.display = "none";
+                ev.style.display="block"; hr.style.display="none";
                 document.getElementById('v-btn').classList.add('active');
                 document.getElementById('h-btn').classList.remove('active');
                 quill.root.innerHTML = hr.value;
             } else {
-                ev.style.display = "none"; hr.style.display = "block";
+                ev.style.display="none"; hr.style.display="block";
                 document.getElementById('h-btn').classList.add('active');
                 document.getElementById('v-btn').classList.remove('active');
                 hr.value = quill.root.innerHTML;
@@ -73,10 +79,14 @@
 
         function submit() {
             const title = document.getElementById('p-title').value;
+            const meta = document.getElementById('meta-input').value || "No description";
             const content = (document.getElementById('html-raw').style.display === "block") ? document.getElementById('html-raw').value : quill.root.innerHTML;
-            if(!title) return alert("Please enter a title");
             
-            const githubUrl = `https://github.com/csrgnk/csrgnk.github.io/issues/new?title=POST: ${encodeURIComponent(title)}&body=${encodeURIComponent(content)}`;
+            if(!title || !content) return alert("Title and Content are required!");
+
+            // Send Meta as 1st line, then Content
+            const body = meta + "\n" + content;
+            const githubUrl = `https://github.com/csrgnk/csrgnk.github.io/issues/new?title=POST: ${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
             window.open(githubUrl, '_blank');
         }
     </script>
