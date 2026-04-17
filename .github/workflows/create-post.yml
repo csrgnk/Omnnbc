@@ -6,48 +6,42 @@ on:
 jobs:
   create-post:
     runs-on: ubuntu-latest
-    # Only runs if the issue title starts with 'POST:'
     if: startsWith(github.event.issue.title, 'POST:')
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Process Issue and Create Files
+      - name: Process Issue Data
         shell: bash
         run: |
-          # 1. Extract Title from Issue Title
           RAW_TITLE=$(echo "${{ github.event.issue.title }}" | sed 's/POST: //')
-          
-          # 2. Extract Body (Content)
-          CONTENT='${{ github.event.issue.body }}'
-          
-          # 3. Generate URL Slug (converts title to lowercase-hyphen-format)
-          # Specifically handles English and preserves Telugu script for JSON
-          SLUG=$(echo "$RAW_TITLE" | sed -e 's/[^[:alnum:]]/-/g' | tr '[:upper:]' '[:lower:]' | sed 's/--/-/g' | sed 's/^-//;s/-$//')
-          
-          # 4. Get Current Date
           DATE=$(date +'%Y-%m-%d')
+          # Create URL slug from title
+          SLUG=$(echo "$RAW_TITLE" | sed -e 's/[^[:alnum:]]/-/g' | tr '[:upper:]' '[:lower:]' | sed 's/--/-/g' | sed 's/^-//;s/-$//')
 
-          # 5. Create the HTML Post File
+          # Line 1 of issue body = meta_description
+          META=$(echo "${{ github.event.issue.body }}" | head -n 1)
+          # Remaining lines = HTML content
+          CONTENT=$(echo "${{ github.event.issue.body }}" | tail -n +2)
+
+          # Save HTML File
           mkdir -p omnnbc/posts
           echo "$CONTENT" > "omnnbc/posts/$SLUG.html"
 
-          # 6. Update data/posts.json
+          # Update JSON with your specific keys
           mkdir -p omnnbc/data
-          # Create empty JSON array if file doesn't exist
           if [ ! -f omnnbc/data/posts.json ]; then echo "[]" > omnnbc/data/posts.json; fi
           
-          # Use jq to prepend the new post to the JSON array
-          jq --arg t "$RAW_TITLE" --arg u "$SLUG" --arg d "$DATE" \
-          '. = [{"title": $t, "url": $u, "publish_date": $d}] + .' \
+          jq --arg t "$RAW_TITLE" --arg u "$SLUG" --arg d "$DATE" --arg m "$META" \
+          '. = [{"title": $t, "url": $u, "meta_description": $m, "publish_date": $d}] + .' \
           omnnbc/data/posts.json > temp.json && mv temp.json omnnbc/data/posts.json
 
-      - name: Commit and Push Changes
+      - name: Commit and Push
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .
-          git commit -m "Auto-generated post: ${{ github.event.issue.title }}"
+          git commit -m "Add post: $RAW_TITLE"
           git push
 
       - name: Auto-Close Issue
