@@ -5,6 +5,10 @@ Allow: /posts/
 Allow: /pages/
 Allow: /data/
 
+# Block the indexing of specific .html files to prevent duplicate URL issues
+Disallow: /posts/*.html
+Disallow: /pages/*.html
+
 # Block Category and Tag archives from being indexed
 Disallow: /category/
 Disallow: /categories/
