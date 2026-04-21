@@ -47,13 +47,13 @@
         .post-link{ text-decoration:none; color:inherit; display: block; }
 
         /* Pagination */
-        .pagination-wrapper { max-width: 800px; margin: 25px auto; overflow-x: auto; display: flex; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 10px 0; }
+        .pagination-wrapper { max-width: 800px; margin: 25px auto; overflow-x: auto; display: flex; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 10px 0; min-height: 50px; }
         .pagination-wrapper::-webkit-scrollbar { display: none; }
         .pagination { display: flex; gap: 8px; margin: 0 auto; padding: 0 15px; }
 
         .page-btn { min-width: 44px; height: 44px; border-radius: 8px; border: 2px solid var(--primary-pink); background: #fff; color: var(--primary-pink); font-weight: bold; cursor: pointer; flex-shrink: 0; transition: 0.2s; }
         .page-btn.active { background: var(--primary-pink); color: #fff; }
-        .page-edge { background: var(--primary-pink) !important; color: #fff !important; padding: 0 15px; font-size: 12px; text-transform: uppercase; border: none; }
+        .page-edge { background: var(--primary-pink) !important; color: #fff !important; padding: 0 12px; font-size: 13px; border: none; }
 
         footer{ background:var(--dark-blue); color:#fff; text-align:center; padding:25px; margin-top: 30px; }
     </style>
@@ -96,6 +96,7 @@
 <footer>© 2026 Namo Narayanaya Bhakthi Channel</footer>
 
 <script>
+    // AdSense Delayed Loading
     window.addEventListener('load', function() {
         setTimeout(function() {
             var script = document.createElement('script');
@@ -105,9 +106,7 @@
             document.head.appendChild(script);
         }, 3500); 
     });
-</script>
 
-<script>
     const repoName = "Omnnbc";
     const isGitHub = location.hostname.includes("github.io");
     const baseUrl = isGitHub ? "/" + repoName : "";
@@ -116,7 +115,6 @@
     let currentPage = 1;
     const perPage = 25;
 
-    // Load data with basic caching
     fetch(`${baseUrl}/data/posts.json`)
     .then(res => res.json())
     .then(data => {
@@ -153,7 +151,7 @@
         const total = Math.ceil(filteredPosts.length / perPage);
         const pagDiv = document.getElementById("pagination");
         pagDiv.innerHTML = "";
-        if(total <= 1) return;
+        if (total <= 1) return;
 
         const createBtn = (text, targetPage, isEdge = false) => {
             const btn = document.createElement("button");
@@ -167,11 +165,24 @@
             return btn;
         };
 
-        pagDiv.appendChild(createBtn("First", 1, true));
-        for(let i = 1; i <= total; i++) {
+        // Prev Button
+        if (currentPage > 1) {
+            pagDiv.appendChild(createBtn("Prev", currentPage - 1, true));
+        }
+
+        // Logic for 4 numbers display
+        let groupIndex = Math.floor((currentPage - 1) / 4);
+        let startPage = (groupIndex * 4) + 1;
+        let endPage = Math.min(startPage + 3, total);
+
+        for (let i = startPage; i <= endPage; i++) {
             pagDiv.appendChild(createBtn(i, i));
         }
-        pagDiv.appendChild(createBtn("Last", total, true));
+
+        // Next Button
+        if (currentPage < total) {
+            pagDiv.appendChild(createBtn("Next", currentPage + 1, true));
+        }
     }
 
     let searchTimer;
