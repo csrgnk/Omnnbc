@@ -13,11 +13,10 @@
     <link rel="canonical" href="https://omnnbc.com/" />
 
     <link rel="preconnect" href="https://pagead2.googlesyndication.com">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7573720131021971" crossorigin="anonymous"></script>
 
     <style>
         :root{ --primary-pink:#C71585; --dark-blue:#001a4d; }
-        body{ margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#f1f3f5; color: #333; -webkit-user-select: none; user-select: none; }
+        body{ margin:0; font-family:'Segoe UI',Arial,sans-serif; background:#f1f3f5; color: #333; -webkit-user-select: none; user-select: none; font-display: swap; }
 
         /* Navigation */
         .blue-nav, .scroll-container { display:flex; overflow-x:auto; white-space: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
@@ -27,7 +26,7 @@
         .scroll-container { background:var(--primary-pink); padding:5px 0; }
         .scroll-container a { background:#fff; color:var(--primary-pink); padding:8px 16px; margin:6px; border-radius:6px; text-decoration:none; font-weight:600; font-size: 14px; }
 
-        /* Header - Performance: Fixed height logo to prevent layout shift */
+        /* Header */
         .site-header{ background:#fff9db; padding:15px; border-bottom: 2px solid #ddd; }
         .header-box{ display:flex; align-items:center; gap:15px; max-width: 800px; margin: auto; }
         .logo{ width:60px; height:60px; border-radius:50%; object-fit: cover; border: 2px solid var(--primary-pink); }
@@ -41,8 +40,8 @@
         .search-wrapper{ text-align:center; margin:25px 0; }
         #searchInput{ width: 70%; max-width: 320px; padding: 10px 18px; border-radius: 25px; border: 2px solid var(--primary-pink); font-size: 15px; outline: none; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
-        /* Posts - Best Practice: Content Visibility */
-        .container{ max-width:800px; margin:auto; padding:10px; min-height: 600px; }
+        /* Posts */
+        .container{ max-width:800px; margin:auto; padding:10px; min-height: 600px; contain: content; }
         .post-card{ background:#FFFDE7; padding:18px; margin-bottom:15px; border-radius:12px; border-left:6px solid var(--primary-pink); transition: 0.2s; content-visibility: auto; }
         .post-card h3 { margin: 0 0 8px 0; color: var(--dark-blue); font-size: 1.2rem; }
         .post-link{ text-decoration:none; color:inherit; display: block; }
@@ -77,7 +76,7 @@
 
 <header class="site-header">
     <div class="header-box">
-        <img src="/assets/images/Omnnbc-new.png" class="logo" alt="Logo" width="60" height="60">
+        <img src="/assets/images/Omnnbc-new.png" class="logo" alt="Logo" width="60" height="60" fetchpriority="high">
         <div class="site-name-wrapper">
             <h1><span>Namo Narayanaya</span> <span>Bhakthi Channel</span></h1>
         </div>
@@ -96,7 +95,17 @@
 
 <footer>© 2026 Namo Narayanaya Bhakthi Channel</footer>
 
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer></script>
+<script>
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7573720131021971";
+            script.crossOrigin = "anonymous";
+            document.head.appendChild(script);
+        }, 3500); 
+    });
+</script>
 
 <script>
     const repoName = "Omnnbc";
@@ -107,8 +116,8 @@
     let currentPage = 1;
     const perPage = 25;
 
-    // Load data with cache busting
-    fetch(`${baseUrl}/data/posts.json?v=${new Date().getTime()}`)
+    // Load data with basic caching
+    fetch(`${baseUrl}/data/posts.json`)
     .then(res => res.json())
     .then(data => {
         allPosts = data.sort((a,b) => new Date(b.publish_date) - new Date(a.publish_date));
@@ -122,7 +131,6 @@
         const start = (currentPage - 1) * perPage;
         const items = filteredPosts.slice(start, start + perPage);
         
-        // Faster rendering using DocumentFragment
         const fragment = document.createDocumentFragment();
         postsDiv.innerHTML = "";
 
@@ -160,16 +168,12 @@
         };
 
         pagDiv.appendChild(createBtn("First", 1, true));
-        
-        // Limit page numbers shown if there are many (optional logic could go here)
         for(let i = 1; i <= total; i++) {
             pagDiv.appendChild(createBtn(i, i));
         }
-
         pagDiv.appendChild(createBtn("Last", total, true));
     }
 
-    // Performance: Debounced search (waits 300ms after you stop typing)
     let searchTimer;
     document.getElementById("searchInput").addEventListener("input", (e) => {
         clearTimeout(searchTimer);
