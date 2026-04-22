@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Namo Narayanaya Bhakthi Channel</title>
+    <meta name="description" content="Discover divine peace with Namo Narayanaya Bhakthi Channel. Explore Dasabodha, Upasana Chandrika, powerful stotrams, and daily prayers to enrich your spiritual journey.">
+    <meta name="keywords" content="Stotrams, Telugu Lyrics, Bhakthi, Ramayanam, Namo Narayanaya, Dasabodha Telugu, Upasana Chandrika">
+    <link rel="canonical" href="https://omnnbc.com/" />
+    
+    <link rel="icon" type="image/png" href="/assets/images/Omnnbc-new.png">
+    <link rel="apple-touch-icon" href="/assets/images/Omnnbc-new.png">
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-PV0FCCF4HL"></script>
     <script>
@@ -14,21 +20,6 @@
         'page_path': window.location.pathname
       });
     </script>
-
-    <title>Namo Narayanaya Bhakthi Channel</title>
-    ...
-</head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namo Narayanaya Bhakthi Channel</title>
-    
-    <link rel="icon" type="image/png" href="/assets/images/Omnnbc-new.png">
-    <link rel="apple-touch-icon" href="/assets/images/Omnnbc-new.png">
-
-    <meta name="description" content="Discover divine peace with Namo Narayanaya Bhakthi Channel. Explore Dasabodha, Upasana Chandrika, powerful stotrams, and daily prayers to enrich your spiritual journey. Subscribe for daily devotion!">
-    <meta name="keywords" content="Stotrams, Telugu Lyrics, Bhakthi, Ramayanam, Namo Narayanaya">
-    <link rel="canonical" href="https://omnnbc.com/" />
 
     <link rel="preconnect" href="https://pagead2.googlesyndication.com">
 
@@ -114,7 +105,6 @@
 <footer>© 2026 Namo Narayanaya Bhakthi Channel</footer>
 
 <script>
-    // AdSense Delayed Loading
     window.addEventListener('load', function() {
         setTimeout(function() {
             var script = document.createElement('script');
@@ -183,12 +173,10 @@
             return btn;
         };
 
-        // Prev Button
         if (currentPage > 1) {
             pagDiv.appendChild(createBtn("Prev", currentPage - 1, true));
         }
 
-        // Logic for 4 numbers display
         let groupIndex = Math.floor((currentPage - 1) / 4);
         let startPage = (groupIndex * 4) + 1;
         let endPage = Math.min(startPage + 3, total);
@@ -197,7 +185,6 @@
             pagDiv.appendChild(createBtn(i, i));
         }
 
-        // Next Button
         if (currentPage < total) {
             pagDiv.appendChild(createBtn("Next", currentPage + 1, true));
         }
