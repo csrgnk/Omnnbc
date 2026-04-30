@@ -47,6 +47,47 @@ permalink: /404.html
         z-index: 10000;
         box-shadow: 0px 4px 6px rgba(0,0,0,0.2);
     }
+/* Prevent Text and URL Overflow */
+body, p, div, span, a {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+/* Container Optimization for Mobile Score */
+.container {
+    max-width: 100%;
+    box-sizing: border-box;
+    contain: content;
+    padding: 10px;
+}
+
+/* Prevent Content Selection */
+body {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Red Alert Bar Styling */
+#copy-warning {
+    display: none;
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ff0000;
+    color: white;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 25px;
+    z-index: 10000;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+    border: 2px solid white;
+    }
+    
 </style>
 
 <div id="copy-warning">You are not allowed copy this script</div>
@@ -296,6 +337,32 @@ permalink: /404.html
     document.getElementById("postNav").innerHTML = "";
   }
 </script>
+<div id="copy-warning">Copying is not allowed on this site!</div>
 
+<script>
+    // Disable Right-Click
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        showWarning();
+    });
+
+    // Disable Keyboard Shortcuts (Ctrl+C, Ctrl+U, Ctrl+I)
+    document.onkeydown = function(e) {
+        if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 85 || e.keyCode === 73)) {
+            showWarning();
+            return false;
+        }
+    };
+
+    // Function to Show Warning Bar
+    function showWarning() {
+        var warning = document.getElementById('copy-warning');
+        warning.style.display = 'block';
+        setTimeout(function() {
+            warning.style.display = 'none';
+        }, 2500); // Alert disappears after 2.5 seconds
+    }
+</script>
+    
 </body>
 </html>
